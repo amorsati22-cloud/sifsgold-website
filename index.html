@@ -204,7 +204,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   <h1 class="hero-name"><span class="gold">S</span>if's Gold</h1><!-- FIX 3 -->
   <p class="hero-tag">Beauty Platform</p>
   <div class="hdiv"><span class="dl"></span><span class="dm"></span><span class="dl"></span></div>
-  <p class="hero-sub">The all-in-one platform built for beauty students, licensed professionals, schools, and clients — from state board prep to booking to getting paid.</p>
+  <p class="hero-sub">The all-in-one platform built for beauty students, licensed professionals, schools, and clients from state board prep to booking to getting paid.</p>
   <form class="wform" onsubmit="handleSignup(event,'hero-email','hero-btn')">
     <input type="email" id="hero-email" placeholder="Enter your email address" required/>
     <button type="submit" id="hero-btn" class="btn-p">Join the Waitlist</button>
@@ -233,10 +233,10 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   <h2 class="sec-title">Who Is <span class="gold">Sif's Gold</span> For?</h2>
   <p class="sec-sub">Whether you're studying, licensed, running a school, or booking a service — Sif's Gold was built for you.</p>
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(this,'students')">Students</button>
-    <button class="tab-btn" onclick="switchTab(this,'pros')">Licensed Pros</button>
-    <button class="tab-btn" onclick="switchTab(this,'schools')">Schools</button>
-    <button class="tab-btn" onclick="switchTab(this,'clients')">Clients</button>
+    <button class="tab-btn active" onclick="switchTab(this, 'students')">Students</button>
+    <button class="tab-btn" onclick="switchTab(this, 'pros')">Licensed Pros</button>
+    <button class="tab-btn" onclick="switchTab(this, 'schools')">Schools</button>
+    <button class="tab-btn" onclick="switchTab(this, 'clients')">Clients</button>
   </div>
 
   <!-- Students -->
@@ -405,7 +405,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
 <div class="sec-wrap" id="features">
   <p class="sec-label">Everything You Need</p>
   <h2 class="sec-title">One Platform. <span class="gold">Infinite</span> Possibilities.</h2>
-  <p class="sec-sub" style="margin-bottom:48px">Every feature Sif's Gold has was built for someone in the beauty industry.</p>
+  <p class="sec-sub" style="margin-bottom:48px">Every feature in Sif's Gold was built for someone in the beauty industry.</p>
   <div class="feat-grid">
     <div class="feat-card"><span class="feat-icon">&#128203;</span><div class="feat-title">State Board Prep</div><p class="feat-desc">Smart flashcards, practice exams, and diagnostics tailored to your state's exam requirements.</p></div>
     <div class="feat-card"><span class="feat-icon">&#128272;</span><div class="feat-title">Sif's Gold Vault</div><p class="feat-desc">Secure cloud storage for your license, certifications, and important beauty business documents.</p></div>
@@ -502,11 +502,20 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   window.addEventListener('resize',function(){resize();mkStars();});
 })();
 
-function switchTab(btn,id){
-  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
-  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+function switchTab(btn, id) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-panel').forEach(function(p) {
+    p.style.display = 'none';
+    p.classList.remove('active');
+  });
   btn.classList.add('active');
-  document.getElementById('tab-'+id).classList.add('active');
+  var panel = document.getElementById('tab-' + id);
+  if (panel) {
+    panel.style.display = 'block';
+    panel.classList.add('active');
+  }
 }
 
 function handleSignup(e,inputId,btnId){
