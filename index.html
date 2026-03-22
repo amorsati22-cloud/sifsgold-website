@@ -240,7 +240,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 
   <!-- Students -->
-  <div class="tab-panel active" id="tab-students" style="display:block">
+  <div class="tab-panel active" id="tab-students" style="display:block !important">
     <div class="acard">
       <span class="card-icon">&#127891;</span>
       <h3 class="card-title">State Board <span class="gold">Prep</span></h3>
@@ -276,7 +276,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 
   <!-- Pros -->
-  <div class="tab-panel" id="tab-pros" style="display:none">
+  <div class="tab-panel" id="tab-pros" style="display:none !important">
     <div class="feature-card">
       <div class="feature-icon">💼</div>
       <h3 class="feature-title">Client <span class="gold-text">Booking</span></h3>
@@ -312,7 +312,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 
   <!-- Schools -->
-  <div class="tab-panel" id="tab-schools" style="display:none">
+  <div class="tab-panel" id="tab-schools" style="display:none !important">
     <div class="feature-card">
       <div class="feature-icon">🏫</div>
       <h3 class="feature-title">School <span class="gold-text">Dashboard</span></h3>
@@ -347,7 +347,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 
   <!-- Clients -->
-  <div class="tab-panel" id="tab-clients" style="display:none">
+  <div class="tab-panel" id="tab-clients" style="display:none !important">
     <div class="feature-card">
       <div class="feature-icon">📅</div>
       <h3 class="feature-title">Easy <span class="gold-text">Booking</span></h3>
@@ -483,16 +483,20 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
 })();
 
 function switchTab(btn, id) {
-  var tabs = ['students','pros','schools','clients'];
-  for (var i = 0; i < tabs.length; i++) {
-    var p = document.getElementById('tab-' + tabs[i]);
-    if (p) p.style.display = 'none';
+  var ids = ['students','pros','schools','clients'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById('tab-' + ids[i]);
+    if (el) {
+      el.setAttribute('style', 'display:none !important');
+    }
   }
   document.querySelectorAll('.tab-btn').forEach(function(b) {
     b.classList.remove('active');
   });
-  var active = document.getElementById('tab-' + id);
-  if (active) active.style.display = 'block';
+  var target = document.getElementById('tab-' + id);
+  if (target) {
+    target.setAttribute('style', 'display:block !important');
+  }
   btn.classList.add('active');
 }
 
