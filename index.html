@@ -515,18 +515,18 @@ function handleSignup(e,inputId,btnId){
   var btn=document.getElementById(btnId);
   var email=input.value.trim();
   if(!email)return;
-  btn.textContent="You're on the list!";
-  btn.style.background='rgba(201,150,42,0.3)';
-  btn.style.color='#FFD700';
-  input.value='';
-  input.placeholder='Check your inbox soon!';
-  setTimeout(function(){
-    btn.textContent=btnId==='hero-btn'?'Join the Waitlist':'Secure My Spot';
-    btn.style.background='';
-    btn.style.color='';
-    input.placeholder=inputId==='hero-email'?'Enter your email address':'Your email address';
-  },4000);
+  btn.textContent="Submitting...";
+  fetch("https://formspree.io/f/xaqpgyev",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify({email:email})
+  }).then(function(r){
+    if(r.ok){
+      btn.textContent="You're on the list!";
+      input.value='';
+      input.placeholder='Check your inbox soon!';
+    } else {
+      btn.textContent="Try again";
+    }
+  }).catch(function(){btn.textContent="Try again";});
 }
-</script>
-</body>
-</html>
