@@ -26,7 +26,6 @@ body{background:var(--navy);color:var(--white);font-family:'Montserrat',sans-ser
 .orb-l{width:400px;height:400px;top:40%;left:-100px;background:radial-gradient(circle,rgba(0,170,255,0.06) 0%,transparent 70%)}
 .orb-r{width:400px;height:400px;top:60%;right:-100px;background:radial-gradient(circle,rgba(0,255,204,0.05) 0%,transparent 70%)}
 .page-wrap{position:relative;z-index:10}
-/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,13,26,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--white);letter-spacing:4px;text-transform:uppercase}
 .nav-logo span{color:var(--gold-b)}
@@ -35,7 +34,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,13,26,0.88
 .nav-links a:hover{color:var(--gold)}
 .nav-cta{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--navy) !important;background:var(--gold-b);padding:8px 18px;border-radius:100px;font-weight:700;transition:all .2s !important;text-decoration:none}
 .nav-cta:hover{background:var(--gold-l) !important}
-/* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;max-width:100%}
 .badge-ring{position:relative;width:240px;height:240px;display:flex;align-items:center;justify-content:center;margin-bottom:36px;animation:fadeUp 1s ease both}
 .badge-ring-svg{position:absolute;inset:0;width:100%;height:100%;animation:spinSlow 45s linear infinite}
@@ -61,27 +59,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,13,26,0.88
 .btn-p:hover{background:var(--gold-l);transform:translateY(-1px)}
 .hero-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;animation:fadeUp 1s .95s ease both}
 .pill{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(201,150,42,0.75);border:1px solid rgba(201,150,42,0.25);padding:5px 14px;border-radius:100px;background:rgba(201,150,42,0.05)}
-/* STATS */
 .stats-wrap{max-width:1100px;margin:0 auto;padding:0 24px}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:80px}
 .stat-item{text-align:center;padding:32px 20px;border-right:1px solid var(--border)}
 .stat-item:last-child{border-right:none}
 .stat-num{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:var(--gold-b);line-height:1;margin-bottom:6px;text-shadow:0 0 20px rgba(255,215,0,0.3)}
 .stat-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
-/* SECTION HEADERS */
 .sec-wrap{max-width:1100px;margin:0 auto;padding:0 24px 100px}
 .sec-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:10px}
 .sec-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,46px);font-weight:900;text-align:center;color:var(--white);margin-bottom:12px;line-height:1.15}
 .sec-title .gold{color:var(--gold-b)}
 .sec-sub{font-size:14px;font-weight:300;color:var(--muted);text-align:center;margin-bottom:48px;line-height:1.8;max-width:500px;margin-left:auto;margin-right:auto}
-/* TABS */
 .tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
 .tab-btn{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 22px;border-radius:100px;border:1px solid rgba(201,150,42,0.25);background:transparent;color:var(--muted);cursor:pointer;transition:all .25s}
 .tab-btn:hover{border-color:var(--gold);color:var(--gold)}
 .tab-btn.active{background:var(--gold-b);border-color:var(--gold-b);color:var(--navy)}
+
+/* TAB PANELS — JS controls visibility via inline style */
 .tab-panel{display:none}
-.tab-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-/* CARDS */
+
+/* AUDIENCE CARDS */
+.tab-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .acard{background:linear-gradient(145deg,#0d1a2e,#071020);border:1px solid var(--border);border-radius:20px;padding:36px;transition:all .3s}
 .acard:hover{border-color:rgba(201,150,42,0.45);transform:translateY(-3px)}
 .acard.wide{grid-column:1/-1}
@@ -92,6 +90,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,13,26,0.88
 .card-feats{list-style:none;display:flex;flex-direction:column;gap:8px}
 .card-feats li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(245,240,232,0.65);line-height:1.6}
 .card-feats li::before{content:'✦';color:var(--gold);font-size:8px;margin-top:4px;flex-shrink:0}
+
 /* FEATURES GRID */
 .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .feat-card{background:linear-gradient(145deg,#0a1525,#060e1b);border:1px solid rgba(201,150,42,0.12);border-radius:16px;padding:28px;text-align:center;transition:all .3s}
@@ -99,7 +98,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,13,26,0.88
 .feat-icon{font-size:28px;margin-bottom:14px;display:block}
 .feat-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:8px}
 .feat-desc{font-size:12px;font-weight:300;color:var(--muted);line-height:1.8}
-/* CTA */
 .cta-section{max-width:1100px;margin:0 auto;padding:0 24px 100px}
 .cta-box{background:linear-gradient(145deg,#0d1a2e,#060f1c);border:1px solid rgba(201,150,42,0.3);border-radius:28px;padding:70px 40px;text-align:center;position:relative;overflow:hidden}
 .cta-box::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(circle,rgba(201,150,42,0.1) 0%,transparent 70%);pointer-events:none}
@@ -111,7 +109,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,13,26,0.88
 .cta-form input::placeholder{color:rgba(245,240,232,0.35)}
 .cta-form input:focus{border-color:rgba(201,150,42,0.6)}
 .cta-note{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25)}
-/* FOOTER */
 footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
 .footer-logo{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--white);letter-spacing:6px;text-transform:uppercase}
 .footer-logo span{color:var(--gold-b)}
@@ -120,21 +117,18 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
 .footer-links a{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.35);text-decoration:none;transition:color .2s}
 .footer-links a:hover{color:var(--gold)}
 .footer-copy{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.15)}
-/* CORNER MARKS */
 .cm{position:fixed;width:36px;height:36px;opacity:.18;z-index:50;pointer-events:none}
 .cm-tl{top:18px;left:18px;border-top:1px solid var(--gold);border-left:1px solid var(--gold)}
 .cm-tr{top:18px;right:18px;border-top:1px solid var(--gold);border-right:1px solid var(--gold)}
 .cm-bl{bottom:18px;left:18px;border-bottom:1px solid var(--gold);border-left:1px solid var(--gold)}
 .cm-br{bottom:18px;right:18px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold)}
-/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spinSlow{to{transform:rotate(360deg)}}
 @keyframes iconGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(255,215,0,0.3))}50%{filter:drop-shadow(0 0 12px rgba(255,215,0,0.7))}}
-/* RESPONSIVE */
 @media(max-width:760px){
   .nav-links{display:none}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .tab-panel.active{grid-template-columns:1fr}
+  .tab-grid{grid-template-columns:1fr}
   .acard.wide{grid-column:auto}
   .feat-grid{grid-template-columns:1fr 1fr}
   .wform input{width:100%}
@@ -143,14 +137,6 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
 @media(max-width:500px){
   .feat-grid{grid-template-columns:1fr}
 }
-.feature-card{background:linear-gradient(145deg,#0d1a2e,#071020);border:1px solid rgba(201,150,42,0.2);border-radius:20px;padding:36px;transition:all .3s}
-.feature-card:hover{border-color:rgba(201,150,42,0.45);transform:translateY(-3px)}
-.feature-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#F5F0E8;margin-bottom:10px}
-.feature-desc{font-size:13px;font-weight:300;color:rgba(245,240,232,0.5);line-height:1.9;margin-bottom:20px}
-.feature-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(245,240,232,0.65);line-height:1.6}
-.feature-list li::before{content:'✦';color:#C9962A;font-size:8px;margin-top:4px;flex-shrink:0}
-.gold-text{color:#FFD700}
 </style>
 </head>
 <body>
@@ -164,7 +150,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
 <div class="cm cm-br"></div>
 
 <nav>
-  <div class="nav-logo"><span>S</span>if's Gold</div><!-- FIX 1 -->
+  <div class="nav-logo"><span>S</span>if's Gold</div>
   <ul class="nav-links">
     <li><a href="#audience">Who It's For</a></li>
     <li><a href="#features">Features</a></li>
@@ -175,7 +161,6 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
 
 <div class="page-wrap">
 
-<!-- HERO -->
 <section class="hero" id="home">
   <div class="badge-ring">
     <svg class="badge-ring-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
@@ -199,7 +184,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
     </svg>
     <div class="badge-inner">
       <span class="badge-scissors">&#9986;</span>
-      <span class="badge-k">S</span><!-- FIX 2 -->
+      <span class="badge-k">S</span>
       <div class="badge-stars">
         <span class="bl"></span>
         <span class="st">&#9733;</span>
@@ -209,10 +194,10 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
       </div>
     </div>
   </div>
-  <h1 class="hero-name"><span class="gold">S</span>if's Gold</h1><!-- FIX 3 -->
+  <h1 class="hero-name"><span class="gold">S</span>if's Gold</h1>
   <p class="hero-tag">Beauty Platform</p>
   <div class="hdiv"><span class="dl"></span><span class="dm"></span><span class="dl"></span></div>
-  <p class="hero-sub">The all-in-one platform built for beauty students, licensed professionals, schools, and clients from state board prep to booking to getting paid.</p>
+  <p class="hero-sub">The all-in-one platform built for beauty students, licensed professionals, schools, and clients — from state board prep to booking to getting paid.</p>
   <form class="wform" onsubmit="handleSignup(event,'hero-email','hero-btn')">
     <input type="email" id="hero-email" placeholder="Enter your email address" required/>
     <button type="submit" id="hero-btn" class="btn-p">Join the Waitlist</button>
@@ -225,7 +210,6 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 </section>
 
-<!-- STATS -->
 <div class="stats-wrap">
   <div class="stats-grid">
     <div class="stat-item"><div class="stat-num">6K+</div><div class="stat-label">Hours of Study Tools</div></div>
@@ -235,161 +219,163 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 </div>
 
-<!-- AUDIENCE TABS -->
 <div class="sec-wrap" id="audience">
   <p class="sec-label">Built For Everyone</p>
   <h2 class="sec-title">Who Is <span class="gold">Sif's Gold</span> For?</h2>
   <p class="sec-sub">Whether you're studying, licensed, running a school, or booking a service — Sif's Gold was built for you.</p>
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(this, 'students')">Students</button>
-    <button class="tab-btn" onclick="switchTab(this, 'pros')">Licensed Pros</button>
-    <button class="tab-btn" onclick="switchTab(this, 'schools')">Schools</button>
-    <button class="tab-btn" onclick="switchTab(this, 'clients')">Clients</button>
+    <button class="tab-btn active" onclick="switchTab(this,'students')">Students</button>
+    <button class="tab-btn" onclick="switchTab(this,'pros')">Licensed Pros</button>
+    <button class="tab-btn" onclick="switchTab(this,'schools')">Schools</button>
+    <button class="tab-btn" onclick="switchTab(this,'clients')">Clients</button>
   </div>
 
-  <!-- Students -->
-  <div class="tab-panel active" id="tab-students" style="display:block !important">
-    <div class="acard">
-      <span class="card-icon">&#127891;</span>
-      <h3 class="card-title">State Board <span class="gold">Prep</span></h3>
-      <p class="card-desc">Ace your cosmetology, barbering, esthetics, or nail tech exam with smart study tools, practice tests, and progress tracking.</p>
-      <ul class="card-feats">
-        <li>Flashcards and quizzes by state</li>
-        <li>Timed practice exams</li>
-        <li>Weak area diagnostics</li>
-        <li>Study streaks and milestones</li>
-      </ul>
-    </div>
-    <div class="acard">
-      <span class="card-icon">&#128218;</span>
-      <h3 class="card-title">Student <span class="gold">Hub</span></h3>
-      <p class="card-desc">Track your hours, manage school projects, connect with classmates, and build your portfolio before you even graduate.</p>
-      <ul class="card-feats">
-        <li>Hour log and milestone tracker</li>
-        <li>Student projects showcase</li>
-        <li>Community and peer connect</li>
-        <li>Career prep resources</li>
-      </ul>
-    </div>
-    <div class="acard wide">
-      <span class="card-icon">&#10024;</span>
-      <h3 class="card-title">Get <span class="gold">Sif's Gold</span> Before You Graduate</h3>
-      <p class="card-desc">Start building your brand, your clientele, and your business before you walk across that stage. Sif's Gold helps students transition from classroom to career — faster than ever.</p>
-      <ul class="card-feats">
-        <li>Emergency notification system for salon safety</li>
-        <li>Chemical safety guides and body map service browser</li>
-        <li>Mentorship connections with licensed pros</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Pros -->
-  <div class="tab-panel" id="tab-pros" style="display:none !important">
-    <div class="feature-card">
-      <div class="feature-icon">💼</div>
-      <h3 class="feature-title">Client <span class="gold-text">Booking</span></h3>
-      <p class="feature-desc">Your schedule, your way. Accept bookings, set your services, manage deposits, and build loyal clientele — all in one place.</p>
-      <ul class="feature-list">
-        <li>Customizable service menu</li>
-        <li>Deposit and payment processing</li>
-        <li>Client history and notes</li>
-        <li>Automated reminders</li>
-      </ul>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">💰</div>
-      <h3 class="feature-title">Get <span class="gold-text">Paid</span></h3>
-      <p class="feature-desc">Track your income, set pricing, earn through brand deals, and manage your beauty business finances — all from one dashboard.</p>
-      <ul class="feature-list">
-        <li>Income tracking dashboard</li>
-        <li>Brand deals marketplace</li>
-        <li>Chair Board job listings</li>
-        <li>Instant payout tools</li>
-      </ul>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⭐</div>
-      <h3 class="feature-title">Pro <span class="gold-text">Community</span></h3>
-      <p class="feature-desc">Connect, collaborate, and grow with a network of licensed beauty professionals who get it.</p>
-      <ul class="feature-list">
-        <li>Pro-only forums and threads</li>
-        <li>Continuing education access</li>
-        <li>Peer referral network</li>
-      </ul>
+  <div class="tab-panel" id="tab-students">
+    <div class="tab-grid">
+      <div class="acard">
+        <span class="card-icon">&#127891;</span>
+        <h3 class="card-title">State Board <span class="gold">Prep</span></h3>
+        <p class="card-desc">Ace your cosmetology, barbering, esthetics, or nail tech exam with smart study tools, practice tests, and progress tracking.</p>
+        <ul class="card-feats">
+          <li>Flashcards and quizzes by state</li>
+          <li>Timed practice exams</li>
+          <li>Weak area diagnostics</li>
+          <li>Study streaks and milestones</li>
+        </ul>
+      </div>
+      <div class="acard">
+        <span class="card-icon">&#128218;</span>
+        <h3 class="card-title">Student <span class="gold">Hub</span></h3>
+        <p class="card-desc">Track your hours, manage school projects, connect with classmates, and build your portfolio before you even graduate.</p>
+        <ul class="card-feats">
+          <li>Hour log and milestone tracker</li>
+          <li>Student projects showcase</li>
+          <li>Community and peer connect</li>
+          <li>Career prep resources</li>
+        </ul>
+      </div>
+      <div class="acard wide">
+        <span class="card-icon">&#10024;</span>
+        <h3 class="card-title">Get <span class="gold">Sif's Gold</span> Before You Graduate</h3>
+        <p class="card-desc">Start building your brand, your clientele, and your business before you walk across that stage. Sif's Gold helps students transition from classroom to career — faster than ever.</p>
+        <ul class="card-feats">
+          <li>Emergency notification system for salon safety</li>
+          <li>Chemical safety guides and body map service browser</li>
+          <li>Mentorship connections with licensed pros</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- Schools -->
-  <div class="tab-panel" id="tab-schools" style="display:none !important">
-    <div class="feature-card">
-      <div class="feature-icon">🏫</div>
-      <h3 class="feature-title">School <span class="gold-text">Dashboard</span></h3>
-      <p class="feature-desc">Manage your entire student body, track hours, post job opportunities, and offer continuing education — from one admin panel.</p>
-      <ul class="feature-list">
-        <li>Student enrollment and hour tracking</li>
-        <li>Custom school page and branding</li>
-        <li>Scholarship listing tools</li>
-        <li>Job board for graduates</li>
-      </ul>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3 class="feature-title">Pass Rate <span class="gold-text">Analytics</span></h3>
-      <p class="feature-desc">Know exactly how your students are performing on state board prep before they ever sit the exam.</p>
-      <ul class="feature-list">
-        <li>School-wide study analytics</li>
-        <li>Exam readiness scoring</li>
-        <li>Intervention alerts for at-risk students</li>
-      </ul>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🤝</div>
-      <h3 class="feature-title">Placement and <span class="gold-text">Partnerships</span></h3>
-      <p class="feature-desc">Connect your graduates with licensed pros, salons, and brand partners directly through Sif's Gold marketplace.</p>
-      <ul class="feature-list">
-        <li>Graduate placement tools</li>
-        <li>Brand partnership access</li>
-        <li>Alumni community management</li>
-      </ul>
+  <div class="tab-panel" id="tab-pros">
+    <div class="tab-grid">
+      <div class="acard">
+        <span class="card-icon">&#128188;</span>
+        <h3 class="card-title">Client <span class="gold">Booking</span></h3>
+        <p class="card-desc">Your schedule, your way. Accept bookings, set your services, manage deposits, and build loyal clientele — all in one place.</p>
+        <ul class="card-feats">
+          <li>Customizable service menu</li>
+          <li>Deposit and payment processing</li>
+          <li>Client history and notes</li>
+          <li>Automated reminders</li>
+        </ul>
+      </div>
+      <div class="acard">
+        <span class="card-icon">&#128176;</span>
+        <h3 class="card-title">Get <span class="gold">Paid</span></h3>
+        <p class="card-desc">Track your income, set pricing, earn through brand deals, and manage your beauty business finances — all from one dashboard.</p>
+        <ul class="card-feats">
+          <li>Income tracking dashboard</li>
+          <li>Brand deals marketplace</li>
+          <li>Chair Board job listings</li>
+          <li>Instant payout tools</li>
+        </ul>
+      </div>
+      <div class="acard wide">
+        <span class="card-icon">&#11088;</span>
+        <h3 class="card-title">Pro <span class="gold">Community</span></h3>
+        <p class="card-desc">Connect, collaborate, and grow with a network of licensed beauty professionals who get it.</p>
+        <ul class="card-feats">
+          <li>Pro-only forums and threads</li>
+          <li>Continuing education access</li>
+          <li>Peer referral network</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- Clients -->
-  <div class="tab-panel" id="tab-clients" style="display:none !important">
-    <div class="feature-card">
-      <div class="feature-icon">📅</div>
-      <h3 class="feature-title">Easy <span class="gold-text">Booking</span></h3>
-      <p class="feature-desc">Find licensed beauty pros near you, browse services, and book an appointment in seconds — no phone calls, no DMs.</p>
-      <ul class="feature-list">
-        <li>Search pros by specialty and location</li>
-        <li>Instant booking and confirmations</li>
-        <li>Automated reminders</li>
-      </ul>
+  <div class="tab-panel" id="tab-schools">
+    <div class="tab-grid">
+      <div class="acard">
+        <span class="card-icon">&#127979;</span>
+        <h3 class="card-title">School <span class="gold">Dashboard</span></h3>
+        <p class="card-desc">Manage your entire student body, track hours, post job opportunities, and offer continuing education — from one admin panel.</p>
+        <ul class="card-feats">
+          <li>Student enrollment and hour tracking</li>
+          <li>Custom school page and branding</li>
+          <li>Scholarship listing tools</li>
+          <li>Job board for graduates</li>
+        </ul>
+      </div>
+      <div class="acard">
+        <span class="card-icon">&#128202;</span>
+        <h3 class="card-title">Pass Rate <span class="gold">Analytics</span></h3>
+        <p class="card-desc">Know exactly how your students are performing on state board prep before they ever sit the exam.</p>
+        <ul class="card-feats">
+          <li>School-wide study analytics</li>
+          <li>Exam readiness scoring</li>
+          <li>Intervention alerts for at-risk students</li>
+        </ul>
+      </div>
+      <div class="acard wide">
+        <span class="card-icon">&#129309;</span>
+        <h3 class="card-title">Placement and <span class="gold">Partnerships</span></h3>
+        <p class="card-desc">Connect your graduates with licensed pros, salons, and brand partners directly through Sif's Gold marketplace. Turn your school into a launchpad.</p>
+        <ul class="card-feats">
+          <li>Graduate placement tools</li>
+          <li>Brand partnership access</li>
+          <li>Alumni community management</li>
+        </ul>
+      </div>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">⭐</div>
-      <h3 class="feature-title">Reviews and <span class="gold-text">Trust</span></h3>
-      <p class="feature-desc">Every pro on Sif's Gold is verified. Read real reviews, see portfolios, and book with confidence every time.</p>
-      <ul class="feature-list">
-        <li>Verified license checks</li>
-        <li>Authentic client reviews</li>
-        <li>Photo portfolio preview</li>
-      </ul>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">💎</div>
-      <h3 class="feature-title">Client <span class="gold-text">Loyalty</span></h3>
-      <p class="feature-desc">Stay connected with your favorite pros, track your appointment history, and be the first to hear about deals and new services.</p>
-      <ul class="feature-list">
-        <li>Appointment history and rebooking</li>
-        <li>Loyalty rewards from pros</li>
-        <li>Early access to promotions</li>
-      </ul>
+  </div>
+
+  <div class="tab-panel" id="tab-clients">
+    <div class="tab-grid">
+      <div class="acard">
+        <span class="card-icon">&#128197;</span>
+        <h3 class="card-title">Easy <span class="gold">Booking</span></h3>
+        <p class="card-desc">Find licensed beauty pros near you, browse services, and book an appointment in seconds — no phone calls, no DMs.</p>
+        <ul class="card-feats">
+          <li>Search pros by specialty and location</li>
+          <li>Instant booking and confirmations</li>
+          <li>Automated reminders</li>
+        </ul>
+      </div>
+      <div class="acard">
+        <span class="card-icon">&#11088;</span>
+        <h3 class="card-title">Reviews and <span class="gold">Trust</span></h3>
+        <p class="card-desc">Every pro on Sif's Gold is verified. Read real reviews, see portfolios, and book with confidence every time.</p>
+        <ul class="card-feats">
+          <li>Verified license checks</li>
+          <li>Authentic client reviews</li>
+          <li>Photo portfolio preview</li>
+        </ul>
+      </div>
+      <div class="acard wide">
+        <span class="card-icon">&#128142;</span>
+        <h3 class="card-title">Client <span class="gold">Loyalty</span></h3>
+        <p class="card-desc">Stay connected with your favorite pros, track your appointment history, and be the first to hear about deals and new services.</p>
+        <ul class="card-feats">
+          <li>Appointment history and rebooking</li>
+          <li>Loyalty rewards from pros</li>
+          <li>Early access to promotions</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- FEATURES -->
 <div class="sec-wrap" id="features">
   <p class="sec-label">Everything You Need</p>
   <h2 class="sec-title">One Platform. <span class="gold">Infinite</span> Possibilities.</h2>
@@ -404,7 +390,6 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 </div>
 
-<!-- CTA / WAITLIST -->
 <div class="cta-section" id="waitlist">
   <div class="cta-box">
     <p class="sec-label">Early Access &#183; June 16, 2026</p>
@@ -418,9 +403,8 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo"><span>S</span>if's Gold</div><!-- FIX 4 -->
+  <div class="footer-logo"><span>S</span>if's Gold</div>
   <p class="footer-tag">Get Sif's Gold &#183; Get Licensed &#183; Get Paid</p>
   <ul class="footer-links">
     <li><a href="#home">Home</a></li>
@@ -462,10 +446,7 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
       var s=stars[i];
       var tw=Math.sin(t*s.speed+s.phase);
       var op=s.baseOp+tw*0.25;
-      if(s.isGlitter){
-        var gl=(Math.sin(t*s.gSpeed+s.gPhase)+1)/2;
-        op=gl>0.88?gl*0.95:s.baseOp*0.5;
-      }
+      if(s.isGlitter){var gl=(Math.sin(t*s.gSpeed+s.gPhase)+1)/2;op=gl>0.88?gl*0.95:s.baseOp*0.5;}
       if(op<0)op=0;
       ctx.beginPath();
       var r=s.isGlitter?s.size*1.6:s.size;
@@ -490,21 +471,22 @@ footer{border-top:1px solid var(--border);padding:48px 32px;display:flex;flex-di
   window.addEventListener('resize',function(){resize();mkStars();});
 })();
 
+// Show students tab by default on load
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('tab-students').style.display = 'block';
+});
+
 function switchTab(btn, id) {
   var ids = ['students','pros','schools','clients'];
   for (var i = 0; i < ids.length; i++) {
     var el = document.getElementById('tab-' + ids[i]);
-    if (el) {
-      el.setAttribute('style', 'display:none !important');
-    }
+    if (el) el.style.display = 'none';
   }
   document.querySelectorAll('.tab-btn').forEach(function(b) {
     b.classList.remove('active');
   });
   var target = document.getElementById('tab-' + id);
-  if (target) {
-    target.setAttribute('style', 'display:block !important');
-  }
+  if (target) target.style.display = 'block';
   btn.classList.add('active');
 }
 
@@ -529,3 +511,6 @@ function handleSignup(e,inputId,btnId){
     }
   }).catch(function(){btn.textContent="Try again";});
 }
+</script>
+</body>
+</html>
