@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Sif's Gold — The all-in-one beauty platform for students, professionals, schools, and clients. Launching May 1, 2026."/>
+<title>Sif's Gold — Beauty Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0A1F1E;
+  --gold:#FFB800;
+  --gold-light:#FFD84D;
+  --gold-dim:rgba(255,184,0,0.18);
+  --gold-border:rgba(255,184,0,0.45);
+  --white:#FFFFFF;
+  --muted:rgba(255,255,255,0.88);
+  --muted2:rgba(255,255,255,0.6);
+  --card:rgba(255,184,0,0.04);
+  --card-border:rgba(255,184,0,0.14);
+}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Montserrat',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* ── STARS ── */
+.starfield{
+position:fixed;inset:0;z-index:0;pointer-events:none;
+background-image:
+radial-gradient(1.5px 1.5px at 8% 12%,rgba(0,255,204,0.9) 0%,transparent 100%),
+radial-gradient(1px 1px at 22% 38%,rgba(255,255,255,0.75) 0%,transparent 100%),
+radial-gradient(1.5px 1.5px at 37% 8%,rgba(0,170,255,0.95) 0%,transparent 100%),
+radial-gradient(1px 1px at 55% 55%,rgba(255,255,255,0.65) 0%,transparent 100%),
+radial-gradient(1px 1px at 68% 22%,rgba(255,255,255,0.82) 0%,transparent 100%),
+radial-gradient(1.5px 1.5px at 80% 70%,rgba(255,255,255,0.88) 0%,transparent 100%),
+radial-gradient(1px 1px at 92% 15%,rgba(0,255,204,0.85) 0%,transparent 100%),
+radial-gradient(1px 1px at 14% 80%,rgba(255,255,255,0.82) 0%,transparent 100%),
+radial-gradient(1px 1px at 44% 88%,rgba(255,255,255,0.6) 0%,transparent 100%),
+radial-gradient(1.5px 1.5px at 76% 45%,rgba(255,184,0,0.9) 0%,transparent 100%),
+radial-gradient(1px 1px at 30% 60%,rgba(255,184,0,0.7) 0%,transparent 100%),
+radial-gradient(1px 1px at 60% 90%,rgba(255,255,255,0.65) 0%,transparent 100%),
+radial-gradient(1px 1px at 88% 88%,rgba(255,184,0,0.6) 0%,transparent 100%);
+}
+
+/* ── NAV ── */
+nav{
+position:fixed;top:0;left:0;right:0;z-index:200;
+display:flex;align-items:center;justify-content:space-between;
+padding:0 48px;height:68px;
+background:rgba(8,28,26,0.92);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(0,170,255,0.3);
+}
+.nav-logo{
+display:flex;align-items:center;gap:14px;text-decoration:none;
+}
+.nav-logo img{
+width:42px;height:42px;object-fit:contain;border-radius:50%;
+}
+.nav-logo-text{
+font-family:‘Playfair Display’,serif;
+font-style:italic;font-weight:700;font-size:1.35rem;
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-tagline{
+font-family:‘Space Mono’,monospace;
+font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;
+color:var(–muted);display:block;margin-top:1px;
+}
+.nav-links{
+display:flex;align-items:center;gap:32px;list-style:none;
+}
+.nav-links a{
+font-family:‘Space Mono’,monospace;font-size:0.65rem;
+letter-spacing:0.12em;text-transform:uppercase;
+color:var(–muted);text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(–teal);}
+.nav-cta{
+font-family:‘Space Mono’,monospace;font-size:0.62rem;
+letter-spacing:0.1em;text-transform:uppercase;font-weight:700;
+color:var(–bg);
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+border:none;padding:10px 22px;border-radius:2px;cursor:pointer;
+transition:opacity .2s;text-decoration:none;
+}
+.nav-cta:hover{opacity:.88;}
+
+/* ── HERO ── */
+.hero{
+position:relative;min-height:100vh;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+text-align:center;
+padding:120px 24px 80px;z-index:1;
+}
+.hero-orb{
+position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;
+}
+.orb-a{width:700px;height:700px;background:rgba(0,180,160,0.22);top:-120px;left:-120px;}
+.orb-b{width:600px;height:600px;background:rgba(0,160,140,0.18);bottom:-80px;right:-100px;}
+.orb-c{width:400px;height:400px;background:rgba(0,200,170,0.07);top:50%;left:50%;transform:translate(-50%,-50%);}
+
+.hero-badge{
+font-family:‘Space Mono’,monospace;font-size:0.6rem;
+letter-spacing:0.22em;text-transform:uppercase;
+color:var(–teal);border:1px solid var(–blue-border);
+padding:6px 18px;border-radius:20px;margin-bottom:28px;
+background:var(–blue-dim);display:inline-block;
+}
+.hero-title{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:clamp(3.2rem,8vw,6rem);line-height:1.05;
+background:linear-gradient(145deg,var(–gold-light) 0%,var(–gold) 45%,#fffaed 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+margin-bottom:10px;padding:0 4px;
+}
+.hero-subtitle{
+font-family:‘Space Mono’,monospace;font-size:clamp(0.65rem,1.5vw,0.8rem);
+letter-spacing:0.25em;text-transform:uppercase;
+background:linear-gradient(90deg,var(–blue),var(–teal));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+margin-bottom:28px;
+}
+.hero-desc{
+font-family:‘Montserrat’,sans-serif;font-weight:300;
+font-size:clamp(0.95rem,2vw,1.1rem);line-height:1.8;
+color:rgba(250,250,250,0.6);max-width:540px;margin:0 auto 52px;
+}
+
+/* ── COUNTDOWN ── */
+.countdown-label{
+font-family:‘Space Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.2em;text-transform:uppercase;color:var(–muted);
+margin-bottom:16px;
+}
+.countdown{display:flex;gap:16px;justify-content:center;align-items:flex-start;margin-bottom:60px;}
+.count-unit{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.count-box{
+font-family:‘Playfair Display’,serif;font-weight:700;
+font-size:clamp(2rem,5vw,3rem);
+color:var(–white);line-height:1;
+background:rgba(0,170,255,0.06);
+border:1px solid var(–blue-border);
+border-radius:4px;padding:14px 10px 12px;
+min-width:78px;text-align:center;
+box-shadow:0 0 32px rgba(0,200,170,0.2);
+}
+.count-sep{
+font-family:‘Playfair Display’,serif;font-size:2.4rem;
+color:var(–gold-border);padding-top:14px;line-height:1;
+}
+.count-lbl{
+font-family:‘Space Mono’,monospace;font-size:0.5rem;
+letter-spacing:0.18em;text-transform:uppercase;color:var(–muted);
+}
+
+/* ── DIVIDER ── */
+.section-divider{
+display:flex;align-items:center;gap:20px;
+max-width:200px;margin:0 auto 80px;
+}
+.section-divider .line{
+flex:1;height:1px;
+background:linear-gradient(90deg,transparent,var(–gold-border));
+}
+.section-divider .line.r{background:linear-gradient(90deg,var(–gold-border),transparent);}
+.section-divider svg{opacity:.5;flex-shrink:0;}
+
+/* ── SECTIONS COMMON ── */
+section{position:relative;z-index:1;padding:100px 24px;}
+.section-eyebrow{
+font-family:‘Space Mono’,monospace;font-size:0.6rem;
+letter-spacing:0.22em;text-transform:uppercase;
+color:var(–teal);margin-bottom:16px;text-align:center;
+}
+.section-title{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:clamp(2rem,4vw,3rem);
+background:linear-gradient(135deg,var(–gold-light),var(–gold));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+text-align:center;margin-bottom:16px;padding:0 4px;
+}
+.section-sub{
+font-family:‘Montserrat’,sans-serif;font-weight:300;
+font-size:1rem;color:var(–muted);text-align:center;
+max-width:560px;margin:0 auto 60px;line-height:1.75;
+}
+
+/* ── ABOUT — USER TYPES ── */
+#about{background:rgba(0,40,38,0.5);border-top:1px solid rgba(0,220,180,0.15);}
+.user-grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:24px;max-width:1080px;margin:0 auto;
+}
+.user-card{
+background:var(–card);border:1px solid var(–card-border);
+border-radius:6px;padding:36px 30px;
+transition:border-color .3s,box-shadow .3s;
+position:relative;overflow:hidden;
+}
+.user-card::before{
+content:’’;position:absolute;top:0;left:0;right:0;height:2px;
+background:linear-gradient(90deg,var(–blue),var(–teal),var(–gold));
+opacity:0;transition:opacity .3s;
+}
+.user-card:hover{border-color:var(–gold-border);box-shadow:0 8px 48px rgba(0,200,170,0.18);}
+.user-card:hover::before{opacity:1;}
+.card-icon{font-size:2rem;margin-bottom:20px;}
+.card-type{
+font-family:‘Space Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.2em;text-transform:uppercase;
+color:var(–blue);margin-bottom:10px;
+}
+.card-title{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:1.4rem;color:var(–white);margin-bottom:14px;
+}
+.card-desc{
+font-family:‘Montserrat’,sans-serif;font-weight:300;
+font-size:0.88rem;color:var(–muted);line-height:1.75;margin-bottom:20px;
+}
+.card-features{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.card-features li{
+font-family:‘Montserrat’,sans-serif;font-size:0.8rem;
+color:rgba(250,250,250,0.5);
+padding-left:16px;position:relative;line-height:1.5;
+}
+.card-features li::before{
+content:’—’;position:absolute;left:0;
+color:var(–teal);font-size:0.7rem;
+}
+
+/* ── AMBASSADOR ── */
+#ambassador{background:rgba(0,30,28,0.4);border-top:1px solid rgba(0,220,180,0.15);}
+.amb-inner{max-width:680px;margin:0 auto;}
+.amb-perks{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:16px;margin-bottom:56px;
+}
+.perk{
+background:var(–card);border:1px solid var(–card-border);
+border-radius:4px;padding:22px 20px;text-align:center;
+}
+.perk-icon{font-size:1.6rem;margin-bottom:10px;}
+.perk-title{
+font-family:‘Space Mono’,monospace;font-size:0.6rem;
+letter-spacing:0.12em;text-transform:uppercase;color:var(–blue);
+margin-bottom:6px;
+}
+.perk-desc{font-family:‘Montserrat’,sans-serif;font-size:0.78rem;color:var(–muted);line-height:1.5;}
+
+/* ── FORM ── */
+.form-title{
+font-family:‘Playfair Display’,serif;font-style:italic;
+font-size:1.6rem;color:var(–white);text-align:center;margin-bottom:36px;
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-group{display:flex;flex-direction:column;gap:8px;}
+.form-group.full{grid-column:1/-1;}
+label{
+font-family:‘Space Mono’,monospace;font-size:0.55rem;
+letter-spacing:0.15em;text-transform:uppercase;color:var(–muted);
+}
+input,select,textarea{
+background:rgba(255,255,255,0.04);
+border:1px solid var(–card-border);
+border-radius:3px;padding:12px 16px;
+font-family:‘Montserrat’,sans-serif;font-size:0.88rem;
+color:var(–white);outline:none;
+transition:border-color .2s;width:100%;
+-webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(–gold-border);}
+input::placeholder,textarea::placeholder{color:rgba(250,250,250,0.2);}
+select option{background:var(–bg);color:var(–white);}
+textarea{resize:vertical;min-height:110px;}
+.form-note{
+font-family:‘Space Mono’,monospace;font-size:0.55rem;
+letter-spacing:0.1em;text-transform:uppercase;
+color:rgba(250,250,250,0.2);text-align:center;margin-top:12px;
+}
+.submit-btn{
+width:100%;margin-top:24px;
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+border:none;border-radius:3px;padding:16px;
+font-family:‘Space Mono’,monospace;font-size:0.7rem;
+letter-spacing:0.15em;text-transform:uppercase;font-weight:700;
+color:var(–bg);cursor:pointer;transition:opacity .2s;
+}
+.submit-btn:hover{opacity:.88;}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed;}
+.form-success{
+text-align:center;padding:40px 20px;
+border:1px solid var(–gold-border);border-radius:6px;
+background:var(–gold-dim);display:none;
+}
+.form-success h3{
+font-family:‘Playfair Display’,serif;font-style:italic;
+font-size:1.6rem;color:var(–gold-light);margin-bottom:12px;
+}
+.form-success p{font-family:‘Montserrat’,sans-serif;font-size:0.9rem;color:var(–muted);line-height:1.7;}
+
+/* ── FOOTER ── */
+footer{
+position:relative;z-index:1;
+background:rgba(0,25,24,0.6);
+border-top:1px solid rgba(0,220,180,0.2);
+padding:48px 24px;text-align:center;
+}
+.footer-logo{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:1.5rem;
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+background-clip:text;margin-bottom:8px;display:block;padding:0 4px;
+}
+.footer-tag{
+font-family:‘Space Mono’,monospace;font-size:0.55rem;
+letter-spacing:0.2em;text-transform:uppercase;color:var(–muted);
+margin-bottom:28px;display:block;
+}
+.footer-links{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:28px;}
+.footer-links a{
+font-family:‘Space Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.1em;text-transform:uppercase;
+color:var(–muted);text-decoration:none;transition:color .2s;
+}
+.footer-links a:hover{color:var(–teal);}
+.footer-copy{
+font-family:‘Montserrat’,sans-serif;font-size:0.72rem;
+color:rgba(250,250,250,0.15);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes floatPulse{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(8px);opacity:.8;}}
+.fade-in{animation:fadeUp .9s ease both;}
+.fade-in-1{animation:fadeUp .9s .1s ease both;}
+.fade-in-2{animation:fadeUp .9s .2s ease both;}
+.fade-in-3{animation:fadeUp .9s .3s ease both;}
+.fade-in-4{animation:fadeUp .9s .4s ease both;}
+.scroll-pulse{animation:floatPulse 2.2s ease-in-out infinite;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+nav{padding:0 20px;}
+.nav-links{display:none;}
+.form-grid{grid-template-columns:1fr;}
+.form-group.full{grid-column:1;}
+.amb-perks{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+.amb-perks{grid-template-columns:1fr;}
+.countdown{gap:10px;}
+.count-box{min-width:62px;font-size:1.8rem;padding:10px 6px;}
+}
+
+/* ── FEATURES ── */
+#features{border-top:1px solid rgba(0,220,180,0.15);background:rgba(0,30,28,0.3);}
+.features-grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;max-width:1080px;margin:0 auto;
+}
+.feature-card{
+background:rgba(0,180,160,0.06);border:1px solid rgba(0,220,180,0.14);
+border-radius:6px;padding:32px 28px;position:relative;overflow:hidden;
+transition:border-color .3s,box-shadow .3s;
+}
+.feature-card:hover{
+border-color:rgba(255,184,0,0.4);
+box-shadow:0 8px 40px rgba(255,184,0,0.1);
+}
+.feature-card::before{
+content:’’;position:absolute;top:0;left:0;right:0;height:2px;
+background:linear-gradient(90deg,var(–blue),var(–teal),var(–gold));
+opacity:0;transition:opacity .3s;
+}
+.feature-card:hover::before{opacity:1;}
+.feature-icon{font-size:2.2rem;margin-bottom:18px;}
+.feature-title{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:1.2rem;color:var(–white);margin-bottom:10px;
+}
+.feature-desc{
+font-family:‘Montserrat’,sans-serif;font-weight:300;
+font-size:0.85rem;color:var(–muted);line-height:1.75;
+}
+
+/* ── PRICING ── */
+#pricing{border-top:1px solid rgba(0,220,180,0.15);background:rgba(0,25,24,0.35);}
+.pricing-grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:24px;max-width:900px;margin:0 auto;
+}
+.price-card{
+background:rgba(0,180,160,0.05);border:1px solid rgba(0,220,180,0.12);
+border-radius:6px;padding:36px 28px;text-align:center;
+position:relative;overflow:hidden;transition:border-color .3s,transform .3s;
+}
+.price-card.featured{
+border-color:rgba(255,184,0,0.45);
+background:rgba(255,184,0,0.05);
+transform:scale(1.03);
+}
+.price-card.featured::before{
+content:‘Most Popular’;position:absolute;top:0;left:0;right:0;
+background:linear-gradient(90deg,var(–gold),var(–gold-light));
+color:var(–bg);font-family:‘Space Mono’,monospace;font-size:0.52rem;
+letter-spacing:0.15em;text-transform:uppercase;font-weight:700;
+padding:6px;text-align:center;
+}
+.price-card:hover{border-color:rgba(255,184,0,0.4);}
+.price-tier{
+font-family:‘Space Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.2em;text-transform:uppercase;
+color:var(–teal);margin-bottom:14px;margin-top:8px;
+}
+.price-name{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:1.8rem;color:var(–white);margin-bottom:6px;
+}
+.price-amount{
+font-family:‘Space Mono’,monospace;font-size:0.65rem;
+letter-spacing:0.1em;color:var(–gold);margin-bottom:20px;
+}
+.price-divider{height:1px;background:rgba(0,220,180,0.12);margin:20px 0;}
+.price-features{list-style:none;text-align:left;display:flex;flex-direction:column;gap:10px;}
+.price-features li{
+font-family:‘Montserrat’,sans-serif;font-size:0.82rem;
+color:rgba(255,255,255,0.55);padding-left:18px;position:relative;line-height:1.5;
+}
+.price-features li::before{
+content:‘✓’;position:absolute;left:0;
+color:var(–teal);font-size:0.7rem;font-weight:700;
+}
+.price-cta{
+display:block;margin-top:28px;
+font-family:‘Space Mono’,monospace;font-size:0.62rem;
+letter-spacing:0.12em;text-transform:uppercase;font-weight:700;
+padding:12px;border-radius:3px;text-decoration:none;
+transition:opacity .2s;
+}
+.price-cta.outline{
+border:1px solid rgba(0,220,180,0.35);color:var(–teal);background:none;
+}
+.price-cta.solid{
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+color:var(–bg);border:none;
+}
+.price-cta:hover{opacity:.82;}
+.pricing-note{
+font-family:‘Space Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.1em;text-transform:uppercase;
+color:rgba(255,255,255,0.2);text-align:center;margin-top:40px;
+}
+
+/* ── OUR STORY ── */
+#our-story{border-top:1px solid rgba(0,220,180,0.15);background:rgba(0,30,28,0.3);}
+.story-inner{max-width:820px;margin:0 auto;}
+.story-values{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;margin-top:56px;
+}
+.value-card{
+border-left:2px solid var(–gold);padding:0 0 0 20px;
+}
+.value-title{
+font-family:‘Playfair Display’,serif;font-style:italic;font-weight:700;
+font-size:1.1rem;color:var(–gold-light);margin-bottom:8px;
+}
+.value-desc{
+font-family:‘Montserrat’,sans-serif;font-weight:300;
+font-size:0.85rem;color:var(–muted);line-height:1.75;
+}
+.story-quote{
+font-family:‘Playfair Display’,serif;font-style:italic;
+font-size:clamp(1.1rem,2.5vw,1.5rem);
+color:rgba(255,255,255,0.55);line-height:1.65;
+text-align:center;max-width:640px;margin:56px auto 0;
+padding:36px;border:1px solid rgba(0,220,180,0.12);
+border-radius:4px;background:rgba(0,180,160,0.05);
+position:relative;
+}
+.story-quote::before{
+content:’”’;position:absolute;top:-20px;left:28px;
+font-size:5rem;color:var(–gold);opacity:0.3;line-height:1;
+font-family:‘Playfair Display’,serif;
+}
+
+/* ── DOWNLOAD ── */
+#download{border-top:1px solid rgba(0,220,180,0.15);background:rgba(0,25,24,0.4);}
+.download-inner{max-width:640px;margin:0 auto;text-align:center;}
+.store-badges{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:36px 0;}
+.store-badge{
+display:flex;align-items:center;gap:12px;
+background:rgba(255,255,255,0.04);border:1px solid rgba(0,220,180,0.2);
+border-radius:8px;padding:14px 24px;cursor:pointer;
+transition:border-color .2s,background .2s;text-decoration:none;
+}
+.store-badge:hover{border-color:rgba(255,184,0,0.4);background:rgba(255,184,0,0.05);}
+.store-badge-icon{font-size:1.8rem;line-height:1;}
+.store-badge-text{text-align:left;}
+.store-badge-sub{
+font-family:‘Space Mono’,monospace;font-size:0.5rem;
+letter-spacing:0.12em;text-transform:uppercase;color:var(–muted);
+display:block;margin-bottom:2px;
+}
+.store-badge-name{
+font-family:‘Playfair Display’,serif;font-weight:700;
+font-size:1rem;color:var(–white);display:block;
+}
+.download-divider{
+display:flex;align-items:center;gap:16px;margin:32px 0;
+}
+.download-divider .dline{flex:1;height:1px;background:rgba(0,220,180,0.12);}
+.download-divider span{
+font-family:‘Space Mono’,monospace;font-size:0.55rem;
+letter-spacing:0.15em;text-transform:uppercase;color:var(–muted);
+}
+.waitlist-row{
+display:flex;gap:0;width:100%;
+border-radius:3px;overflow:hidden;
+border:1px solid rgba(0,170,255,0.3);
+}
+.waitlist-row input{
+flex:1;background:rgba(0,170,255,0.06);border:none;outline:none;
+padding:14px 20px;font-family:‘Montserrat’,sans-serif;
+font-size:0.88rem;color:var(–white);
+}
+.waitlist-row input::placeholder{color:rgba(255,255,255,0.25);}
+.waitlist-row button{
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+border:none;padding:14px 28px;
+font-family:‘Space Mono’,monospace;font-size:0.62rem;
+letter-spacing:0.1em;text-transform:uppercase;font-weight:700;
+color:var(–bg);cursor:pointer;white-space:nowrap;transition:opacity .2s;
+}
+.waitlist-row button:hover{opacity:.88;}
+.waitlist-note{
+font-family:‘Space Mono’,monospace;font-size:0.55rem;
+letter-spacing:0.1em;text-transform:uppercase;
+color:rgba(255,255,255,0.2);margin-top:12px;display:block;
+}
+
+/* ── WAITLIST SECTION ── */
+#waitlist{
+border-top:1px solid rgba(0,220,180,0.15);
+background:rgba(0,20,18,0.5);
+text-align:center;
+}
+.waitlist-inner{max-width:580px;margin:0 auto;}
+.waitlist-glow{
+position:relative;display:inline-block;
+margin-bottom:32px;
+}
+.waitlist-glow::before{
+content:’’;position:absolute;
+inset:-30px;border-radius:50%;
+background:radial-gradient(circle,rgba(255,184,0,0.12) 0%,transparent 70%);
+pointer-events:none;
+}
+.waitlist-icon{
+font-size:3rem;display:block;
+animation:float-slow 3s ease-in-out infinite;
+}
+@keyframes float-slow{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+}
+.waitlist-form-wrap{
+border:1px solid rgba(0,170,255,0.3);
+border-radius:4px;overflow:hidden;
+display:flex;margin-bottom:14px;
+}
+.waitlist-form-wrap input{
+flex:1;background:rgba(0,170,255,0.06);
+border:none;outline:none;
+padding:16px 20px;
+font-family:‘Montserrat’,sans-serif;font-size:0.9rem;
+color:var(–white);
+}
+.waitlist-form-wrap input::placeholder{color:rgba(255,255,255,0.25);}
+.waitlist-form-wrap button{
+background:linear-gradient(135deg,var(–gold),var(–gold-light));
+border:none;padding:16px 28px;
+font-family:‘Space Mono’,monospace;font-size:0.62rem;
+letter-spacing:0.1em;text-transform:uppercase;font-weight:700;
+color:var(–bg);cursor:pointer;white-space:nowrap;transition:opacity .2s;
+}
+.waitlist-form-wrap button:hover{opacity:.85;}
+.waitlist-sub-note{
+font-family:‘Space Mono’,monospace;font-size:0.55rem;
+letter-spacing:0.12em;text-transform:uppercase;
+color:rgba(255,255,255,0.2);margin-bottom:40px;display:block;
+}
+.waitlist-stats{
+display:flex;justify-content:center;gap:40px;flex-wrap:wrap;
+padding-top:32px;border-top:1px solid rgba(0,220,180,0.1);
+}
+.waitlist-stat-num{
+font-family:‘Playfair Display’,serif;font-weight:700;font-size:1.8rem;
+color:var(–gold-light);display:block;line-height:1;margin-bottom:4px;
+}
+.waitlist-stat-lbl{
+font-family:‘Space Mono’,monospace;font-size:0.52rem;
+letter-spacing:0.14em;text-transform:uppercase;color:var(–muted);
+}
+.waitlist-success{
+display:none;padding:24px;
+border:1px solid rgba(0,220,180,0.3);
+border-radius:4px;background:rgba(0,220,180,0.06);
+margin-bottom:14px;
+}
+.waitlist-success h3{
+font-family:‘Playfair Display’,serif;font-style:italic;
+font-size:1.4rem;color:var(–teal);margin-bottom:8px;
+}
+.waitlist-success p{
+font-family:‘Montserrat’,sans-serif;font-size:0.85rem;
+color:var(–muted);line-height:1.7;
+}
+</style>
+
+</head>
+<body>
+
+<div class="starfield"></div>
+
+<!-- ── NAV ── -->
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="logo.jpg" alt="Sif's Gold Logo" onerror="this.style.display='none'"/>
+    <div>
+      <span class="nav-logo-text">Sif's Gold</span>
+      <span class="nav-tagline">Beauty Platform</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a>
+    <a href="#waitlist">Waitlist</a></li>
+    <li><a href="#waitlist">Waitlist</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#our-story">About</a></li>
+    <li><a href="#ambassador">Ambassadors</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
+  <a href="#ambassador" class="nav-cta">Apply Now</a>
+</nav>
+
+<!-- ── HERO ── -->
+
+<section class="hero">
+  <div class="hero-orb orb-a"></div>
+  <div class="hero-orb orb-b"></div>
+  <div class="hero-orb orb-c"></div>
+
+  <p class="hero-badge fade-in">✦ Launching May 1, 2026</p>
+  <h1 class="hero-title fade-in-1">Sif's Gold</h1>
+  <p class="hero-subtitle fade-in-2">Beauty Platform</p>
+  <p class="hero-desc fade-in-3">
+    The all-in-one platform for beauty students, licensed professionals,
+    beauty schools, and clients. Study. Book. Build your business. Get paid.
+  </p>
+
+  <p class="countdown-label fade-in-3">Launching in</p>
+  <div class="countdown fade-in-3">
+    <div class="count-unit">
+      <div class="count-box" id="days">00</div>
+      <div class="count-lbl">Days</div>
+    </div>
+    <div class="count-sep">:</div>
+    <div class="count-unit">
+      <div class="count-box" id="hours">00</div>
+      <div class="count-lbl">Hours</div>
+    </div>
+    <div class="count-sep">:</div>
+    <div class="count-unit">
+      <div class="count-box" id="mins">00</div>
+      <div class="count-lbl">Min</div>
+    </div>
+    <div class="count-sep">:</div>
+    <div class="count-unit">
+      <div class="count-box" id="secs">00</div>
+      <div class="count-lbl">Sec</div>
+    </div>
+  </div>
+
+  <div class="section-divider fade-in-4">
+    <div class="line"></div>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M7 0l1.5 5.5H14l-4.5 3.3 1.7 5.2L7 11l-4.2 3 1.7-5.2L0 5.5h5.5z" fill="#D4A843"/>
+    </svg>
+    <div class="line r"></div>
+  </div>
+
+  <!-- scroll hint -->
+
+  <div style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;" class="scroll-pulse">
+    <span style="font-family:'Space Mono',monospace;font-size:0.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);">Scroll</span>
+    <svg width="14" height="18" viewBox="0 0 14 18" fill="none"><path d="M7 0v14M1 8l6 8 6-8" stroke="#D4A843" stroke-width="1.2" stroke-linecap="round" opacity=".5"/></svg>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+
+<section id="about">
+  <p class="section-eyebrow">Who It's For</p>
+  <h2 class="section-title">Built for the Beauty Industry</h2>
+  <p class="section-sub">
+    Sif's Gold is designed for every person in the beauty world —
+    from your first day in school to running your own salon empire.
+  </p>
+
+  <div class="user-grid">
+
+```
+<div class="user-card">
+  <div class="card-icon">🎓</div>
+  <h3 class="card-title">Students</h3>
+  <p class="card-desc">Cosmetology, barbering, esthetics, and nail tech students get everything they need to pass boards and launch their careers.</p>
+  <ul class="card-features">
+    <li>6,000+ state board practice questions</li>
+    <li>AI-powered study tutor</li>
+    <li>Board exam simulator across all 52 regions</li>
+    <li>Digital flashcards & study tracker</li>
+    <li>School gradebook & attendance</li>
+  </ul>
+</div>
+
+<div class="user-card">
+  <div class="card-icon">✂️</div>
+  <h3 class="card-title">Professionals</h3>
+  <p class="card-desc">Licensed stylists, barbers, estheticians, and nail techs get a full business suite in one place.</p>
+  <ul class="card-features">
+    <li>Client booking & scheduling</li>
+    <li>Gold Wallet — savings goals & auto-save</li>
+    <li>Tax ledger & auto-calculator (all 50 states)</li>
+    <li>Brand deals marketplace</li>
+    <li>The Chair Board — job listings & booth rentals</li>
+  </ul>
+</div>
+
+<div class="user-card">
+  <div class="card-icon">🏫</div>
+  <h3 class="card-title">Beauty Schools</h3>
+  <p class="card-desc">Cosmetology schools, barber colleges, and esthetics programs manage students, grades, and performance all in one dashboard.</p>
+  <ul class="card-features">
+    <li>Universal cross-school gradebook</li>
+    <li>Digital report cards with signatures</li>
+    <li>Student placement & referrals</li>
+    <li>School discovery & enrollment tools</li>
+    <li>Attendance and hours tracking</li>
+  </ul>
+</div>
+
+<div class="user-card">
+  <div class="card-icon">💅</div>
+  <h3 class="card-title">Clients</h3>
+  <p class="card-desc">Clients discover, book, and build lasting relationships with their beauty professionals — all on one app.</p>
+  <ul class="card-features">
+    <li>Interactive Beauty Body Map — browse by service</li>
+    <li>Book appointments with real-time availability</li>
+    <li>Pre-payment &amp; secure escrow hold</li>
+    <li>Verified reviews &amp; beauty history</li>
+    <li>Loyalty rewards &amp; referrals</li>
+  </ul>
+</div>
+
+<div class="user-card">
+  <div class="card-icon">🏪</div>
+  <h3 class="card-title">Storefronts</h3>
+  <p class="card-desc">Hair stores and beauty supply businesses sell directly to professionals and clients through the Sif's Gold marketplace.</p>
+  <ul class="card-features">
+    <li>List products with pro-only visibility toggle</li>
+    <li>Basic &amp; Featured storefront tiers</li>
+    <li>Inventory tracking &amp; low stock alerts</li>
+    <li>Order management &amp; Stripe payouts</li>
+    <li>Reach verified professionals directly</li>
+  </ul>
+</div>
+
+<div class="user-card">
+  <div class="card-icon">🤝</div>
+  <h3 class="card-title">Brand Deals</h3>
+  <p class="card-desc">Beauty brands connect with verified creators and professionals through our managed marketplace — with AI-powered contract scanning built in.</p>
+  <ul class="card-features">
+    <li>Creator discovery with 6-tier verification</li>
+    <li>AI contract scanner powered by Claude</li>
+    <li>Filter by platform, following, user type &amp; region</li>
+    <li>Brand subscription plans</li>
+    <li>Direct access to the professional &amp; student list</li>
+  </ul>
+</div>
+
+<div class="user-card">
+  <div class="card-icon">⭐</div>
+  <h3 class="card-title">Ambassadors</h3>
+  <p class="card-desc">Sif's Gold Ambassadors are our community leaders — handpicked creators who represent the platform and earn for every person they bring in.</p>
+  <ul class="card-features">
+    <li>4 ambassador tiers with platform-wide caps</li>
+    <li>Earn a commission on every referral</li>
+    <li>Exclusive early access &amp; Gold status badge</li>
+    <li>Direct line to the founder</li>
+    <li>Shape the platform from day one</li>
+  </ul>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ── WAITLIST ── -->
+
+<section id="waitlist">
+  <div class="waitlist-inner">
+    <div class="waitlist-glow">
+      <span class="waitlist-icon">✦</span>
+    </div>
+    <p class="section-eyebrow">Stay in the Loop</p>
+    <h2 class="section-title">Be First to Know</h2>
+    <p class="section-sub" style="margin-bottom:36px;">
+      Sif's Gold launches May 1, 2026. Drop your email and you'll be
+      the first to know when we go live — plus get early access updates
+      straight to your inbox.
+    </p>
+
+```
+<div class="waitlist-success" id="waitlistSuccess">
+  <h3>You're on the list ✦</h3>
+  <p>Thank you for signing up. You'll hear from us before anyone else when Sif's Gold goes live.</p>
+</div>
+
+<form action="https://formspree.io/f/xaqpgyev" method="POST" id="waitlistForm">
+  <div class="waitlist-form-wrap">
+    <input type="email" name="email" placeholder="Enter your email address" required/>
+    <button type="submit">Notify Me</button>
+  </div>
+</form>
+<span class="waitlist-sub-note">No spam. Unsubscribe anytime. We respect your inbox.</span>
+
+<div class="waitlist-stats">
+  <div>
+    <span class="waitlist-stat-num">7</span>
+    <span class="waitlist-stat-lbl">User Types</span>
+  </div>
+  <div>
+    <span class="waitlist-stat-num">52</span>
+    <span class="waitlist-stat-lbl">Regions Covered</span>
+  </div>
+  <div>
+    <span class="waitlist-stat-num">May 1</span>
+    <span class="waitlist-stat-lbl">Launch Date</span>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ── AMBASSADOR ── -->
+
+<section id="ambassador">
+  <p class="section-eyebrow">Ambassador Program</p>
+  <h2 class="section-title">Join Before We Launch</h2>
+  <p class="section-sub">
+    We're handpicking a select group of ambassadors to grow with us from day one.
+    Represent Sif's Gold in your community and get exclusive early access.
+  </p>
+
+  <div class="amb-inner">
+    <div class="amb-perks">
+      <div class="perk">
+        <div class="perk-icon">🥇</div>
+        <p class="perk-title">Early Access</p>
+        <p class="perk-desc">Be among the first to use the full platform before public launch.</p>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">💛</div>
+        <p class="perk-title">Gold Status</p>
+        <p class="perk-desc">Exclusive ambassador badge and verified profile on the platform.</p>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">💸</div>
+        <p class="perk-title">Earn Commission</p>
+        <p class="perk-desc">Get paid for every person you bring to Sif's Gold.</p>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">📣</div>
+        <p class="perk-title">Grow Together</p>
+        <p class="perk-desc">Direct line to the founder — your feedback shapes the platform.</p>
+      </div>
+    </div>
+
+```
+<!-- APPLICATION FORM -->
+<p class="form-title">Apply to Be an Ambassador</p>
+
+<div class="form-success" id="formSuccess">
+  <h3>Application Received ✦</h3>
+  <p>Thank you for applying. We review every application personally and will be in touch soon. Welcome to the Sif's Gold family.</p>
+</div>
+
+<form id="ambForm" action="https://formspree.io/f/maqlqrkl" method="POST">
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="fname">Full Name *</label>
+      <input type="text" id="fname" name="fullName" placeholder="Your full name" required/>
+    </div>
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" name="email" placeholder="your@email.com" required/>
+    </div>
+    <div class="form-group">
+      <label for="platform">Primary Platform *</label>
+      <select id="platform" name="primaryPlatform" required>
+        <option value="" disabled selected>Select platform</option>
+        <option>Instagram</option>
+        <option>TikTok</option>
+        <option>YouTube</option>
+        <option>Facebook</option>
+        <option>Pinterest</option>
+        <option>Multiple</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="handle">Social Handle *</label>
+      <input type="text" id="handle" name="socialHandle" placeholder="@yourhandle" required/>
+    </div>
+    <div class="form-group">
+      <label for="following">Following Size *</label>
+      <select id="following" name="followingSize" required>
+        <option value="" disabled selected>Select range</option>
+        <option value="under1k">Under 1,000</option>
+        <option value="1k-5k">1,000 – 5,000</option>
+        <option value="5k-10k">5,000 – 10,000</option>
+        <option value="10k-50k">10,000 – 50,000</option>
+        <option value="50k-100k">50,000 – 100,000</option>
+        <option value="100k+">100,000+</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="usertype">I Am A *</label>
+      <select id="usertype" name="userType" required>
+        <option value="" disabled selected>Select type</option>
+        <option>Beauty / Cosmetology Student</option>
+        <option>Barbering Student</option>
+        <option>Esthetics Student</option>
+        <option>Nail Tech Student</option>
+        <option>Licensed Cosmetologist</option>
+        <option>Licensed Barber</option>
+        <option>Licensed Esthetician</option>
+        <option>Licensed Nail Technician</option>
+        <option>Salon / School Owner</option>
+        <option>Client / Beauty Enthusiast</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="state">State *</label>
+      <select id="state" name="state" required>
+        <option value="" disabled selected>Select state</option>
+        <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option><option>Washington D.C.</option><option>Puerto Rico</option><option>Outside the U.S.</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="tiktok">TikTok Handle (optional)</label>
+      <input type="text" id="tiktok" name="tiktokHandle" placeholder="@tiktokhandle"/>
+    </div>
+    <div class="form-group full">
+      <label for="why">Why do you want to be a Sif's Gold Ambassador? *</label>
+      <textarea id="why" name="whyAmbassador" placeholder="Tell us about yourself, your audience, and why you'd be a great fit..." required></textarea>
+    </div>
+    <div class="form-group full">
+      <label for="content">Describe your content style and what you create *</label>
+      <textarea id="content" name="contentStyle" placeholder="What kind of content do you make? What does your audience love about you?" style="min-height:90px;" required></textarea>
+    </div>
+  </div>
+
+  <button type="submit" class="submit-btn" id="submitBtn">Submit Application ✦</button>
+  <p class="form-note">Applications are reviewed manually. We'll contact you directly.</p>
+</form>
+```
+
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+
+<section id="features">
+  <p class="section-eyebrow">What You Get</p>
+  <h2 class="section-title">Everything in One Place</h2>
+  <p class="section-sub">
+    Sif's Gold replaces five different apps with one powerful platform —
+    built specifically for the beauty industry.
+  </p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3 class="feature-title">State Board Study Tools</h3>
+      <p class="feature-desc">6,000+ practice questions across all 52 regions, an AI-powered tutor, flashcards, and a full board exam simulator. Everything you need to pass — in one place.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3 class="feature-title">Booking & Scheduling</h3>
+      <p class="feature-desc">Clients book directly on your profile. Intake forms, photo uploads, real-time availability, and a running late notification so no one is left waiting.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <h3 class="feature-title">Business & Tax Tools</h3>
+      <p class="feature-desc">The Green Sheet tax ledger tracks every dollar. Auto-calculator covers all 50 states. Gold Wallet helps you save toward goals automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <h3 class="feature-title">Beauty Body Map</h3>
+      <p class="feature-desc">An interactive tappable human figure with 7 zones and 42 services. Clients browse by body area and book exactly what they want — no guessing.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3 class="feature-title">Sif's Gold Vault</h3>
+      <p class="feature-desc">Bank-level security for your account. PIN, biometric, pattern lock, and a decoy PIN for added protection. Your data stays yours.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3 class="feature-title">Gold Pulse Analytics</h3>
+      <p class="feature-desc">See your profile views, audience breakdown, booking impact, and content performance all in one dashboard. Know what's working — and do more of it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ── -->
+
+<section id="pricing">
+  <p class="section-eyebrow">Plans & Pricing</p>
+  <h2 class="section-title">Built for Every Stage</h2>
+  <p class="section-sub">
+    Start free. Upgrade when you're ready. No hidden fees, no surprises.
+    Exact pricing revealed at launch.
+  </p>
+  <div class="pricing-grid">
+
+```
+<div class="price-card">
+  <p class="price-tier">Tier 01</p>
+  <h3 class="price-name">Free</h3>
+  <p class="price-amount">Always free — no card required</p>
+  <div class="price-divider"></div>
+  <ul class="price-features">
+    <li>Basic profile and booking</li>
+    <li>Browse job listings on The Chair Board</li>
+    <li>Access to community features</li>
+    <li>State board flashcards</li>
+    <li>Limited study questions</li>
+  </ul>
+  <a href="#ambassador" class="price-cta outline">Get Early Access</a>
+</div>
+
+<div class="price-card featured">
+  <p class="price-tier">Tier 02</p>
+  <h3 class="price-name">Pro</h3>
+  <p class="price-amount">Monthly subscription — price revealed at launch</p>
+  <div class="price-divider"></div>
+  <ul class="price-features">
+    <li>Everything in Free</li>
+    <li>Full state board simulator — all 52 regions</li>
+    <li>AI-powered study tutor</li>
+    <li>Gold Wallet & auto-save rules</li>
+    <li>Full tax ledger & auto-calculator</li>
+    <li>Brand Deals marketplace access</li>
+    <li>Gold Pulse analytics dashboard</li>
+    <li>Priority booking visibility</li>
+  </ul>
+  <a href="#ambassador" class="price-cta solid">Get Early Access</a>
+</div>
+
+<div class="price-card">
+  <p class="price-tier">Tier 03</p>
+  <h3 class="price-name">Premium</h3>
+  <p class="price-amount">For schools, salons & storefronts — price revealed at launch</p>
+  <div class="price-divider"></div>
+  <ul class="price-features">
+    <li>Everything in Pro</li>
+    <li>School or salon business dashboard</li>
+    <li>Universal gradebook & digital report cards</li>
+    <li>Multi-staff scheduling & management</li>
+    <li>Storefront listing on marketplace</li>
+    <li>Advanced analytics & tax reporting</li>
+    <li>Dedicated onboarding support</li>
+  </ul>
+  <a href="#ambassador" class="price-cta outline">Get Early Access</a>
+</div>
+```
+
+  </div>
+  <p class="pricing-note">✦ Ambassador members receive exclusive early pricing locked in at launch</p>
+</section>
+
+<!-- ── OUR STORY ── -->
+
+<section id="our-story">
+  <p class="section-eyebrow">Our Story</p>
+  <h2 class="section-title">Why Sif's Gold Exists</h2>
+  <div class="story-inner">
+    <p class="section-sub" style="margin-bottom:0;">
+      The beauty industry is full of talented, hardworking people — students grinding through school,
+      licensed professionals building their clientele, school owners managing everything at once,
+      and clients who just want to find someone they trust. And yet there has never been a single platform
+      built for all of them together. Until now.
+    </p>
+    <p class="section-sub" style="margin-top:24px;margin-bottom:0;">
+      Sif's Gold was built to close that gap. To give every person in the beauty world the tools,
+      the community, and the infrastructure they deserve — from their first day in cosmetology school
+      to the day they open their own salon. One platform. Every stage.
+    </p>
+
+```
+<div class="story-values">
+  <div class="value-card">
+    <h4 class="value-title">Built for the Industry</h4>
+    <p class="value-desc">Every feature on Sif's Gold was designed with real beauty professionals in mind — not borrowed from another industry and renamed.</p>
+  </div>
+  <div class="value-card">
+    <h4 class="value-title">Safety First</h4>
+    <p class="value-desc">From the Vault security system to payment escrow holds and abuse prevention tools, your safety on this platform is non-negotiable.</p>
+  </div>
+  <div class="value-card">
+    <h4 class="value-title">Community Over Competition</h4>
+    <p class="value-desc">Sif's Gold is built on the belief that when beauty professionals thrive together, everyone wins — clients, students, and pros alike.</p>
+  </div>
+  <div class="value-card">
+    <h4 class="value-title">Inclusive by Design</h4>
+    <p class="value-desc">50 cultures, 50 languages, and tools built for every discipline — cosmetology, barbering, esthetics, and nail technology.</p>
+  </div>
+</div>
+
+<blockquote class="story-quote">
+  Beauty is not a luxury. It is a skill, a craft, a livelihood, and a community.
+  Sif's Gold was built to honor all of that.
+</blockquote>
+```
+
+  </div>
+</section>
+
+<!-- ── DOWNLOAD ── -->
+
+<section id="download">
+  <p class="section-eyebrow">Get the App</p>
+  <h2 class="section-title">Coming May 1, 2026</h2>
+  <p class="section-sub">
+    Sif's Gold will be available on iOS and Android at launch.
+    Join the waitlist now to get notified the moment it drops.
+  </p>
+  <div class="download-inner">
+    <div class="store-badges">
+      <a class="store-badge">
+        <div class="store-badge-icon">🍎</div>
+        <div class="store-badge-text">
+          <span class="store-badge-sub">Coming soon on the</span>
+          <span class="store-badge-name">App Store</span>
+        </div>
+      </a>
+      <a class="store-badge">
+        <div class="store-badge-icon">▶</div>
+        <div class="store-badge-text">
+          <span class="store-badge-sub">Coming soon on</span>
+          <span class="store-badge-name">Google Play</span>
+        </div>
+      </a>
+    </div>
+
+```
+<div class="download-divider">
+  <div class="dline"></div>
+  <span>Or join the waitlist</span>
+  <div class="dline"></div>
+</div>
+
+<form action="https://formspree.io/f/xaqpgyev" method="POST">
+  <div class="waitlist-row">
+    <input type="email" name="email" placeholder="Enter your email address" required/>
+    <button type="submit">Notify Me ✦</button>
+  </div>
+</form>
+<span class="waitlist-note">No spam. First to know when we launch.</span>
+```
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+
+<footer>
+  <span class="footer-logo">Sif's Gold</span>
+  <span class="footer-tag">Beauty Platform · Launching May 1, 2026</span>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#waitlist">Waitlist</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#our-story">About</a>
+    <a href="#ambassador">Ambassadors</a>
+    <a href="#download">Download</a>
+    <a href="mailto:hello@sifsgold.com">Contact</a>
+  </div>
+  <p class="footer-copy">© 2026 Sif's Gold. All rights reserved. Minneapolis, Minnesota.</p>
+</footer>
+
+<script>
+// ── COUNTDOWN ──
+function tick(){
+  const launch=new Date('2026-05-01T00:00:00');
+  const now=new Date();
+  const diff=launch-now;
+  if(diff<=0){
+    ['days','hours','mins','secs'].forEach(id=>document.getElementById(id).textContent='00');
+    return;
+  }
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  document.getElementById('days').textContent=String(d).padStart(2,'0');
+  document.getElementById('hours').textContent=String(h).padStart(2,'0');
+  document.getElementById('mins').textContent=String(m).padStart(2,'0');
+  document.getElementById('secs').textContent=String(s).padStart(2,'0');
+}
+tick();setInterval(tick,1000);
+
+// ── AMBASSADOR FORM — Formspree ──
+document.getElementById('ambForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  const formData = new FormData(this);
+  try {
+    const res = await fetch('https://formspree.io/f/maqlqrkl', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      document.getElementById('ambForm').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit Application ✦';
+      alert('Something went wrong. Please try again.');
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = 'Submit Application ✦';
+    alert('Something went wrong. Please try again.');
+  }
+});
+
+// ── WAITLIST FORM ──
+const waitlistForm = document.getElementById('waitlistForm');
+if(waitlistForm){
+  waitlistForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = this.querySelector('button');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    try{
+      const res = await fetch(this.action, {
+        method:'POST',
+        body: new FormData(this),
+        headers:{'Accept':'application/json'}
+      });
+      if(res.ok){
+        waitlistForm.style.display='none';
+        document.getElementById('waitlistSuccess').style.display='block';
+      } else {
+        btn.textContent = 'Notify Me';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
+    } catch(err){
+      btn.textContent = 'Notify Me';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again.');
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
