@@ -3,26 +3,35 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
   const BASE_ID  = 'appQMp6086JTVyWG6';
   const TABLE_ID = 'tblp0cmKXsgQIhBqj';
 
-  if (!AIRTABLE_API_KEY) {
-    return res.status(500).json({ error: 'Missing API key' });
-  }
+  if (!AIRTABLE_API_KEY) return res.status(500).json({ error: 'Missing API key' });
 
   let body = req.body;
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch(e) {}
   }
+
+  // Map camelCase form fields → exact Airtable column names
+  const fields = {
+    'Full Name':        body.fullName        || '',
+    'Email':            body.email           || '',
+    'Primary Platform': body.primaryPlatform || '',
+    'Social Handle':    body.socialHandle    || '',
+    'TikTok Handle':    body.tiktokHandle    || '',
+    'Following Size':   body.followingSize   || '',
+    'User Type':        body.userType        || '',
+    'State':            body.state           || '',
+    'Why Ambassador':   body.whyAmbassador   || '',
+    'Content Style':    body.contentStyle    || '',
+    'Applied At':       body.appliedAt       || new Date().toISOString(),
+    'Status':           'Pending'
+  };
 
   try {
     const response = await fetch(
@@ -33,7 +42,7 @@ module.exports = async function handler(req, res) {
           'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ fields })
       }
     );
 
