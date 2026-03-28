@@ -831,7 +831,7 @@ footer{
       <p>Thank you for signing up. You'll hear from us before anyone else when Sif's Gold goes live.</p>
     </div>
 
-    <form action="https://formspree.io/f/xaqpgyev" method="POST" id="waitlistForm">
+    <form id="waitlistForm">
       <div class="waitlist-form-wrap">
         <input type="email" name="email" placeholder="Enter your email address" required/>
         <button type="submit">Notify Me</button>
@@ -1161,7 +1161,7 @@ footer{
       <div class="dline"></div>
     </div>
 
-    <form action="https://formspree.io/f/xaqpgyev" method="POST">
+    <form id="downloadWaitlistForm">
       <div class="waitlist-row">
         <input type="email" name="email" placeholder="Enter your email address" required/>
         <button type="submit">Notify Me ✦</button>
@@ -1239,34 +1239,34 @@ document.getElementById('ambForm').addEventListener('submit', async function(e){
 });
 
 // ── WAITLIST FORM ──
-const waitlistForm = document.getElementById('waitlistForm');
-if(waitlistForm){
-  waitlistForm.addEventListener('submit', async function(e){
+// ── ALL WAITLIST FORMS — Web3Forms ──
+document.querySelectorAll('#waitlistForm, #downloadWaitlistForm').forEach(function(form){
+  form.addEventListener('submit', async function(e){
     e.preventDefault();
-    const btn = this.querySelector('button');
+    var btn = this.querySelector('button');
+    var orig = btn.textContent;
     btn.textContent = 'Submitting...';
     btn.disabled = true;
-    try{
-      const res = await fetch(this.action, {
-        method:'POST',
-        body: new FormData(this),
-        headers:{'Accept':'application/json'}
-      });
-      if(res.ok){
-        waitlistForm.style.display='none';
-        document.getElementById('waitlistSuccess').style.display='block';
+    var fd = new FormData(this);
+    fd.append('access_key', '31e29b26-890f-47e3-bf6f-2c41ada33b6b');
+    fd.append('subject', 'New Waitlist Signup - Sifs Gold');
+    try {
+      var res = await fetch('https://api.web3forms.com/submit', { method:'POST', body:fd });
+      var data = await res.json();
+      if(data.success){
+        var success = document.getElementById('waitlistSuccess');
+        if(success){ form.style.display='none'; success.style.display='block'; }
+        else { btn.textContent = 'Done!'; }
       } else {
-        btn.textContent = 'Notify Me';
-        btn.disabled = false;
+        btn.textContent = orig; btn.disabled = false;
         alert('Something went wrong. Please try again.');
       }
     } catch(err){
-      btn.textContent = 'Notify Me';
-      btn.disabled = false;
+      btn.textContent = orig; btn.disabled = false;
       alert('Something went wrong. Please try again.');
     }
   });
-}
+});
 
 </script>
 </body>
