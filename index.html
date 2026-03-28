@@ -897,7 +897,7 @@ footer{
       <p>Thank you for applying. We review every application personally and will be in touch soon. Welcome to the Sif's Gold family.</p>
     </div>
 
-    <form id="ambForm">
+    <form id="ambForm" action="https://formspree.io/f/maqlqrkl" method="POST">
       <div class="form-grid">
         <div class="form-group">
           <label for="fname">Full Name *</label>
@@ -1208,43 +1208,33 @@ function tick(){
 }
 tick();setInterval(tick,1000);
 
-// ── AMBASSADOR FORM — secure proxy ──
-document.getElementById('ambForm').addEventListener('submit',async function(e){
+// ── AMBASSADOR FORM — Web3Forms ──
+document.getElementById('ambForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  const btn=document.getElementById('submitBtn');
-  btn.disabled=true;btn.textContent='Submitting...';
-
-  const payload={
-    fullName:       this.fullName.value.trim(),
-    email:          this.email.value.trim(),
-    primaryPlatform:this.primaryPlatform.value,
-    socialHandle:   this.socialHandle.value.trim(),
-    tiktokHandle:   this.tiktokHandle.value.trim()||'—',
-    followingSize:  this.followingSize.value,
-    userType:       this.userType.value,
-    state:          this.state.value,
-    whyAmbassador:  this.whyAmbassador.value.trim(),
-    contentStyle:   this.contentStyle.value.trim(),
-    appliedAt:      new Date().toISOString(),
-    status:         'Pending'
-  };
-
-  try{
-    const res=await fetch('/api/submit',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  const formData = new FormData(this);
+  formData.append('access_key', '31e29b26-890f-47e3-bf6f-2c41ada33b6b');
+  formData.append('subject', 'New Ambassador Application - Sif's Gold');
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData
     });
-    if(res.ok){
-      document.getElementById('ambForm').style.display='none';
-      document.getElementById('formSuccess').style.display='block';
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('ambForm').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
     } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit Application ✦';
       alert('Something went wrong. Please try again.');
-      btn.disabled=false;btn.textContent='Submit Application ✦';
     }
-  } catch(err){
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = 'Submit Application ✦';
     alert('Something went wrong. Please try again.');
-    btn.disabled=false;btn.textContent='Submit Application ✦';
   }
 });
 
