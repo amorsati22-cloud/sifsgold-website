@@ -1248,7 +1248,7 @@ document.querySelectorAll('#waitlistForm, #downloadWaitlistForm').forEach(functi
     btn.textContent = 'Submitting...';
     btn.disabled = true;
     var fd = new FormData(this);
-    fd.append('access_key', '31e29b26-890f-47e3-bf6f-2c41ada33b6b');
+    fd.append('access_key', '81476d95-3f7c-4f37-855b-bf4fba5b6cdb');
     fd.append('subject', 'New Waitlist Signup - Sifs Gold');
     try {
       var res = await fetch('https://api.web3forms.com/submit', { method:'POST', body:fd });
