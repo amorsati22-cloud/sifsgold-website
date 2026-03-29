@@ -1,0 +1,12 @@
+{
+  "name": "kitted-web",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "serve .",
+    "build": "echo 'Static site - no build needed'",
+    "start": "serve ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

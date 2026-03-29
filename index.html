@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kitted — global platform for students, pros, schools, and clients. Join the waitlist." />
+  <meta name="theme-color" content="#0a1628" />
+  <title>Kitted — Get Kitted. Worldwide.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ocean-deep: #0a1628;
+      --ocean-mid: #0f2847;
+      --ocean-light: #1a3d5c;
+      --foam: #7eb8da;
+      --gold: #c9a227;
+      --gold-soft: #e8d48a;
+      --text: #e8f4fc;
+      --text-muted: #8ba3b8;
+      --surface: rgba(15, 40, 71, 0.65);
+      --border: rgba(126, 184, 218, 0.2);
+      --radius: 14px;
+      --font: "DM Sans", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--ocean-deep);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body.rtl { direction: rtl; }
+    .ocean-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% -20%, #1a4a6e 0%, transparent 55%),
+        radial-gradient(ellipse 80% 50% at 100% 50%, rgba(26, 74, 110, 0.35) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 0% 80%, rgba(15, 55, 90, 0.4) 0%, transparent 45%),
+        linear-gradient(180deg, #061018 0%, var(--ocean-deep) 40%, #050d14 100%);
+    }
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.04;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    a { color: var(--foam); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.25rem; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(6, 16, 24, 0.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .brand span { color: var(--gold-soft); }
+    .nav-tabs {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .nav-tabs button {
+      font-family: var(--font);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nav-tabs button:hover, .nav-tabs button.active {
+      color: var(--text);
+      border-color: var(--border);
+      background: var(--surface);
+    }
+    .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+    .lang-wrap { position: relative; }
+    .lang-btn {
+      font-family: var(--font);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .lang-btn svg { width: 18px; height: 18px; opacity: 0.9; }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 200px;
+      max-height: 280px;
+      overflow-y: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(10, 22, 40, 0.98);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+      display: none;
+      z-index: 200;
+    }
+    body.rtl .lang-menu { right: auto; left: 0; }
+    .lang-menu.open { display: block; }
+    .lang-menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      padding: 0.65rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+    }
+    body.rtl .lang-menu button { text-align: right; }
+    .lang-menu button:hover { background: var(--ocean-mid); }
+    .lang-menu button.active { color: var(--gold-soft); }
+    .hero {
+      padding: 4rem 0 3rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--foam) 50%, var(--gold-soft) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p.lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 36rem;
+      margin: 0 auto 2rem;
+    }
+    .waitlist-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      align-items: center;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .waitlist-box input[type="email"] {
+      flex: 1 1 220px;
+      min-width: 200px;
+      padding: 0.85rem 1.1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(6, 20, 35, 0.6);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 1rem;
+    }
+    .waitlist-box input::placeholder { color: var(--text-muted); }
+    .waitlist-box button[type="submit"] {
+      font-family: var(--font);
+      font-weight: 600;
+      padding: 0.85rem 1.5rem;
+      border-radius: var(--radius);
+      border: none;
+      background: linear-gradient(135deg, var(--gold) 0%, #a68520 100%);
+      color: #0a1628;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .waitlist-box button[type="submit"]:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(201, 162, 39, 0.35);
+    }
+    .form-msg { margin-top: 0.75rem; font-size: 0.9rem; min-height: 1.4em; }
+    .form-msg.ok { color: #7dcea0; }
+    .form-msg.err { color: #f1948a; }
+    .panels { padding: 2rem 0 4rem; }
+    .panel {
+      display: none;
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .panel.active { display: block; }
+    .panel h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--gold-soft);
+    }
+    .panel p { color: var(--text-muted); margin-bottom: 1rem; max-width: 52rem; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .feature {
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(6, 16, 28, 0.4);
+    }
+    .feature h3 { font-size: 1rem; margin-bottom: 0.35rem; color: var(--text); }
+    .feature p { font-size: 0.9rem; margin: 0; color: var(--text-muted); }
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    @media (max-width: 640px) {
+      .nav { flex-direction: column; align-items: stretch; }
+      .nav-tabs { justify-content: center; }
+      .nav-right { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ocean-bg" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap nav">
+      <a href="#" class="brand" data-i18n="brand">Kitted <span>Global</span></a>
+      <nav class="nav-tabs" aria-label="Audience">
+        <button type="button" data-audience="students" class="active" data-i18n="tab_students">Students</button>
+        <button type="button" data-audience="pros" data-i18n="tab_pros">Pros</button>
+        <button type="button" data-audience="schools" data-i18n="tab_schools">Schools</button>
+        <button type="button" data-audience="clients" data-i18n="tab_clients">Clients</button>
+      </nav>
+      <div class="nav-right">
+        <div class="lang-wrap">
+          <button type="button" class="lang-btn" id="langToggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Language">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
+            <span id="langLabel">English</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <h1 data-i18n="hero_title">Get Kitted — for everyone, everywhere.</h1>
+      <p class="lead" data-i18n="hero_lead">One ocean-deep experience for learners, professionals, institutions, and the people who hire them. Join the global waitlist.</p>
+      <form class="waitlist-box" id="waitlistForm" onsubmit="return submitEmail(event)">
+        <input type="email" id="emailInput" required autocomplete="email" placeholder="you@email.com" data-i18n-placeholder="email_ph" />
+        <button type="submit" data-i18n="cta_join">Join waitlist</button>
+      </form>
+      <p class="form-msg" id="formMsg" role="status"></p>
+    </section>
+
+    <section class="panels wrap">
+      <article class="panel active reveal" id="panel-students" data-audience-panel="students">
+        <h2 data-i18n="stu_h2">For students</h2>
+        <p data-i18n="stu_p">Build real skills, track progress, and connect with programs that match your goals — from trades to academics.</p>
+        <div class="features">
+          <div class="feature reveal"><h3 data-i18n="stu_f1t">Structured learning</h3><p data-i18n="stu_f1p">Paths that respect how you actually learn.</p></div>
+          <div class="feature reveal"><h3 data-i18n="stu_f2t">Career-ready</h3><p data-i18n="stu_f2p">Show what you know to schools and employers.</p></div>
+          <div class="feature reveal"><h3 data-i18n="stu_f3t">Global community</h3><p data-i18n="stu_f3p">Same platform, your language, your pace.</p></div>
+        </div>
+      </article>
+      <article class="panel reveal" id="panel-pros" data-audience-panel="pros">
+        <h2 data-i18n="pro_h2">For pros</h2>
+        <p data-i18n="pro_p">Showcase credentials, grow your book of business, and stay sharp with tools built for working experts.</p>
+        <div class="features">
+          <div class="feature reveal"><h3 data-i18n="pro_f1t">Profile & proof</h3><p data-i18n="pro_f1p">Portfolio-style presence that clients trust.</p></div>
+          <div class="feature reveal"><h3 data-i18n="pro_f2t">Demand</h3><p data-i18n="pro_f2p">Get discovered by clients and schools.</p></div>
+          <div class="feature reveal"><h3 data-i18n="pro_f3t">Always on</h3><p data-i18n="pro_f3p">Mobile-first, fast, and secure.</p></div>
+        </div>
+      </article>
+      <article class="panel reveal" id="panel-schools" data-audience-panel="schools">
+        <h2 data-i18n="sch_h2">For schools</h2>
+        <p data-i18n="sch_p">Recruit, onboard, and support cohorts with a single view of skills, outcomes, and placement.</p>
+        <div class="features">
+          <div class="feature reveal"><h3 data-i18n="sch_f1t">Cohort tools</h3><p data-i18n="sch_f1p">Visibility without the spreadsheet chaos.</p></div>
+          <div class="feature reveal"><h3 data-i18n="sch_f2t">Partnerships</h3><p data-i18n="sch_f2p">Connect programs to employers and clients.</p></div>
+          <div class="feature reveal"><h3 data-i18n="sch_f3t">Compliance-ready</h3><p data-i18n="sch_f3p">Security headers and privacy-first defaults.</p></div>
+        </div>
+      </article>
+      <article class="panel reveal" id="panel-clients" data-audience-panel="clients">
+        <h2 data-i18n="cli_h2">For clients</h2>
+        <p data-i18n="cli_p">Find vetted pros and students, book with confidence, and support talent in your community.</p>
+        <div class="features">
+          <div class="feature reveal"><h3 data-i18n="cli_f1t">Trust signals</h3><p data-i18n="cli_f1p">Verified paths and transparent profiles.</p></div>
+          <div class="feature reveal"><h3 data-i18n="cli_f2t">Local & global</h3><p data-i18n="cli_f2p">Search near you or across borders.</p></div>
+          <div class="feature reveal"><h3 data-i18n="cli_f3t">Simple</h3><p data-i18n="cli_f3p">No clutter — just outcomes.</p></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p data-i18n="footer">&copy; Kitted. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var LANG_KEY = "kitted_lang";
+      var RTL_LANGS = ["ar"];
+
+      var LANGS = [
+        { code: "en", label: "English" },
+        { code: "es", label: "Español" },
+        { code: "fr", label: "Français" },
+        { code: "pt", label: "Português" },
+        { code: "ht", label: "Kreyòl ayisyen" },
+        { code: "ar", label: "العربية" },
+        { code: "zh", label: "中文" },
+        { code: "hi", label: "हिन्दी" },
+        { code: "de", label: "Deutsch" }
+      ];
+
+      var STR = {
+        en: {
+          brand: "Kitted Global",
+          tab_students: "Students", tab_pros: "Pros", tab_schools: "Schools", tab_clients: "Clients",
+          hero_title: "Get Kitted — for everyone, everywhere.",
+          hero_lead: "One ocean-deep experience for learners, professionals, institutions, and the people who hire them. Join the global waitlist.",
+          email_ph: "you@email.com", cta_join: "Join waitlist",
+          form_ok: "You're on the list. We'll be in touch.",
+          form_err: "Something went wrong. Please try again.",
+          stu_h2: "For students", stu_p: "Build real skills, track progress, and connect with programs that match your goals — from trades to academics.",
+          stu_f1t: "Structured learning", stu_f1p: "Paths that respect how you actually learn.",
+          stu_f2t: "Career-ready", stu_f2p: "Show what you know to schools and employers.",
+          stu_f3t: "Global community", stu_f3p: "Same platform, your language, your pace.",
+          pro_h2: "For pros", pro_p: "Showcase credentials, grow your book of business, and stay sharp with tools built for working experts.",
+          pro_f1t: "Profile & proof", pro_f1p: "Portfolio-style presence that clients trust.",
+          pro_f2t: "Demand", pro_f2p: "Get discovered by clients and schools.",
+          pro_f3t: "Always on", pro_f3p: "Mobile-first, fast, and secure.",
+          sch_h2: "For schools", sch_p: "Recruit, onboard, and support cohorts with a single view of skills, outcomes, and placement.",
+          sch_f1t: "Cohort tools", sch_f1p: "Visibility without the spreadsheet chaos.",
+          sch_f2t: "Partnerships", sch_f2p: "Connect programs to employers and clients.",
+          sch_f3t: "Compliance-ready", sch_f3p: "Security headers and privacy-first defaults.",
+          cli_h2: "For clients", cli_p: "Find vetted pros and students, book with confidence, and support talent in your community.",
+          cli_f1t: "Trust signals", cli_f1p: "Verified paths and transparent profiles.",
+          cli_f2t: "Local & global", cli_f2p: "Search near you or across borders.",
+          cli_f3t: "Simple", cli_f3p: "No clutter — just outcomes.",
+          footer: "© Kitted. All rights reserved."
+        },
+        es: {
+          brand: "Kitted Global",
+          tab_students: "Estudiantes", tab_pros: "Profesionales", tab_schools: "Escuelas", tab_clients: "Clientes",
+          hero_title: "Ponte Kitted — para todos, en todas partes.",
+          hero_lead: "Una experiencia profunda como el océano para quienes aprenden, profesionales, instituciones y quienes contratan. Únete a la lista de espera global.",
+          email_ph: "tu@email.com", cta_join: "Unirme a la lista",
+          form_ok: "Estás en la lista. Te contactaremos pronto.",
+          form_err: "Algo salió mal. Inténtalo de nuevo.",
+          stu_h2: "Para estudiantes", stu_p: "Desarrolla habilidades reales, sigue tu progreso y conecta con programas que encajan con tus metas.",
+          stu_f1t: "Aprendizaje estructurado", stu_f1p: "Rutas que respetan cómo aprendes de verdad.",
+          stu_f2t: "Listo para trabajar", stu_f2p: "Muestra lo que sabes a escuelas y empleadores.",
+          stu_f3t: "Comunidad global", stu_f3p: "La misma plataforma, tu idioma, tu ritmo.",
+          pro_h2: "Para profesionales", pro_p: "Muestra credenciales, haz crecer tu negocio y mantente al día con herramientas para expertos.",
+          pro_f1t: "Perfil y prueba", pro_f1p: "Presencia tipo portafolio en la que confían los clientes.",
+          pro_f2t: "Demanda", pro_f2p: "Sé descubierto por clientes y escuelas.",
+          pro_f3t: "Siempre activo", pro_f3p: "Móvil primero, rápido y seguro.",
+          sch_h2: "Para escuelas", sch_p: "Recluta, incorpora y apoya cohortes con una sola vista de habilidades y resultados.",
+          sch_f1t: "Herramientas de cohorte", sch_f1p: "Visibilidad sin caos de hojas de cálculo.",
+          sch_f2t: "Alianzas", sch_f2p: "Conecta programas con empleadores y clientes.",
+          sch_f3t: "Listo para cumplimiento", sch_f3p: "Cabeceras de seguridad y privacidad por defecto.",
+          cli_h2: "Para clientes", cli_p: "Encuentra profesionales y estudiantes verificados, reserva con confianza.",
+          cli_f1t: "Señales de confianza", cli_f1p: "Rutas verificadas y perfiles transparentes.",
+          cli_f2t: "Local y global", cli_f2p: "Busca cerca de ti o más allá de fronteras.",
+          cli_f3t: "Simple", cli_f3p: "Sin desorden — solo resultados.",
+          footer: "© Kitted. Todos los derechos reservados."
+        },
+        fr: {
+          brand: "Kitted Global",
+          tab_students: "Étudiants", tab_pros: "Pros", tab_schools: "Écoles", tab_clients: "Clients",
+          hero_title: "Passez Kitted — pour tous, partout.",
+          hero_lead: "Une expérience océanique profonde pour apprenants, professionnels, institutions et recruteurs. Rejoignez la liste d'attente mondiale.",
+          email_ph: "vous@email.com", cta_join: "Rejoindre la liste",
+          form_ok: "Vous êtes inscrit. Nous vous contacterons.",
+          form_err: "Une erreur s'est produite. Réessayez.",
+          stu_h2: "Pour les étudiants", stu_p: "Développez des compétences réelles, suivez vos progrès et connectez-vous aux bons programmes.",
+          stu_f1t: "Parcours structurés", stu_f1p: "Des chemins adaptés à votre façon d'apprendre.",
+          stu_f2t: "Prêt pour l'emploi", stu_f2p: "Montrez ce que vous savez aux écoles et employeurs.",
+          stu_f3t: "Communauté mondiale", stu_f3p: "La même plateforme, votre langue, votre rythme.",
+          pro_h2: "Pour les pros", pro_p: "Valorisez vos titres, développez votre activité avec des outils pour experts.",
+          pro_f1t: "Profil & preuve", pro_f1p: "Une présence portfolio qui rassure les clients.",
+          pro_f2t: "Demande", pro_f2p: "Soyez trouvé par clients et écoles.",
+          pro_f3t: "Toujours disponible", pro_f3p: "Mobile d'abord, rapide et sécurisé.",
+          sch_h2: "Pour les écoles", sch_p: "Recrutez et accompagnez vos cohortes avec une vue unique des compétences.",
+          sch_f1t: "Outils cohorte", sch_f1p: "Visibilité sans chaos tableur.",
+          sch_f2t: "Partenariats", sch_f2p: "Reliez programmes, employeurs et clients.",
+          sch_f3t: "Conformité", sch_f3p: "En-têtes de sécurité et vie privée par défaut.",
+          cli_h2: "Pour les clients", cli_p: "Trouvez des pros et étudiants vérifiés, réservez en confiance.",
+          cli_f1t: "Signaux de confiance", cli_f1p: "Parcours vérifiés, profils transparents.",
+          cli_f2t: "Local & global", cli_f2p: "Près de chez vous ou au-delà des frontières.",
+          cli_f3t: "Simple", cli_f3p: "Pas de superflu — des résultats.",
+          footer: "© Kitted. Tous droits réservés."
+        },
+        pt: {
+          brand: "Kitted Global",
+          tab_students: "Estudantes", tab_pros: "Profissionais", tab_schools: "Escolas", tab_clients: "Clientes",
+          hero_title: "Fique Kitted — para todos, em todo lugar.",
+          hero_lead: "Uma experiência profunda como o oceano para quem aprende, profissionais, instituições e contratantes. Entre na lista de espera global.",
+          email_ph: "voce@email.com", cta_join: "Entrar na lista",
+          form_ok: "Você está na lista. Entraremos em contato.",
+          form_err: "Algo deu errado. Tente novamente.",
+          stu_h2: "Para estudantes", stu_p: "Construa habilidades reais, acompanhe o progresso e conecte-se a programas alinhados aos seus objetivos.",
+          stu_f1t: "Aprendizado estruturado", stu_f1p: "Trilhas que respeitam como você aprende.",
+          stu_f2t: "Pronto para carreira", stu_f2p: "Mostre o que sabe para escolas e empregadores.",
+          stu_f3t: "Comunidade global", stu_f3p: "A mesma plataforma, seu idioma, seu ritmo.",
+          pro_h2: "Para profissionais", pro_p: "Mostre credenciais, cresça seu negócio e mantenha-se afiado com ferramentas para especialistas.",
+          pro_f1t: "Perfil e prova", pro_f1p: "Presença tipo portfólio em que clientes confiam.",
+          pro_f2t: "Demanda", pro_f2p: "Seja descoberto por clientes e escolas.",
+          pro_f3t: "Sempre ligado", pro_f3p: "Mobile-first, rápido e seguro.",
+          sch_h2: "Para escolas", sch_p: "Recrute, integre e apoie turmas com uma visão única de habilidades e resultados.",
+          sch_f1t: "Ferramentas de turma", sch_f1p: "Visibilidade sem caos de planilhas.",
+          sch_f2t: "Parcerias", sch_f2p: "Conecte programas a empregadores e clientes.",
+          sch_f3t: "Pronto para conformidade", sch_f3p: "Cabeçalhos de segurança e privacidade por padrão.",
+          cli_h2: "Para clientes", cli_p: "Encontre profissionais e estudantes verificados, reserve com confiança.",
+          cli_f1t: "Sinais de confiança", cli_f1p: "Trilhas verificadas e perfis transparentes.",
+          cli_f2t: "Local e global", cli_f2p: "Busque perto de você ou além das fronteiras.",
+          cli_f3t: "Simples", cli_f3p: "Sem bagunça — só resultados.",
+          footer: "© Kitted. Todos os direitos reservados."
+        },
+        ht: {
+          brand: "Kitted Global",
+          tab_students: "Elèv", tab_pros: "Pwofesyonèl", tab_schools: "Lekòl", tab_clients: "Kliyan",
+          hero_title: "Vin Kitted — pou tout moun, toupatou.",
+          hero_lead: "Yon eksperyans fon kòm lanmè pou moun ki ap aprann, pwofesyonèl, enstitisyon, ak moun ki anboche. Antre nan lis atant mondyal la.",
+          email_ph: "ou@imel.com", cta_join: "Antre nan lis la",
+          form_ok: "Ou sou lis la. N ap kontakte w.",
+          form_err: "Gen yon pwoblèm. Eseye ankò.",
+          stu_h2: "Pou elèv", stu_p: "Bati bon konpetans, swiv pwogrè w, e konekte ak pwogram ki koresponn ak objektif ou.",
+          stu_f1t: "Aprantisaj estriktire", stu_f1p: "Chemen ki respekte jan ou aprann.",
+          stu_f2t: "Pare pou travay", stu_f2p: "Montre sa ou konnen bay lekòl ak anplwayè.",
+          stu_f3t: "Kominote mondyal", stu_f3p: "Menm platfòm, lang ou, rit ou.",
+          pro_h2: "Pou pwofesyonèl", pro_p: "Montre kalifikasyon, grandi biznis ou, rete byen ak zouti pou ekspè.",
+          pro_f1t: "Pwofil ak prèv", pro_f1p: "Prezans ki fè kliyan gen konfyans.",
+          pro_f2t: "Demann", pro_f2p: "Jwenn kliyan ak lekòl ki jwenn ou.",
+          pro_f3t: "Toujou aktif", pro_f3p: "Mobil an premye, rapid, an sekirite.",
+          sch_h2: "Pou lekòl", sch_p: "Rekrute, entegre, sipòte gwoup elèv ak yon sèl vizyon sou konpetans ak rezilta.",
+          sch_f1t: "Zouti gwoup", sch_f1p: "Vizibilite san dezòd tablo kalkil.",
+          sch_f2t: "Patenarya", sch_f2p: "Konekte pwogram ak anplwayè ak kliyan.",
+          sch_f3t: "Konfòmite", sch_f3p: "Sekirite ak vi prive nan baz.",
+          cli_h2: "Pou kliyan", cli_p: "Jwenn pwofesyonèl ak elèv verifye, rezève ak konfyans.",
+          cli_f1t: "Siy konfyans", cli_f1p: "Chemen verifye, pwofil klè.",
+          cli_f2t: "Lokal ak mondyal", cli_f2p: "Chèche toupre ou oswa lòt bò fwontyè.",
+          cli_f3t: "Senp", cli_f3p: "Pa gen dezòd — sèlman rezilta.",
+          footer: "© Kitted. Tout dwa rezève."
+        },
+        ar: {
+          brand: "Kitted العالمي",
+          tab_students: "طلاب", tab_pros: "محترفون", tab_schools: "مدارس", tab_clients: "عملاء",
+          hero_title: "كن جاهزًا — للجميع، في كل مكان.",
+          hero_lead: "تجربة عميقة كالمحيط للمتعلمين والمؤسسات ومن يوظفهم. انضم إلى قائمة الانتظار العالمية.",
+          email_ph: "بريدك@email.com", cta_join: "انضم للقائمة",
+          form_ok: "تم تسجيلك. سنتواصل معك قريبًا.",
+          form_err: "حدث خطأ. حاول مرة أخرى.",
+          stu_h2: "للطلاب", stu_p: "ابنِ مهارات حقيقية، تابع تقدمك، وتواصل مع البرامج التي تناسب أهدافك.",
+          stu_f1t: "تعلم منظم", stu_f1p: "مسارات تحترم طريقة تعلمك.",
+          stu_f2t: "جاهز للعمل", stu_f2p: "أظهر ما تعرفه للمدارس وأصحاب العمل.",
+          stu_f3t: "مجتمع عالمي", stu_f3p: "نفس المنصة، لغتك، وتيرتك.",
+          pro_h2: "للمحترفين", pro_p: "اعرض شهاداتك، نمِّ عملك، وابقَ حادًا بأدوات للخبراء.",
+          pro_f1t: "ملف وإثبات", pro_f1p: "حضور يشبه المحفظة يثق به العملاء.",
+          pro_f2t: "طلب", pro_f2p: "اكتشفك العملاء والمدارس.",
+          pro_f3t: "دائمًا متاح", pro_f3p: "جوال أولاً، سريع وآمن.",
+          sch_h2: "للمدارس", sch_p: "استقطب وادمج وادعم الفوج برؤية واحدة للمهارات والنتائج.",
+          sch_f1t: "أدوات الفوج", sch_f1p: "رؤية دون فوضى جداول.",
+          sch_f2t: "شراكات", sch_f2p: "اربط البرامج بأصحاب العمل والعملاء.",
+          sch_f3t: "جاهز للامتثال", sch_f3p: "رؤوس أمان وخصوصية افتراضية.",
+          cli_h2: "للعملاء", cli_p: "اعثر على محترفين وطلاب موثوقين، واحجز بثقة.",
+          cli_f1t: "إشارات ثقة", cli_f1p: "مسارات موثقة وملفات شفافة.",
+          cli_f2t: "محلي وعالمي", cli_f2p: "ابحث قربك أو عبر الحدود.",
+          cli_f3t: "بسيط", cli_f3p: "بدون فوضى — نتائج فقط.",
+          footer: "© Kitted. جميع الحقوق محفوظة."
+        },
+        zh: {
+          brand: "Kitted 全球",
+          tab_students: "学生", tab_pros: "专业人士", tab_schools: "学校", tab_clients: "客户",
+          hero_title: "加入 Kitted — 面向所有人，遍布全球。",
+          hero_lead: "为学习者、专业人士、机构与招聘方打造的深海级体验。加入全球等候名单。",
+          email_ph: "你的@邮箱.com", cta_join: "加入等候名单",
+          form_ok: "已加入名单。我们会联系你。",
+          form_err: "出错了，请重试。",
+          stu_h2: "面向学生", stu_p: "培养真实技能，跟踪进度，连接符合目标的课程与项目。",
+          stu_f1t: "结构化学习", stu_f1p: "尊重你真实学习节奏的路径。",
+          stu_f2t: "就业就绪", stu_f2p: "向学校与雇主展示你的能力。",
+          stu_f3t: "全球社区", stu_f3p: "同一平台，你的语言，你的节奏。",
+          pro_h2: "面向专业人士", pro_p: "展示资质，拓展业务，用为专家打造的工具保持领先。",
+          pro_f1t: "档案与证明", pro_f1p: "让客户信赖的作品集式呈现。",
+          pro_f2t: "需求对接", pro_f2p: "被客户与学校发现。",
+          pro_f3t: "随时在线", pro_f3p: "移动优先，快速且安全。",
+          sch_h2: "面向学校", sch_p: "以统一视图招募、入职并支持学员群体与成果。",
+          sch_f1t: "班级工具", sch_f1p: "清晰可视，告别表格混乱。",
+          sch_f2t: "合作", sch_f2p: "连接项目、雇主与客户。",
+          sch_f3t: "合规就绪", sch_f3p: "安全头与隐私优先默认设置。",
+          cli_h2: "面向客户", cli_p: "寻找经过核验的专业人士与学生，放心预约。",
+          cli_f1t: "信任信号", cli_f1p: "核验路径与透明档案。",
+          cli_f2t: "本地与全球", cli_f2p: "在身边或跨境搜索。",
+          cli_f3t: "简洁", cli_f3p: "没有杂乱 — 只有结果。",
+          footer: "© Kitted. 保留所有权利。"
+        },
+        hi: {
+          brand: "Kitted वैश्विक",
+          tab_students: "छात्र", tab_pros: "पेशेवर", tab_schools: "स्कूल", tab_clients: "ग्राहक",
+          hero_title: "Kitted बनें — सभी के लिए, हर जगह।",
+          hero_lead: "सीखने वालों, पेशेवरों, संस्थानों और नियोक्ताओं के लिए गहरे समुद्र जैसा अनुभव। वैश्विक प्रतीक्षा सूची में शामिल हों।",
+          email_ph: "आप@ईमेल.com", cta_join: "सूची में शामिल हों",
+          form_ok: "आप सूची में हैं। हम संपर्क करेंगे।",
+          form_err: "कुछ गलत हुआ। पुनः प्रयास करें।",
+          stu_h2: "छात्रों के लिए", stu_p: "वास्तविक कौशल बनाएं, प्रगति ट्रैक करें, और अपने लक्ष्यों से मेल खाने वाले कार्यक्रमों से जुड़ें।",
+          stu_f1t: "संरचित सीखना", stu_f1p: "रास्ते जो आपके सीखने के तरीके का सम्मान करते हैं।",
+          stu_f2t: "करियर-तैयार", stu_f2p: "स्कूल और नियोक्ताओं को दिखाएं कि आप क्या जानते हैं।",
+          stu_f3t: "वैश्विक समुदाय", stu_f3p: "एक ही प्लेटफ़ॉrm, आपकी भाषा, आपकी गति।",
+          pro_h2: "पेशेवरों के लिए", pro_p: "प्रमाणपत्र दिखाएं, व्यवसाय बढ़ाएं, विशेषज्ञों के लिए बने टूल से तेज रहें।",
+          pro_f1t: "प्रोफ़ाइल और प्रमाण", pro_f1p: "ग्राहकों को भरोसा दिलाने वाली पोर्टफोलियो-शैली उपस्थिति।",
+          pro_f2t: "मांग", pro_f2p: "ग्राहक और स्कूल आपको खोजें।",
+          pro_f3t: "हमेशा चालू", pro_f3p: "मोबाइल-पहले, तेज़ और सुरक्षित।",
+          sch_h2: "स्कूलों के लिए", sch_p: "एक ही दृष्टिकोण से भर्ती, ऑनबोर्डिंग और समूह समर्थन।",
+          sch_f1t: "समूह टूल", sch_f1p: "स्प्रेडशीट अराजकता के बिना दृश्यता।",
+          sch_f2t: "साझेदारी", sch_f2p: "कार्यक्रमों को नियोक्ताओं और ग्राहकों से जोड़ें।",
+          sch_f3t: "अनुपालन-तैयार", sch_f3p: "सुरक्षा हेडर और गोपनीयता-पहले डिफ़ॉल्ट।",
+          cli_h2: "ग्राहकों के लिए", cli_p: "सत्यापित पेशेवर और छात्र खोजें, विश्वास के साथ बुक करें।",
+          cli_f1t: "विश्वास संकेत", cli_f1p: "सत्यापित पथ और पारदर्शी प्रोफ़ाइल।",
+          cli_f2t: "स्थानीय और वैश्विक", cli_f2p: "आपके पास या सीमाओं के पार खोजें।",
+          cli_f3t: "सरल", cli_f3p: "कोई अव्यवस्था नहीं — केवल परिणाम।",
+          footer: "© Kitted. सर्वाधिकार सुरक्षित।"
+        },
+        de: {
+          brand: "Kitted Global",
+          tab_students: "Studierende", tab_pros: "Profis", tab_schools: "Schulen", tab_clients: "Kund:innen",
+          hero_title: "Werde Kitted — für alle, überall.",
+          hero_lead: "Ein tiefes Ozean-Erlebnis für Lernende, Profis, Institutionen und Arbeitgeber. Trage dich auf die globale Warteliste ein.",
+          email_ph: "du@email.de", cta_join: "Auf die Warteliste",
+          form_ok: "Du stehst auf der Liste. Wir melden uns.",
+          form_err: "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+          stu_h2: "Für Studierende", stu_p: "Baue echte Skills auf, verfolge Fortschritt und vernetze dich mit passenden Programmen.",
+          stu_f1t: "Strukturiertes Lernen", stu_f1p: "Pfade, die respektieren, wie du lernst.",
+          stu_f2t: "Karrierebereit", stu_f2p: "Zeige Schulen und Arbeitgebern, was du kannst.",
+          stu_f3t: "Globale Community", stu_f3p: "Dieselbe Plattform, deine Sprache, dein Tempo.",
+          pro_h2: "Für Profis", pro_p: "Zeige Credentials, wachse mit deinem Business und bleib scharf mit Profi-Tools.",
+          pro_f1t: "Profil & Nachweis", pro_f1p: "Portfolio-Präsenz, der Kund:innen vertrauen.",
+          pro_f2t: "Nachfrage", pro_f2p: "Werde von Kund:innen und Schulen gefunden.",
+          pro_f3t: "Immer da", pro_f3p: "Mobile-first, schnell und sicher.",
+          sch_h2: "Für Schulen", sch_p: "Rekrutiere, onboard und unterstütze Kohorten mit einer Sicht auf Skills und Outcomes.",
+          sch_f1t: "Kohorten-Tools", sch_f1p: "Transparenz ohne Tabellen-Chaos.",
+          sch_f2t: "Partnerschaften", sch_f2p: "Verbinde Programme mit Arbeitgebern und Kund:innen.",
+          sch_f3t: "Compliance-ready", sch_f3p: "Security-Header und Privacy-first Defaults.",
+          cli_h2: "Für Kund:innen", cli_p: "Finde geprüfte Profis und Studierende, buche mit Vertrauen.",
+          cli_f1t: "Vertrauenssignale", cli_f1p: "Verifizierte Pfade, transparente Profile.",
+          cli_f2t: "Lokal & global", cli_f2p: "Suche bei dir oder über Grenzen hinweg.",
+          cli_f3t: "Einfach", cli_f3p: "Kein Schnickschnack — nur Ergebnisse.",
+          footer: "© Kitted. Alle Rechte vorbehalten."
+        }
+      };
+
+      function detectLang() {
+        var saved = localStorage.getItem(LANG_KEY);
+        if (saved && STR[saved]) return saved;
+        var nav = (navigator.language || navigator.userLanguage || "en").split("-")[0].toLowerCase();
+        if (STR[nav]) return nav;
+        return "en";
+      }
+
+      var currentLang = detectLang();
+
+      function applyLang(code) {
+        if (!STR[code]) code = "en";
+        currentLang = code;
+        localStorage.setItem(LANG_KEY, code);
+        var t = STR[code];
+        document.documentElement.lang = code;
+        var rtl = RTL_LANGS.indexOf(code) >= 0;
+        document.body.classList.toggle("rtl", rtl);
+        document.querySelectorAll("[data-i18n]").forEach(function (el) {
+          var k = el.getAttribute("data-i18n");
+          if (t[k] != null) el.textContent = t[k];
+        });
+        document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+          var k = el.getAttribute("data-i18n-placeholder");
+          if (t[k] != null) el.setAttribute("placeholder", t[k]);
+        });
+        var label = LANGS.find(function (l) { return l.code === code; });
+        document.getElementById("langLabel").textContent = label ? label.label : code;
+        document.querySelectorAll(".lang-menu button").forEach(function (b) {
+          b.classList.toggle("active", b.getAttribute("data-code") === code);
+        });
+      }
+
+      function buildLangMenu() {
+        var menu = document.getElementById("langMenu");
+        LANGS.forEach(function (L) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.setAttribute("role", "option");
+          b.setAttribute("data-code", L.code);
+          b.textContent = L.label;
+          b.addEventListener("click", function () {
+            applyLang(L.code);
+            menu.classList.remove("open");
+            document.getElementById("langToggle").setAttribute("aria-expanded", "false");
+          });
+          menu.appendChild(b);
+        });
+      }
+
+      document.getElementById("langToggle").addEventListener("click", function (e) {
+        e.stopPropagation();
+        var menu = document.getElementById("langMenu");
+        var open = !menu.classList.contains("open");
+        menu.classList.toggle("open", open);
+        this.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      document.addEventListener("click", function () {
+        document.getElementById("langMenu").classList.remove("open");
+        document.getElementById("langToggle").setAttribute("aria-expanded", "false");
+      });
+
+      buildLangMenu();
+      applyLang(currentLang);
+
+      var tabButtons = document.querySelectorAll(".nav-tabs button");
+      var panels = document.querySelectorAll("[data-audience-panel]");
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var aud = btn.getAttribute("data-audience");
+          tabButtons.forEach(function (b) { b.classList.toggle("active", b === btn); });
+          panels.forEach(function (p) {
+            p.classList.toggle("active", p.getAttribute("data-audience-panel") === aud);
+          });
+        });
+      });
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      );
+      document.querySelectorAll(".reveal").forEach(function (el) { observer.observe(el); });
+      window.KITTED_I18N = STR;
+    })();
+
+    function submitEmail(ev) {
+      ev.preventDefault();
+      var email = document.getElementById("emailInput").value.trim();
+      var msg = document.getElementById("formMsg");
+      var lang = localStorage.getItem("kitted_lang") || "en";
+      var dict = window.KITTED_I18N || {};
+      var okText = (dict[lang] && dict[lang].form_ok) || "You're on the list.";
+      var errText = (dict[lang] && dict[lang].form_err) || "Something went wrong.";
+
+      msg.className = "form-msg";
+      msg.textContent = "";
+
+      // In production: POST to your API here (Mailchimp, Formspree, or custom backend)
+      // Example Formspree:
+      // fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email: email })
+      // }).then(function (r) { if (r.ok) { msg.classList.add('ok'); msg.textContent = okText; } else throw new Error(); }).catch(function () { msg.classList.add('err'); msg.textContent = errText; });
+
+      msg.classList.add("ok");
+      msg.textContent = okText;
+      document.getElementById("emailInput").value = "";
+      return false;
+    }
+  </script>
+</body>
+</html>
