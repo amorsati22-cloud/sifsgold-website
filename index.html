@@ -539,22 +539,20 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   resize();
   window.addEventListener('resize', resize);
 
-  // Stars
   const stars = [];
-  const starColors = ['#ffffff','#ffffff','#ffffff','#D4A843','#F0C060','#00C9B1','#A8D8EA','#E8DFC8'];
+  const starColors = ['#ffffff','#ffffff','#ffffff','#D4A843','#F0C060','#00C9B1','#A8D8EA'];
   for(let i=0;i<100;i++){
     stars.push({
       x: Math.random(),
-      y: Math.random() * 0.78, // keep stars in upper portion, not in river
+      y: Math.random()*0.78,
       r: Math.random()*1.2+0.2,
       color: starColors[Math.floor(Math.random()*starColors.length)],
-      speed: Math.random()*0.012+0.004,
+      speed: Math.random()*0.008+0.003,
       phase: Math.random()*Math.PI*2,
       bright: Math.random()*0.3+0.2
     });
   }
 
-  // River particles (shimmer on water)
   const ripples = [];
   for(let i=0;i<60;i++){
     ripples.push({
@@ -565,6 +563,22 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     });
   }
 
+  // Falling petals
+  const petals = [];
+  for(let i=0;i<55;i++){
+    petals.push({
+      x: Math.random(),
+      y: Math.random()*0.75,
+      size: Math.random()*2.5+1,
+      speedX: (Math.random()-0.5)*0.0006,
+      speedY: Math.random()*0.0008+0.0003,
+      rot: Math.random()*Math.PI*2,
+      rotSpeed: (Math.random()-0.5)*0.04,
+      alpha: Math.random()*0.5+0.25,
+      phase: Math.random()*Math.PI*2
+    });
+  }
+
   let t = 0;
 
   function draw(){
@@ -572,7 +586,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     const H = canvas.height;
     ctx.clearRect(0,0,W,H);
 
-    // ── SKY GRADIENT ──
+    // SKY
     const sky = ctx.createLinearGradient(0,0,0,H);
     sky.addColorStop(0,   '#000005');
     sky.addColorStop(0.4, '#020818');
@@ -584,12 +598,11 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     ctx.fillStyle = sky;
     ctx.fillRect(0,0,W,H);
 
-    // ── RIVER ──
+    // RIVER
     const riverTop    = H * 0.78;
     const riverBottom = H * 0.88;
     const riverMid    = H * 0.83;
 
-    // River base
     const riverGrad = ctx.createLinearGradient(0, riverTop, 0, riverBottom);
     riverGrad.addColorStop(0,   'rgba(0,40,70,0.0)');
     riverGrad.addColorStop(0.2, 'rgba(0,80,120,0.55)');
@@ -599,7 +612,6 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     ctx.fillStyle = riverGrad;
     ctx.fillRect(0, riverTop, W, riverBottom - riverTop);
 
-    // River glow (moonlight reflection)
     const moonGlow = ctx.createLinearGradient(0, riverTop, 0, riverBottom);
     moonGlow.addColorStop(0,   'rgba(180,220,255,0.0)');
     moonGlow.addColorStop(0.35,'rgba(180,220,255,0.12)');
@@ -609,7 +621,6 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     ctx.fillStyle = moonGlow;
     ctx.fillRect(0, riverTop, W, riverBottom - riverTop);
 
-    // Gold shimmer line down center of river
     const shimW = W * 0.35;
     const shimX = W/2 - shimW/2 + Math.sin(t*0.4)*W*0.04;
     const shimGrad = ctx.createLinearGradient(shimX, 0, shimX+shimW, 0);
@@ -621,7 +632,6 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     ctx.fillStyle = shimGrad;
     ctx.fillRect(shimX, riverTop, shimW, riverBottom - riverTop);
 
-    // River ripples
     ripples.forEach(rip => {
       const rx = rip.x * W;
       const ry = riverMid + Math.sin(rip.phase + t * rip.speed * 80) * (riverBottom-riverTop)*0.22;
@@ -633,7 +643,6 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       ctx.stroke();
     });
 
-    // Teal river edge glow
     const tealGlow = ctx.createLinearGradient(0, riverTop-8, 0, riverTop+20);
     tealGlow.addColorStop(0, 'rgba(0,201,177,0)');
     tealGlow.addColorStop(0.5,'rgba(0,201,177,0.15)');
@@ -648,26 +657,22 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     ctx.fillStyle = tealGlow2;
     ctx.fillRect(0, riverBottom-20, W, 28);
 
-    // ── STARS ──
+    // STARS
     stars.forEach(s => {
       const opacity = s.bright * (0.4 + 0.6*Math.sin(s.phase + t*s.speed*30));
       const glow = s.r * (0.8 + Math.sin(s.phase + t*s.speed*20)*0.3);
       const sx = s.x * W;
       const sy = s.y * H;
-
-      // Glow halo
       const grad = ctx.createRadialGradient(sx,sy,0,sx,sy,glow*3);
-      grad.addColorStop(0, s.color.replace(')',`,${opacity*0.4})`).replace('rgb','rgba'));
+      grad.addColorStop(0, `rgba(255,255,255,${opacity*0.4})`);
       grad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(sx,sy,glow*3,0,Math.PI*2);
       ctx.fill();
-
-      // Star core
       ctx.beginPath();
       ctx.arc(sx,sy,s.r,0,Math.PI*2);
-      ctx.fillStyle = s.color + Math.round(opacity*255).toString(16).padStart(2,'0');
+      ctx.fillStyle = `rgba(255,255,255,${opacity})`;
       ctx.fill();
     });
 
@@ -680,6 +685,24 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       ctx.ellipse(rx, ry, s.r*0.8, s.r*0.3, 0, 0, Math.PI*2);
       ctx.fillStyle = `rgba(200,230,255,${opacity})`;
       ctx.fill();
+    });
+
+    // FALLING PETALS
+    petals.forEach(p => {
+      p.x += p.speedX + Math.sin(t*0.6+p.phase)*0.0003;
+      p.y += p.speedY;
+      p.rot += p.rotSpeed;
+      p.phase += 0.015;
+      if(p.y > 0.82){ p.y = -0.02; p.x = Math.random(); }
+      ctx.save();
+      ctx.translate(p.x*W, p.y*H);
+      ctx.rotate(p.rot);
+      const alpha = p.alpha*(0.5+0.5*Math.sin(p.phase));
+      ctx.beginPath();
+      ctx.ellipse(0,0,p.size*1.5,p.size*0.8,0,0,Math.PI*2);
+      ctx.fillStyle=`rgba(235,215,228,${alpha})`;
+      ctx.fill();
+      ctx.restore();
     });
 
     t += 0.016;
