@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login | Sif's Gold</title>
+  <link rel="stylesheet" href="/billing.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="topbar"><a class="brand" href="/">Sif's Gold</a><nav class="nav"><a href="/pricing">Pricing</a></nav></header>
+    <section class="card stack" style="max-width:560px;">
+      <h1>Login</h1>
+      <p class="muted">Create or access your account before checkout so Stripe can prefill your email and your subscription can be linked to your profile.</p>
+      <input id="email" type="email" placeholder="you@example.com" style="padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg-soft);color:var(--text);" />
+      <input id="password" type="password" placeholder="Password" style="padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg-soft);color:var(--text);" />
+      <button id="loginBtn" class="btn">Continue</button>
+      <p id="msg" class="muted"></p>
+    </section>
+  </main>
+  <script>
+    document.getElementById('loginBtn').onclick = () => {
+      localStorage.setItem('sifsgold_web_email', document.getElementById('email').value || '');
+      document.getElementById('msg').textContent = 'Logged in (demo). Continue to checkout.';
+      setTimeout(() => { window.location.href = '/checkout'; }, 500);
+    };
+  </script>
+</body>
+</html>

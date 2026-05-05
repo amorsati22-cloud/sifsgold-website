@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pricing | Sif's Gold</title>
+  <link rel="stylesheet" href="/billing.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="topbar">
+      <a class="brand" href="/">Sif's Gold</a>
+      <nav class="nav">
+        <a href="/pricing">Pricing</a><a href="/checkout">Checkout</a><a href="/account">Account</a><a href="/login">Login</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <h1>Choose Your Plan 💎</h1>
+      <p>Subscribe on our website and keep more money in your pocket - our best rates are here.</p>
+      <span class="pill">Save up to 30% with yearly</span>
+      <div class="toggle">
+        <button id="monthlyBtn">Monthly</button>
+        <button id="yearlyBtn" class="active">Yearly <- Best Value</button>
+      </div>
+      <div class="tabs" id="typeTabs"></div>
+    </section>
+    <section class="plans" id="planGrid"></section>
+    <section class="trust">
+      <div>✓ Cancel anytime</div><div>✓ Secure payment via Stripe</div><div>✓ Instant access after payment</div><div>✓ 7-day free trial on yearly plans</div><div>✓ All 50 languages included free</div>
+    </section>
+  </main>
+  <script>
+    const billing = { mode: 'yearly', type: 'student' };
+    const plans = {
+      student: [
+        { name: 'Free', monthly: '$0 forever', yearly: '$0 forever', cta: 'Start Free', slug: '', features: ['Basic study tools', '5 practice questions/day'] },
+        { name: 'Pro Student', monthly: '$4.99/month', yearly: '$34.99/year', save: 'save $24.89 - like getting 5 months free', cta: 'Start 7-Day Free Trial', slug: 'student_pro', features: ['All study tools', 'All 50 states', 'Unlimited practice questions', 'All games', 'Trial only on yearly plan'] },
+        { name: 'Master Student', monthly: '$8.99/month', yearly: '$59.99/year', save: 'save $47.89', cta: 'Start 7-Day Free Trial', slug: 'student_master', features: ['Everything in Pro', 'AI study coach', 'Advanced analytics', 'Priority support'] },
+      ],
+      professional: [
+        { name: 'Free', monthly: '$0', yearly: '$0', cta: 'Start Free', slug: '', features: ['Unlimited bookings always free', 'Basic booking calendar', 'Up to 10 client records'] },
+        { name: 'Pro', monthly: '$14.99/month', yearly: '$99.99/year', save: 'save $79.89 - like getting 5 months free', cta: 'Start 7-Day Free Trial', slug: 'pro', features: ['Unlimited client records', 'Chemical formula vault', 'Green Sheet financials', 'Deal Studio', 'CE Marketplace'] },
+        { name: 'Elite', monthly: '$24.99/month', yearly: '$179.99/year', save: 'save $119.89', cta: 'Start 7-Day Free Trial', slug: 'elite', features: ['Everything in Pro', 'Advanced analytics (Gold Pulse)', 'Multi-staff booking', 'Priority algorithm placement', 'Featured Pro badge'] },
+      ],
+      client: [
+        { name: 'Free', monthly: '$0', yearly: '$0', cta: 'Start Free', slug: '', features: ['Browse and book pros'] },
+        { name: 'Pro Client', monthly: '$3.99/month', yearly: '$24.99/year', save: 'save $22.89', cta: 'Subscribe', slug: 'client_pro', features: ['Priority booking access', 'Beauty health journal', 'Beauty budget tracker', 'Client challenges'] },
+        { name: 'VIP Client', monthly: '$7.99/month', yearly: '$49.99/year', save: 'save $45.89', cta: 'Subscribe', slug: 'client_vip', features: ['Everything in Pro', 'VIP badge', 'White-glove support', 'First access to new features'] },
+      ],
+      school: [
+        { name: 'Free', monthly: '$0', yearly: '$0', cta: 'Start Free', slug: '', features: ['Up to 75 students', 'Basic tools'] },
+        { name: 'Standard', monthly: '$49/month', yearly: '$399/year', save: 'save $189', cta: 'Start Free Trial', slug: 'school_standard', features: ['Up to 75 students', 'All management tools unlocked'] },
+        { name: 'Partner', monthly: '$99/month', yearly: '$799/year', save: 'save $389', cta: 'Start Free Trial', slug: 'school_partner', features: ['Up to 500 students', 'Advanced analytics', 'Alumni network'] },
+        { name: 'Elite', monthly: '$199/month', yearly: '$1,599/year', save: 'save $789', cta: 'Contact Sales', slug: 'school_elite', features: ['Unlimited students', 'White label options', 'Dedicated support'] },
+      ],
+      salon: [
+        { name: 'Up to 5 artists', monthly: '$49.99/month', yearly: '$399/year', cta: 'Subscribe', slug: 'salon_5', features: [] },
+        { name: 'Up to 15 artists', monthly: '$99.99/month', yearly: '$799/year', cta: 'Subscribe', slug: 'salon_15', features: [] },
+        { name: 'Enterprise (unlimited)', monthly: '$199/month', yearly: '$1,599/year', cta: 'Contact Sales', slug: 'salon_unlimited', features: [] },
+      ],
+      brand: [
+        { name: 'Basic listing', monthly: '$19.99/month', yearly: '$19.99/month', cta: 'Subscribe', slug: 'store_basic', features: ['Marketplace visibility'] },
+        { name: 'Featured listing', monthly: '$39.99/month', yearly: '$39.99/month', cta: 'Subscribe', slug: 'store_featured', features: ['+ 8% transaction fee on sales'] },
+      ],
+    };
+    const labels = [['student','🎓 Student'],['professional','💅 Pro'],['client','👤 Client'],['school','🏫 School'],['salon','💈 Salon'],['brand','🛍️ Brand']];
+    const tabs = document.getElementById('typeTabs');
+    const grid = document.getElementById('planGrid');
+    function renderTabs() {
+      tabs.innerHTML = labels.map(([id, text]) => `<button class="${billing.type===id?'active':''}" data-type="${id}">${text}</button>`).join('');
+      tabs.querySelectorAll('button').forEach((b)=>b.onclick=()=>{billing.type=b.dataset.type; render();});
+    }
+    function render() {
+      renderTabs();
+      const list = plans[billing.type] || [];
+      grid.innerHTML = list.map((p)=>{
+        const cadence = billing.mode === 'monthly' ? p.monthly : p.yearly;
+        const slug = p.slug ? `${p.slug}_${billing.mode}` : '';
+        const href = slug ? `/checkout?plan=${slug}` : '/login';
+        return `<article class="card"><h3>${p.name}</h3><p class="price">${cadence}</p>${p.save && billing.mode==='yearly' ? `<p class="save">${p.save}</p>`:''}<ul>${p.features.map((f)=>`<li>${f}</li>`).join('')}</ul><a class="btn" href="${href}">${p.cta} →</a></article>`;
+      }).join('');
+    }
+    document.getElementById('monthlyBtn').onclick=()=>{billing.mode='monthly';monthlyBtn.classList.add('active');yearlyBtn.classList.remove('active');render();};
+    document.getElementById('yearlyBtn').onclick=()=>{billing.mode='yearly';yearlyBtn.classList.add('active');monthlyBtn.classList.remove('active');render();};
+    render();
+  </script>
+</body>
+</html>

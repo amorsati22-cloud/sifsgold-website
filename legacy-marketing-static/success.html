@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Success | Sif's Gold</title>
+  <link rel="stylesheet" href="/billing.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card stack" style="max-width:760px;margin:auto;">
+      <h1>🎉 Welcome to Sif's Gold <span id="tier">Pro</span>!</h1>
+      <p class="ok">Your payment completed successfully.</p>
+      <p class="muted">Download the app to get started:</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn" href="https://apps.apple.com" target="_blank" rel="noreferrer">App Store Download</a>
+        <a class="btn secondary" href="https://play.google.com/store" target="_blank" rel="noreferrer">Google Play Download</a>
+      </div>
+      <p class="muted">Or continue on the web from your account portal.</p>
+      <a class="btn secondary" href="/account">Go to Account</a>
+    </section>
+  </main>
+  <script>
+    const tier = new URLSearchParams(window.location.search).get('tier');
+    if (tier) document.getElementById('tier').textContent = tier;
+  </script>
+</body>
+</html>
