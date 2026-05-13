@@ -1,42 +1,63 @@
 import type { Metadata } from "next";
-import { LegalPageShell } from "@/components/legal/LegalPageShell";
+import Link from "next/link";
+import { LegalLayout, legalLastUpdated } from "@/components/legal/LegalLayout";
+import { BRAND } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
+  description: "How Sif's Gold uses cookies and similar technologies — essential, functional, and privacy-first analytics.",
+  alternates: { canonical: `${BRAND.url}/legal/cookies` },
 };
 
-export default function CookiesPage() {
+export default function CookiesPolicyPage() {
+  const last = legalLastUpdated();
   return (
-    <LegalPageShell title="Cookie Policy">
-      <h2 id="placeholder-notice">Placeholder Notice</h2>
+    <LegalLayout title="Cookie Policy" lastUpdated={last} currentPath="/legal/cookies">
+      <h2 id="overview">Overview</h2>
       <p>
-        This is a placeholder Cookie Policy. The final policy will be published after legal review
-        and consent tooling implementation.
+        Sif&apos;s Gold uses a small set of cookies and similar technologies to keep your session secure, remember
+        preferences you explicitly set, and understand product health. We do not use tracking pixels or third-party advertising
+        cookies.
       </p>
 
-      <h2 id="what-cookies-are">What Cookies Are</h2>
+      <h2 id="essential">Essential cookies</h2>
       <p>
-        The final policy will define cookies and similar tracking technologies, including local
-        storage and related browser technologies.
+        These cookies are required for core security and account flows — for example keeping you signed in during an active
+        session and protecting forms from automated abuse. They cannot be disabled without breaking basic functionality.
       </p>
 
-      <h2 id="categories">Planned Cookie Categories</h2>
-      <ul>
-        <li>Essential cookies</li>
-        <li>Analytics cookies</li>
-        <li>Marketing cookies</li>
-      </ul>
+      <h2 id="functional">Functional cookies</h2>
       <p>
-        At this stage, none of these categories are loaded in production until the consent banner
-        is implemented.
+        When you choose preferences in the product (such as reduced motion or cookie choices saved in our consent layer),
+        functional cookies or local storage may remember those selections so you do not have to reconfigure every visit.
       </p>
 
-      <h2 id="management-and-third-parties">Cookie Management and Third Parties</h2>
+      <h2 id="analytics">Analytics</h2>
       <p>
-        The final policy will include browser-based cookie management instructions and disclosures
-        around any third-party cookies in use.
+        We use Vercel Web Analytics in a privacy-preserving configuration that is cookie-free at the visitor level and focuses
+        on aggregate page performance — not individual ad profiles.
       </p>
-    </LegalPageShell>
+
+      <h2 id="opt-out">Opting out</h2>
+      <p>
+        Where a category is optional, you can withdraw consent through our cookie preferences UI when it is enabled for your
+        account or device. Essential cookies remain for security even if other categories are off.
+      </p>
+
+      <h2 id="no-ads">No ad-tech cookies</h2>
+      <p>
+        We do not use tracking pixels or third-party advertising cookies. Partner surfaces inside The Gold Collective are
+        contextual — not retargeting networks.
+      </p>
+
+      <h2 id="contact">Questions</h2>
+      <p>
+        For privacy questions or data requests, use the{" "}
+        <Link href="/contact" className="font-semibold text-gold underline-offset-4 hover:underline">
+          contact form
+        </Link>
+        .
+      </p>
+    </LegalLayout>
   );
 }
-
