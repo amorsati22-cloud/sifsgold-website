@@ -53,7 +53,7 @@ export default function NotFound() {
         <div className="mt-8 text-sm text-cream/75">
           <p className="font-semibold text-gold">Popular destinations:</p>
           <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-2">
-            <Link href="/for-professionals" className="hover:text-gold">
+            <Link href="/for-pros" className="hover:text-gold">
               For Professionals
             </Link>
             <Link href="/for-clients" className="hover:text-gold">

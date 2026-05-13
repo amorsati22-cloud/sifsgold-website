@@ -1,5 +1,12 @@
 import type { MetadataRoute } from "next";
+import { audienceLandingSlugs } from "@/data/audience-landings";
 import { BRAND, LEGAL_PAGES } from "@/lib/constants";
+
+const AUDIENCE_SITEMAP = audienceLandingSlugs.map((slug) => ({
+  path: `/${slug}`,
+  changeFrequency: "weekly" as const,
+  priority: 0.75,
+}));
 
 const ROUTES: Array<{
   path: string;
@@ -11,6 +18,7 @@ const ROUTES: Array<{
   { path: "/pricing", changeFrequency: "weekly", priority: 0.9 },
   { path: "/press", changeFrequency: "monthly", priority: 0.5 },
   { path: "/delete", changeFrequency: "yearly", priority: 0.3 },
+  ...AUDIENCE_SITEMAP,
   ...LEGAL_PAGES.filter((page) => page.href.startsWith("/legal/")).map((page) => ({
     path: page.href,
     changeFrequency: "yearly" as const,

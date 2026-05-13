@@ -9,10 +9,10 @@ import { WheatBranch } from "@/components/decorative/WheatBranch";
 import { GoldButton } from "@/components/ui/GoldButton";
 
 const NAV_LINKS = [
-  { label: "For Pros", href: "/for-professionals" },
+  { label: "For Pros", href: "/for-pros" },
   { label: "For Clients", href: "/for-clients" },
   { label: "Schools & Salons", href: "/for-schools" },
-  { label: "Fashion", href: "/fashion" },
+  { label: "Fashion", href: "/for-fashion" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "Features", href: "/#features" },
