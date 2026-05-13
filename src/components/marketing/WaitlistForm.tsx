@@ -85,7 +85,7 @@ export function WaitlistForm({
             type="email"
             autoComplete="email"
             required
-            placeholder="you@example.com"
+            placeholder="Your email address"
             className="min-h-12 w-full rounded-xl border border-white/20 bg-navy-dark/60 px-4 text-offwhite shadow-sm outline-none ring-gold/20 placeholder:text-white/40 focus:border-gold focus:ring-4"
           />
           <button

@@ -1,4 +1,6 @@
 import { BRAND } from "@/lib/constants";
+import type { PricingTier } from "@/data/pricing";
+import { pricingTiers } from "@/data/pricing";
 
 export type BreadcrumbSchemaItem = {
   name: string;
@@ -60,6 +62,64 @@ export function generateBreadcrumbSchema(items: BreadcrumbSchemaItem[]) {
       name: item.name,
       item: toAbsoluteUrl(item.href),
     })),
+  };
+}
+
+export function generateLocalBusinessSchema(input: {
+  name: string;
+  url: string;
+  description: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: input.name,
+    url: input.url,
+    description: input.description,
+    parentOrganization: {
+      "@type": "Organization",
+      name: BRAND.name,
+      url: BRAND.url,
+    },
+  };
+}
+
+export function generatePricingProductListSchema() {
+  const tiers: PricingTier[] = Object.values(pricingTiers).flat();
+  const itemListElement = tiers.map((tier, index) => {
+    const price =
+      typeof tier.monthlyPrice === "number" && tier.monthlyPrice > 0
+        ? String(tier.monthlyPrice)
+        : typeof tier.annualPrice === "number" && tier.annualPrice > 0
+          ? String(Math.round(tier.annualPrice / 12))
+          : "0";
+    return {
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: `${BRAND.name} — ${tier.name}`,
+        description: tier.limits?.description ?? tier.features.slice(0, 4).join(" "),
+        brand: {
+          "@type": "Brand",
+          name: BRAND.name,
+        },
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "USD",
+          price,
+          availability: "https://schema.org/PreOrder",
+          url: `${BRAND.url}/pricing`,
+        },
+      },
+    };
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${BRAND.name} pricing tiers`,
+    itemListElement,
   };
 }
 

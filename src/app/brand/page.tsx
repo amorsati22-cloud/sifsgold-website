@@ -120,9 +120,8 @@ export default function BrandPage() {
         <div className="mx-auto max-w-content px-4 sm:px-6 md:px-8">
           <h2 className="font-heading text-3xl text-gold md:text-4xl">Forbidden words</h2>
           <p className="mt-5 max-w-3xl text-base leading-relaxed text-cream/90">
-            Do not use <span className="font-semibold text-gold">&quot;Kitted&quot;</span> — it is a retired former name and
-            is fully out of circulation. Use <span className="font-semibold text-gold">Sif&apos;s Gold</span> in all public
-            copy, decks, and captions.
+            Do not use the retired predecessor brand name in any form — it is fully out of circulation. Use{" "}
+            <span className="font-semibold text-gold">Sif&apos;s Gold</span> in all public copy, decks, and captions.
           </p>
         </div>
       </section>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CONSENT_UPDATED_EVENT, hasAcceptedAnalytics } from "@/lib/consent";
 
@@ -24,7 +23,6 @@ export function AnalyticsGate() {
 
   return (
     <>
-      <Analytics />
       <SpeedInsights />
     </>
   );

@@ -25,7 +25,7 @@ export function SignInPlaceholderForm() {
           name="email"
           type="email"
           autoComplete="email"
-          placeholder="you@example.com"
+                placeholder="Your email address"
         />
       </div>
       <div>

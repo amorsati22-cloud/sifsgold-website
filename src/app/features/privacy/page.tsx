@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FeatureDeepDiveView } from "@/components/features/FeatureDeepDiveView";
+import { FeatureDeepDiveWithSchema } from "@/components/features/FeatureDeepDiveWithSchema";
 import { FeaturePrivacyExtras } from "@/components/features/FeaturePrivacyExtras";
 import { getFeatureDeepDive } from "@/data/feature-deep-dives";
 import type { FeatureDeepDiveConfig } from "@/types/feature-deep-dive";
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <FeatureDeepDiveView config={config}>
+    <FeatureDeepDiveWithSchema config={config}>
       <FeaturePrivacyExtras />
-    </FeatureDeepDiveView>
+    </FeatureDeepDiveWithSchema>
   );
 }

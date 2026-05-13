@@ -23,7 +23,7 @@ export default function Error({
           Something went sideways.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-base text-cream/80">
-          Our team has been notified. While we look into it, you can try again or head back home.
+          Something went sideways. Try again in a moment.
         </p>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -39,6 +39,12 @@ export default function Error({
             className="inline-flex items-center justify-center rounded-full border border-gold/60 px-6 py-3 font-body text-sm font-semibold text-gold transition-all duration-brand-fast hover:bg-gold/10"
           >
             Back to Home
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center rounded-full border border-teal/60 px-6 py-3 font-body text-sm font-semibold text-teal transition-all duration-brand-fast hover:bg-teal/10"
+          >
+            Contact us
           </Link>
         </div>
 

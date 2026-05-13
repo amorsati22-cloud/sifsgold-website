@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AudienceLandingView } from "@/components/audience/AudienceLandingView";
+import { AudienceLandingWithSchemas } from "@/components/audience/AudienceLandingWithSchemas";
 import { getAudienceLanding } from "@/data/audience-landings";
 import { BRAND } from "@/lib/constants";
 
@@ -25,5 +25,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <AudienceLandingView config={config} />;
+  return <AudienceLandingWithSchemas config={config} />;
 }

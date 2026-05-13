@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FeatureDeepDiveView } from "@/components/features/FeatureDeepDiveView";
+import { FeatureDeepDiveWithSchema } from "@/components/features/FeatureDeepDiveWithSchema";
 import { getFeatureDeepDive } from "@/data/feature-deep-dives";
 import type { FeatureDeepDiveConfig } from "@/types/feature-deep-dive";
 import { BRAND } from "@/lib/constants";
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <FeatureDeepDiveView
+    <FeatureDeepDiveWithSchema
       config={config}
       gridIntro="Everything in Health Hub is optional — enable only what serves you, and turn it off whenever you want. These tools support awareness, not medical decisions."
     />
