@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { label: "Schools & Salons", href: "/for-schools" },
   { label: "Fashion", href: "/fashion" },
   { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
   { label: "Features", href: "/#features" },
 ] as const;
 
@@ -56,6 +57,18 @@ export function Navigation() {
   }, [menuOpen]);
 
   useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen, closeMenu]);
+
+  useEffect(() => {
     closeMenu();
   }, [pathname, closeMenu]);
 
@@ -81,7 +94,7 @@ export function Navigation() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-6 lg:gap-8 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-6 lg:gap-8 lg:flex" aria-label="Main navigation">
             {NAV_LINKS.map((item) => (
               <Link key={item.href} href={item.href} className={desktopLinkClass(pathname, item.href)}>
                 {item.label}
@@ -136,7 +149,7 @@ export function Navigation() {
               <X className="h-7 w-7" aria-hidden />
             </button>
           </div>
-          <nav className="mt-10 flex flex-col gap-1" aria-label="Mobile primary">
+          <nav className="mt-10 flex flex-col gap-1" aria-label="Mobile main navigation">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.href}

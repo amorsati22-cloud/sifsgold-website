@@ -11,6 +11,8 @@ export const sifsGoldTheme = {
     navyLift: "#0A1929",
     teal: "#00C9B1",
     gold: "#D4A843",
+    /** Accessible gold tone for smaller body text. */
+    goldBody: "#C49434",
     goldLight: "#F0C060",
     cream: "#F5EFE0",
     whiteSoft: "#FAFAF7",

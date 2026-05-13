@@ -15,6 +15,7 @@ const config: Config = {
         teal: t.colors.teal,
         gold: {
           DEFAULT: t.colors.gold,
+          body: t.colors.goldBody,
           light: t.colors.goldLight,
         },
         cream: t.colors.cream,

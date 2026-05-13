@@ -53,10 +53,10 @@ export function StarfieldBackground() {
                   }
             }
             transition={{
-              duration: 28 + s.d * 4,
-              repeat: Infinity,
+              duration: reduceMotion ? 0 : 28 + s.d * 4,
+              repeat: reduceMotion ? 0 : Infinity,
               ease: "easeInOut",
-              delay: s.d,
+              delay: reduceMotion ? 0 : s.d,
             }}
           />
         ))}

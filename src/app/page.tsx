@@ -4,9 +4,10 @@ import { ProblemStatement } from "@/components/sections/ProblemStatement";
 import { WhoItsFor } from "@/components/sections/WhoItsFor";
 import { WhatsInside } from "@/components/sections/WhatsInside";
 import { IndustrySays } from "@/components/sections/IndustrySays";
+import { TrustStrip } from "@/components/sections/TrustStrip";
 import { NumbersRow } from "@/components/sections/NumbersRow";
 import { SifsCircleCTA } from "@/components/sections/SifsCircleCTA";
-import { PreFooterCTA } from "@/components/sections/PreFooterCTA";
+import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 
 export const metadata: Metadata = {
   title: "Sif's Gold — Beauty, Grooming, Fitness, and Fashion in One Platform",
@@ -26,9 +27,10 @@ export default function HomePage() {
       <WhoItsFor />
       <WhatsInside />
       <IndustrySays />
+      <TrustStrip />
       <NumbersRow />
       <SifsCircleCTA />
-      <PreFooterCTA />
+      <NewsletterSignup />
     </article>
   );
 }

@@ -4,8 +4,11 @@ import { Montserrat, Playfair_Display, Space_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
 import { StarfieldBackground } from "@/components/decorative/StarfieldBackground";
+import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
+import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { GoddessProfile } from "@/components/decorative/GoddessProfile";
+import { generateOrganizationSchema, generateWebSiteSchema } from "@/lib/schema";
 import { sifsGoldTheme } from "@/lib/theme";
 import "./globals.css";
 
@@ -54,24 +57,34 @@ export const metadata: Metadata = {
     template: "%s | Sif's Gold",
   },
   description: defaultDescription,
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [{ url: "/icon", type: "image/png" }],
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     title: defaultTitle,
     description: defaultDescription,
     url: "/",
     siteName: "Sif's Gold",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
+    locale: "en_US",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
+    site: "",
     title: defaultTitle,
     description: defaultDescription,
-    images: ["/og-image.jpg"],
+    images: ["/opengraph-image"],
   },
 };
 
 export const viewport: Viewport = {
   themeColor: sifsGoldTheme.colors.navy,
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -80,9 +93,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const fontVars = `${playfair.variable} ${montserrat.variable} ${spaceMono.variable}`;
+  const organizationSchema = generateOrganizationSchema();
+  const webSiteSchema = generateWebSiteSchema();
 
   return (
     <html lang="en" className={fontVars}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+        />
+      </head>
       <body className="relative flex min-h-screen flex-col">
         <ThemeProvider>
           <a href="#main-content" className="skip-link">
@@ -106,6 +131,8 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
+          <CookieBanner />
+          <AnalyticsGate />
         </ThemeProvider>
       </body>
     </html>

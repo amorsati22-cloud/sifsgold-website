@@ -115,8 +115,8 @@ export function SifsCircleCTA() {
 
             <p
               id="waitlist-error"
-              className={`mt-3 text-sm text-gold ${error ? "block" : "sr-only"}`}
-              aria-live="assertive"
+              className={`mt-3 text-sm text-gold-body ${error ? "block" : "sr-only"}`}
+              aria-live="polite"
             >
               {error || "No error"}
             </p>

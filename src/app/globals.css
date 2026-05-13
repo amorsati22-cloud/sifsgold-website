@@ -8,6 +8,7 @@
     --color-navy-deep: theme("colors.navy.deep");
     --color-teal: theme("colors.teal");
     --color-gold: theme("colors.gold.DEFAULT");
+    --color-gold-body: theme("colors.gold.body");
     --color-gold-light: theme("colors.gold.light");
     --color-cream: theme("colors.cream");
     --color-white-soft: theme("colors.white-soft");
@@ -66,8 +67,8 @@
     @apply bg-gold text-navy;
   }
 
-  :focus-visible {
-    @apply outline outline-2 outline-offset-2 outline-teal;
+  :where(a, button, input, select, textarea, summary, [role="button"], [tabindex]):focus-visible {
+    @apply outline-none ring-2 ring-gold ring-offset-2 ring-offset-navy;
   }
 
   .font-tabular-nums,
