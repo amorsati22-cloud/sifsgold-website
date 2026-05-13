@@ -86,7 +86,7 @@ export default function ForBrandsPage() {
           <li>
             <FeatureCard
               icon={<UsersRound className="h-6 w-6" aria-hidden />}
-              title="Sif's Advocates Ambassador Network"
+              title="Sif's Advocates"
               description="Verified pros and students who apply to brands they already love — structured reach, not random DMs."
             />
           </li>
@@ -130,7 +130,8 @@ export default function ForBrandsPage() {
           Partner tiers
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-center text-white/60">
-          Compare plans — upgrade or downgrade as your advocate programs mature.
+          Compare plans — upgrade or downgrade as your Sif&apos;s Advocates and Gold Partners
+          programs mature.
         </p>
         <ul className="mt-14 grid list-none gap-8 p-0 lg:grid-cols-3">
           {TIERS.map((tier) => (
@@ -138,7 +139,7 @@ export default function ForBrandsPage() {
               <div
                 className={`flex h-full flex-col rounded-2xl border p-8 ${
                   tier.featured
-                    ? "border-gold/60 bg-gradient-to-b from-gold/10 to-white/5 shadow-[0_0_40px_rgba(212,168,67,0.12)]"
+                    ? "border-gold/60 bg-gradient-to-b from-gold/10 to-white/5 shadow-lg ring-1 ring-gold/25"
                     : "border-white/10 bg-white/5"
                 }`}
               >

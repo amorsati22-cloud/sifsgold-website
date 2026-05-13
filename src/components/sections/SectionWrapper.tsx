@@ -18,7 +18,7 @@ export function SectionWrapper({
       {fullWidth ? (
         children
       ) : (
-        <div className="mx-auto max-w-7xl px-6">{children}</div>
+        <div className="mx-auto max-w-content px-4 sm:px-6 lg:px-8">{children}</div>
       )}
     </section>
   );

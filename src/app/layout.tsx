@@ -1,8 +1,34 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import { Montserrat, Playfair_Display, Space_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { Navigation } from "@/components/layout/Navigation";
+import { StarfieldBackground } from "@/components/decorative/StarfieldBackground";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { GoddessProfile } from "@/components/decorative/GoddessProfile";
+import { sifsGoldTheme } from "@/lib/theme";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["700", "900"],
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-space-mono",
+  weight: ["400", "700"],
+  display: "swap",
+});
 
 function MainLoadingFallback() {
   return (
@@ -10,22 +36,23 @@ function MainLoadingFallback() {
       className="flex min-h-[50vh] w-full flex-1 flex-col items-center justify-center bg-navy"
       aria-live="polite"
     >
-      <span className="text-5xl text-gold" aria-hidden>
-        👑
-      </span>
+      <GoddessProfile className="h-12 w-12 text-gold/80" aria-hidden />
+      <span className="mt-4 font-body text-sm text-cream/60">Loading…</span>
     </div>
   );
 }
 
-const defaultTitle = "Sif's Gold — The Beauty Platform Built for Everyone";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://sifsgold.com";
+const defaultTitle = "Sif's Gold";
 const defaultDescription =
-  "The all-in-one platform for beauty students, licensed professionals, salons, schools, clients, and fashion talent.";
+  "The beauty, grooming, fitness, and fashion platform serving students, professionals, salons, brands, and clients.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://sifsgold.com",
-  ),
-  title: defaultTitle,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: "%s | Sif's Gold",
+  },
   description: defaultDescription,
   openGraph: {
     title: defaultTitle,
@@ -43,23 +70,43 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: sifsGoldTheme.colors.navy,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const fontVars = `${playfair.variable} ${montserrat.variable} ${spaceMono.variable}`;
+
   return (
-    <html lang="en">
-      <body className="flex min-h-screen flex-col bg-navy font-body text-white antialiased">
-        <Header />
-        <main className="flex min-h-0 flex-1 flex-col">
-          <Suspense fallback={<MainLoadingFallback />}>
-            <div className="animate-in fade-in duration-300 flex min-h-0 flex-1 flex-col">
-              {children}
-            </div>
-          </Suspense>
-        </main>
-        <Footer />
+    <html lang="en" className={fontVars}>
+      <body className="relative flex min-h-screen flex-col">
+        <ThemeProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+          <StarfieldBackground />
+          <div className="relative z-10 flex min-h-screen flex-col">
+            <Navigation />
+            <main
+              id="main-content"
+              tabIndex={-1}
+              className="flex min-h-0 flex-1 flex-col outline-none"
+            >
+              <div className="mx-auto w-full max-w-content flex-1 px-4 sm:px-6 md:px-8">
+                <Suspense fallback={<MainLoadingFallback />}>
+                  <div className="animate-in flex min-h-0 flex-1 flex-col">
+                    {children}
+                  </div>
+                </Suspense>
+              </div>
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

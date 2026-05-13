@@ -37,16 +37,16 @@ function fmt(n: number) {
 function displayPrice(
   plan: PlanRow,
   billing: BillingPeriod,
-): { main: string; suffix: string } {
+): { main: string; suffix: string; isFree: boolean } {
   if (plan.monthly === 0) {
-    return { main: fmt(0), suffix: "" };
+    return { main: "Free", suffix: "", isFree: true };
   }
   if (billing === "monthly") {
-    return { main: fmt(plan.monthly), suffix: "/mo" };
+    return { main: fmt(plan.monthly), suffix: "/mo", isFree: false };
   }
   const y =
     plan.yearly !== null ? plan.yearly : Math.round(plan.monthly * 12 * 0.8 * 100) / 100;
-  return { main: fmt(y), suffix: "/yr" };
+  return { main: fmt(y), suffix: "/yr", isFree: false };
 }
 
 const BEAUTY_GROUPS: PlanGroup[] = [
@@ -240,14 +240,14 @@ const BEAUTY_GROUPS: PlanGroup[] = [
         name: "Starter",
         monthly: 149,
         yearly: null,
-        features: ["Campaign briefs", "Up to 5 ambassadors"],
+        features: ["Campaign briefs", "Up to 5 Sif's Advocates seats"],
       },
       {
         name: "Campaign",
         monthly: 299,
         yearly: null,
         features: [
-          "20 ambassadors",
+          "20 Sif's Advocates seats",
           "Content approval workflow",
           "Analytics",
         ],
@@ -257,7 +257,7 @@ const BEAUTY_GROUPS: PlanGroup[] = [
         monthly: 599,
         yearly: null,
         features: [
-          "Unlimited ambassadors",
+          "Unlimited Sif's Advocates seats",
           "Brand Intelligence Briefing",
           "Dedicated support",
         ],
@@ -376,7 +376,7 @@ function PlanCards({
   return (
     <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {plans.map((plan) => {
-        const { main, suffix } = displayPrice(plan, billing);
+        const { main, suffix, isFree } = displayPrice(plan, billing);
         return (
           <div
             key={plan.name}
@@ -385,9 +385,13 @@ function PlanCards({
             <p className="font-mono text-xs uppercase tracking-widest text-gold/90">
               {plan.name}
             </p>
-            <p className="mt-3 font-heading text-3xl font-bold text-offwhite">
+            <p
+              className={`mt-3 font-heading text-3xl font-bold ${isFree ? "text-gold" : "text-offwhite"}`}
+            >
               {main}
-              <span className="text-lg font-normal text-white/50">{suffix}</span>
+              {!isFree ? (
+                <span className="text-lg font-normal text-white/50">{suffix}</span>
+              ) : null}
             </p>
             <ul className="mt-5 list-disc space-y-2 pl-4 text-sm text-white/65">
               {plan.features.map((f) => (

@@ -2,25 +2,96 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
-
 @layer base {
+  :root {
+    --color-navy: theme("colors.navy.DEFAULT");
+    --color-navy-deep: theme("colors.navy.deep");
+    --color-teal: theme("colors.teal");
+    --color-gold: theme("colors.gold.DEFAULT");
+    --color-gold-light: theme("colors.gold.light");
+    --color-cream: theme("colors.cream");
+    --color-white-soft: theme("colors.white-soft");
+    --color-overlay: theme("colors.overlay");
+    --motion-fast: theme("transitionDuration.brand-fast");
+    --motion-medium: theme("transitionDuration.brand-medium");
+    --motion-slow: theme("transitionDuration.brand-slow");
+  }
+
   * {
     @apply box-border;
   }
+
   html {
     @apply scroll-smooth;
   }
+
   body {
-    @apply bg-navy text-white font-body antialiased;
+    @apply bg-navy font-body text-base font-normal leading-relaxed text-cream antialiased;
   }
+
   h1,
   h2,
-  h3 {
-    @apply font-heading;
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-bold text-cream;
   }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h5 {
+    @apply text-lg md:text-xl;
+  }
+
+  h6 {
+    @apply text-base md:text-lg;
+  }
+
   ::selection {
     @apply bg-gold text-navy;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-teal;
+  }
+
+  .font-tabular-nums,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-brand-md focus:bg-navy-deep focus:px-4 focus:py-3 focus:font-body focus:text-sm focus:font-semibold focus:text-cream focus:shadow-nav;
+  }
+
+  .on-cream-surface {
+    @apply bg-cream text-navy;
+  }
+
+  .on-cream-surface h1,
+  .on-cream-surface h2,
+  .on-cream-surface h3,
+  .on-cream-surface h4,
+  .on-cream-surface h5,
+  .on-cream-surface h6 {
+    @apply text-navy;
   }
 }
 
@@ -36,5 +107,32 @@
 }
 
 .animate-in {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in var(--motion-medium, 320ms) ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    animation: none;
+  }
+}
+
+@keyframes gold-shimmer {
+  0%,
+  100% {
+    color: var(--color-gold);
+  }
+  50% {
+    color: var(--color-gold-light);
+  }
+}
+
+.animate-gold-shimmer {
+  animation: gold-shimmer 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gold-shimmer {
+    animation: none;
+    color: var(--color-gold);
+  }
 }
