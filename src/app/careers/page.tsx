@@ -1,46 +1,48 @@
 import type { Metadata } from "next";
-import { CareersInquiryForm } from "@/components/marketing/CareersInquiryForm";
-import { web3formsWaitlistAccessKey } from "@/lib/web3forms";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { CareersTalentPoolForm } from "@/components/info/CareersTalentPoolForm";
+import { BRAND } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Careers | Sif's Gold",
+  title: "Careers",
   description:
-    "Help shape the beauty and fashion platform built for the industry — advisor, consultant, and future team conversations.",
+    "Sif's Gold is not hiring yet — join the talent pool to hear when we cross $20K MRR and open roles.",
+  alternates: { canonical: `${BRAND.url}/careers` },
 };
 
 export default function CareersPage() {
   return (
-    <div className="min-h-screen bg-navy font-body text-offwhite">
-      <header className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-navy-light/40 to-navy">
-        <div className="pointer-events-none absolute inset-0 opacity-50" aria-hidden>
-          <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
-          <div className="absolute right-0 top-24 h-64 w-64 rounded-full bg-teal/15 blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-          <h1 className="max-w-3xl text-balance text-4xl font-semibold tracking-tight md:text-6xl">
-            Build the platform with us.
+    <article className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-navy font-body text-cream">
+      <Breadcrumb
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Careers", href: "/careers" },
+        ]}
+      />
+      <header className="border-b border-gold/10 bg-navy py-16 md:py-24">
+        <div className="mx-auto max-w-content px-4 sm:px-6 md:px-8">
+          <h1 className="max-w-3xl font-heading text-4xl font-black leading-tight text-gold md:text-5xl lg:text-6xl">
+            We&apos;re not hiring yet — but we will be.
           </h1>
-          <p className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-white/70 sm:text-xl">
-            Sif&apos;s Gold is early stage and founder-led. We&apos;re not hiring full-time roles
-            right now, but we&apos;re always open to conversations with people who are deeply
-            embedded in the beauty or fashion industries and want to help shape what this platform
-            becomes.
+          <p className="mt-6 max-w-3xl text-pretty text-lg leading-relaxed text-cream/90">
+            Sif&apos;s Gold reaches its hiring trigger at <span className="font-semibold text-gold">$20K MRR</span>. When we
+            get there, we&apos;ll post open roles here first — starting with the people who already helped us ship with care.
           </p>
         </div>
       </header>
 
-      <section className="border-t border-white/10 bg-gradient-to-b from-navy-light/20 to-navy py-16 md:py-24">
-        <div className="mx-auto max-w-xl px-4 sm:px-6">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Interested?</h2>
-          <p className="mt-4 text-pretty text-lg leading-relaxed text-white/70">
-            If you work in beauty or fashion and want to contribute — as an advisor, consultant,
-            or future team member — reach out through the contact form.
+      <section className="border-b border-gold/10 bg-navy-light/20 py-16 md:py-20">
+        <div className="mx-auto max-w-content px-4 sm:px-6 md:px-8">
+          <h2 className="font-heading text-2xl text-gold md:text-3xl">Want to be first to know when we open roles?</h2>
+          <p className="mt-3 max-w-2xl text-sm text-cream/80">
+            Join the talent pool — one short form, no public job board yet. We&apos;ll only email when there is something real
+            to share.
           </p>
-          <div className="mt-8 rounded-2xl border border-white/10 bg-navy-dark/50 p-6 sm:p-8">
-            <CareersInquiryForm accessKey={web3formsWaitlistAccessKey} />
+          <div className="mx-auto mt-10 max-w-lg rounded-brand-lg border border-gold/25 bg-navy-deep/70 p-6 md:p-8">
+            <CareersTalentPoolForm idPrefix="careers" />
           </div>
         </div>
       </section>
-    </div>
+    </article>
   );
 }

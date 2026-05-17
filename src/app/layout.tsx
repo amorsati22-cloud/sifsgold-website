@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { Montserrat, Playfair_Display, Space_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
@@ -132,6 +133,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <CookieBanner />
+          <Analytics />
           <AnalyticsGate />
         </ThemeProvider>
       </body>

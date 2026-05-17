@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { HomeHero } from "@/components/sections/HomeHero";
 import { ProblemStatement } from "@/components/sections/ProblemStatement";
 import { WhoItsFor } from "@/components/sections/WhoItsFor";
 import { WhatsInside } from "@/components/sections/WhatsInside";
-import { IndustrySays } from "@/components/sections/IndustrySays";
-import { TrustStrip } from "@/components/sections/TrustStrip";
-import { NumbersRow } from "@/components/sections/NumbersRow";
 import { SifsCircleCTA } from "@/components/sections/SifsCircleCTA";
-import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
+
+const IndustrySays = dynamic(() =>
+  import("@/components/sections/IndustrySays").then((m) => m.IndustrySays),
+);
+const TrustStrip = dynamic(() => import("@/components/sections/TrustStrip").then((m) => m.TrustStrip));
+const NumbersRow = dynamic(() => import("@/components/sections/NumbersRow").then((m) => m.NumbersRow));
+const NewsletterSignup = dynamic(() =>
+  import("@/components/sections/NewsletterSignup").then((m) => m.NewsletterSignup),
+);
 
 export const metadata: Metadata = {
   title: "Sif's Gold — Beauty, Grooming, Fitness, and Fashion in One Platform",

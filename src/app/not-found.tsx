@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const STARFIELD_DOTS = Array.from({ length: 30 }, (_, i) => ({
+const STARFIELD_DOTS = Array.from({ length: 36 }, (_, i) => ({
   left: `${((i * 17 + 13) % 100)}%`,
   top: `${((i * 29 + 9) % 100)}%`,
 }));
@@ -19,14 +19,11 @@ export default function NotFound() {
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-content flex-col items-center px-4 text-center sm:px-6 md:px-8">
-        <p className="font-heading text-[84px] font-black leading-none text-gold sm:text-[120px]">
-          404
-        </p>
-        <h1 className="mt-3 font-heading text-4xl text-cream sm:text-5xl">
-          This page wandered off.
-        </h1>
+        <p className="font-heading text-[84px] font-black leading-none text-gold sm:text-[120px]">404</p>
+        <h1 className="mt-3 font-heading text-4xl text-cream sm:text-5xl">This page wandered off into Sif&apos;s stars.</h1>
         <p className="mt-5 max-w-2xl text-base text-cream/80">
-          The page you&apos;re looking for doesn&apos;t exist, was moved, or is being worked on.
+          The URL may have changed while we polish launch, or the link was mistyped. Try home, pricing, or the waitlist
+          below.
         </p>
 
         <div className="mt-8 flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:justify-center">
@@ -46,26 +43,29 @@ export default function NotFound() {
             href="/#waitlist"
             className="inline-flex items-center justify-center rounded-full border border-gold/60 px-6 py-3 font-body text-sm font-semibold text-gold transition-all duration-brand-fast hover:bg-gold/10"
           >
-            Join the Waitlist
+            Join Sif&apos;s Circle
           </Link>
         </div>
 
         <div className="mt-8 text-sm text-cream/75">
-          <p className="font-semibold text-gold">Popular destinations:</p>
+          <p className="font-semibold text-gold">Popular destinations</p>
           <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-2">
-            <Link href="/for-professionals" className="hover:text-gold">
+            <Link href="/for-pros" className="hover:text-gold">
               For Professionals
             </Link>
             <Link href="/for-clients" className="hover:text-gold">
               For Clients
             </Link>
-            <Link href="/for-schools" className="hover:text-gold">
-              For Schools
+            <Link href="/study-guides" className="hover:text-gold">
+              Study Guides
             </Link>
-            <Link href="/about" className="hover:text-gold">
-              About
+            <Link href="/tools/tip-calculator" className="hover:text-gold">
+              Tip Calculator
             </Link>
-            <Link href="/help" className="hover:text-gold">
+            <Link href="/trust" className="hover:text-gold">
+              Trust Center
+            </Link>
+            <Link href="/contact" className="hover:text-gold">
               Contact
             </Link>
           </div>
@@ -74,4 +74,3 @@ export default function NotFound() {
     </section>
   );
 }
-

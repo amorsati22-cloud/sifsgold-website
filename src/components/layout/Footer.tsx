@@ -8,19 +8,18 @@ import { WheatBranch } from "@/components/decorative/WheatBranch";
 import { OPEN_COOKIE_PREFERENCES_EVENT } from "@/lib/consent";
 
 const platformLinks = [
-  { label: "For Pros", href: "/for-professionals" },
+  { label: "For Pros", href: "/for-pros" },
   { label: "For Clients", href: "/for-clients" },
   { label: "For Students", href: "/for-students" },
   { label: "For Schools", href: "/for-schools" },
   { label: "For Salons", href: "/for-salons" },
-  { label: "For Fashion", href: "/fashion" },
+  { label: "For Fashion", href: "/for-fashion" },
   { label: "For Brands", href: "/for-brands" },
 ] as const;
 
 const resourcesLinks = [
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
-  { label: "Press", href: "/press" },
   { label: "Help Center", href: "#" },
   { label: "Status", href: "#" },
 ] as const;
