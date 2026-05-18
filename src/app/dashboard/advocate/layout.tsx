@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { isAdvocateUserType } from "@/lib/auth-advocate";
-import { isAdvocateOnboardingComplete, type AdvocateProfileRow } from "@/lib/advocates/profile";
+import type { AdvocateProfileRow } from "@/lib/advocates/profile";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 

@@ -16,7 +16,13 @@ export type MarketplaceCampaign = {
 
 type SortKey = "match" | "pay" | "newest";
 
-export function MarketplaceCampaignList({ campaigns }: { campaigns: MarketplaceCampaign[] }) {
+export function MarketplaceCampaignList({
+  campaigns,
+  linkPrefix = "/brand-deals/marketplace",
+}: {
+  campaigns: MarketplaceCampaign[];
+  linkPrefix?: string;
+}) {
   const [objective, setObjective] = useState("");
   const [minPay, setMinPay] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
@@ -80,7 +86,7 @@ export function MarketplaceCampaignList({ campaigns }: { campaigns: MarketplaceC
         {filtered.map((c) => (
           <li key={c.id}>
             <Link
-              href={`/brand-deals/marketplace/${c.id}`}
+              href={`${linkPrefix}/${c.id}`}
               className="block rounded-brand-md border border-gold/15 bg-navy-lift p-5 transition hover:border-gold/40"
             >
               <h2 className="font-heading text-xl text-gold">{c.title}</h2>

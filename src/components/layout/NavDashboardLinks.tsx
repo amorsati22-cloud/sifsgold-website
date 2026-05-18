@@ -107,8 +107,8 @@ export function NavDashboardLinks({ mobile = false }: { mobile?: boolean }) {
       {userType && ADVOCATE_USER_TYPES.includes(userType as (typeof ADVOCATE_USER_TYPES)[number]) && (
         <>
           <Link
-            href="/dashboard/advocate/brand-deals"
-            className={linkClass(pathname, "/dashboard/advocate/brand-deals", mobile)}
+            href="/dashboard/advocate"
+            className={linkClass(pathname, "/dashboard/advocate", mobile)}
           >
             Brand Deals
           </Link>

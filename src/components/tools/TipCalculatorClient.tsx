@@ -1,95 +1,133 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Calculator } from "@/components/tools/Calculator";
 import { GlassInput } from "@/components/ui/GlassInput";
+import { calculateTipSplit } from "@/lib/tools/formulas";
 
-const PRESETS = [10, 15, 18, 20, 25] as const;
+const TIP_PRESETS = [15, 18, 20, 22, 25] as const;
 
 export function TipCalculatorClient() {
-  const [price, setPrice] = useState("85");
-  const [tipPct, setTipPct] = useState(18);
-  const [taxPct, setTaxPct] = useState(7.5);
+  const [serviceTotal, setServiceTotal] = useState("120");
+  const [tipPct, setTipPct] = useState(20);
+  const [customTip, setCustomTip] = useState("");
+  const [members, setMembers] = useState([
+    { name: "Stylist", sharePercent: 60 },
+    { name: "Assistant", sharePercent: 40 },
+  ]);
 
-  const totals = useMemo(() => {
-    const p = Number.parseFloat(price);
-    if (!Number.isFinite(p) || p < 0) {
-      return { subtotal: 0, tax: 0, tip: 0, total: 0 };
-    }
-    const tax = (p * taxPct) / 100;
-    const tip = (p * tipPct) / 100;
-    const total = p + tax + tip;
-    return { subtotal: p, tax, tip, total };
-  }, [price, taxPct, tipPct]);
+  const effectiveTip = customTip ? Number.parseFloat(customTip) || tipPct : tipPct;
+
+  const result = useMemo(
+    () =>
+      calculateTipSplit({
+        serviceTotal: Number.parseFloat(serviceTotal) || 0,
+        tipPercent: effectiveTip,
+        members,
+      }),
+    [serviceTotal, effectiveTip, members],
+  );
+
+  function updateMember(i: number, field: "name" | "sharePercent", value: string) {
+    setMembers((m) =>
+      m.map((row, idx) =>
+        idx === i
+          ? {
+              ...row,
+              [field]: field === "sharePercent" ? Number.parseFloat(value) || 0 : value,
+            }
+          : row,
+      ),
+    );
+  }
 
   return (
-    <div className="mx-auto max-w-xl space-y-8">
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-offwhite" htmlFor="svc-price">
-          Service price (USD)
-        </label>
-        <GlassInput id="svc-price" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} />
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between gap-3">
-          <label className="text-sm font-medium text-offwhite" htmlFor="tip-range">
-            Tip ({tipPct}%)
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {PRESETS.map((n) => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => setTipPct(n)}
-                className={`rounded-full border px-3 py-1 text-xs font-semibold ${
-                  tipPct === n ? "border-gold bg-gold text-navy" : "border-gold/40 text-gold hover:bg-gold/10"
-                }`}
-              >
-                {n}%
-              </button>
+    <Calculator
+      toolName="tip-calculator"
+      getPresetData={() => ({ serviceTotal, tipPct: effectiveTip, members })}
+      disclaimers={["Tip splits are estimates — confirm pooling policies with your salon."]}
+      results={
+        <div className="space-y-4">
+          <p className="text-sm text-cream/75">Total tip</p>
+          <p className="font-heading text-3xl text-gold">${result.tipAmount.toFixed(2)}</p>
+          <p className="text-sm text-cream/75">Service + tip</p>
+          <p className="font-heading text-2xl text-cream">${result.totalWithTip.toFixed(2)}</p>
+          <ul className="mt-4 space-y-2 border-t border-gold/15 pt-4">
+            {result.perPerson.map((p) => (
+              <li key={p.name} className="flex justify-between text-sm">
+                <span>{p.name}</span>
+                <span className="text-gold">${p.totalTakeHome.toFixed(2)} take-home</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-        <input
-          id="tip-range"
-          type="range"
-          min={0}
-          max={35}
-          value={tipPct}
-          onChange={(e) => setTipPct(Number(e.target.value))}
-          className="mt-3 w-full accent-gold"
-        />
-        <p className="mt-1 text-xs text-cream/55">Drag for custom percentages beyond presets.</p>
-      </div>
-
+      }
+    >
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-offwhite" htmlFor="tax">
-          Sales tax (%)
+        <label className="mb-1.5 block text-sm font-medium text-offwhite" htmlFor="svc-total">
+          Service total (USD)
         </label>
         <GlassInput
-          id="tax"
+          id="svc-total"
           inputMode="decimal"
-          value={String(taxPct)}
-          onChange={(e) => setTaxPct(Number.parseFloat(e.target.value) || 0)}
+          value={serviceTotal}
+          onChange={(e) => setServiceTotal(e.target.value)}
         />
       </div>
-
-      <div className="rounded-brand-lg border border-gold/30 bg-navy-deep/80 p-6">
-        <p className="text-sm text-cream/75">Tip amount</p>
-        <p className="font-heading text-3xl text-gold">${totals.tip.toFixed(2)}</p>
-        <p className="mt-4 text-sm text-cream/75">Estimated total (service + tax + tip)</p>
-        <p className="font-heading text-3xl text-cream">${totals.total.toFixed(2)}</p>
+      <div>
+        <p className="text-sm font-medium text-offwhite">Tip %</p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {TIP_PRESETS.map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => {
+                setTipPct(n);
+                setCustomTip("");
+              }}
+              className={`rounded-full border px-3 py-1 text-xs font-semibold ${
+                effectiveTip === n && !customTip
+                  ? "border-gold bg-gold text-navy"
+                  : "border-gold/40 text-gold hover:bg-gold/10"
+              }`}
+            >
+              {n}%
+            </button>
+          ))}
+        </div>
+        <GlassInput
+          className="mt-3"
+          inputMode="decimal"
+          placeholder="Custom %"
+          value={customTip}
+          onChange={(e) => setCustomTip(e.target.value)}
+        />
       </div>
-
-      <section className="rounded-brand-lg border border-gold/15 bg-navy-deep/60 p-6 text-sm leading-relaxed text-cream/85">
-        <h2 className="font-heading text-lg text-gold">Tipping etiquette in the beauty industry</h2>
-        <p className="mt-3">
-          Tips reward craft, time-on-feet, and judgment — not just throughput. When a service includes assistants, clarify
-          whether gratuity is pooled. For large transformations, many clients anchor on 18–20% when outcomes exceed
-          expectations.
-        </p>
-        <p className="mt-3 text-cream/70">Calculator outputs are estimates; rounding and local tax rules vary.</p>
-      </section>
-    </div>
+      <div>
+        <p className="text-sm font-medium text-offwhite">Team split (%)</p>
+        {members.map((m, i) => (
+          <div key={i} className="mt-2 grid gap-2 sm:grid-cols-2">
+            <GlassInput
+              value={m.name}
+              onChange={(e) => updateMember(i, "name", e.target.value)}
+              placeholder="Name"
+            />
+            <GlassInput
+              inputMode="decimal"
+              value={String(m.sharePercent)}
+              onChange={(e) => updateMember(i, "sharePercent", e.target.value)}
+              placeholder="% share"
+            />
+          </div>
+        ))}
+        <button
+          type="button"
+          className="mt-2 text-xs text-gold hover:underline"
+          onClick={() => setMembers((m) => [...m, { name: "Team", sharePercent: 0 }])}
+        >
+          + Add team member
+        </button>
+      </div>
+    </Calculator>
   );
 }

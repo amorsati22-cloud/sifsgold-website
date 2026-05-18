@@ -79,7 +79,6 @@ export default async function AdvocateDashboardPage() {
         </div>
       )}
 
-      <motion-safe>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard label="Earnings YTD" value={formatCurrency(ytdTotal)} />
         <KpiCard label="Deals completed" value={String(completedDeals ?? 0)} />

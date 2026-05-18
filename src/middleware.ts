@@ -4,6 +4,7 @@ import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
 import { BRAND_USER_TYPES } from "@/lib/auth-brand";
 import { PRO_USER_TYPES } from "@/lib/auth-pro";
 import { isSalonUserType } from "@/lib/auth-salon";
+import { isSchoolUserType } from "@/lib/auth-school";
 import { isReservedUsername } from "@/lib/reserved-usernames";
 import { updateSession } from "@/lib/supabase/middleware";
 import { createServerClient } from "@supabase/ssr";
@@ -31,7 +32,7 @@ const DASHBOARD_BUYER_PATHS = ["/dashboard/orders", "/dashboard/wishlist", "/das
 const DASHBOARD_STOREFRONT_PATHS = ["/dashboard/storefront"];
 const DASHBOARD_BRAND_DEALS_PATHS = ["/dashboard/brand-deals"];
 const DASHBOARD_ADVOCATE_DEALS_PATHS = ["/dashboard/advocate"];
-const BRAND_DEALS_MARKETPLACE_PATHS = ["/brand-deals/marketplace"];
+const BRAND_DEALS_MARKETPLACE_PATHS = ["/brand-deals/marketplace", "/brand-deals"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -105,6 +106,14 @@ export async function middleware(request: NextRequest) {
     (p) => pathname === p || pathname.startsWith(`${p}/`),
   );
 
+  const isDashboardSchoolRoute = DASHBOARD_SCHOOL_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
+  const isDashboardStudentSchoolRoute = DASHBOARD_STUDENT_SCHOOL_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
   const isProtectedDashboard =
     isDashboardProRoute ||
     isDashboardBuyerRoute ||
@@ -112,7 +121,9 @@ export async function middleware(request: NextRequest) {
     isDashboardBrandDealsRoute ||
     isDashboardAdvocateDealsRoute ||
     isBrandDealsMarketplaceRoute ||
-    isDashboardSalonRoute;
+    isDashboardSalonRoute ||
+    isDashboardSchoolRoute ||
+    isDashboardStudentSchoolRoute;
 
   if (isProtectedDashboard) {
     if (!isSupabaseConfigured()) {
@@ -164,8 +175,16 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    if (isDashboardAdvocateDealsRoute || isBrandDealsMarketplaceRoute) {
+    if (isDashboardAdvocateDealsRoute) {
       if (!profile || !ADVOCATE_USER_TYPES.includes(profile.user_type as (typeof ADVOCATE_USER_TYPES)[number])) {
+        return NextResponse.redirect(new URL("/advocates", request.url));
+      }
+    }
+
+    if (isBrandDealsMarketplaceRoute) {
+      const isAdvocate = profile && ADVOCATE_USER_TYPES.includes(profile.user_type as (typeof ADVOCATE_USER_TYPES)[number]);
+      const isBrand = profile && BRAND_USER_TYPES.includes(profile.user_type as (typeof BRAND_USER_TYPES)[number]);
+      if (!isAdvocate && !isBrand) {
         return NextResponse.redirect(new URL("/advocates", request.url));
       }
     }
@@ -207,6 +226,10 @@ export const config = {
     "/dashboard/messages/:path*",
     "/dashboard/salon",
     "/dashboard/salon/:path*",
+    "/dashboard/school",
+    "/dashboard/school/:path*",
+    "/dashboard/student",
+    "/dashboard/student/:path*",
     "/dashboard/pro",
     "/dashboard/pro/:path*",
     "/dashboard/profile",
@@ -235,6 +258,8 @@ export const config = {
     "/dashboard/brand-deals/:path*",
     "/dashboard/advocate",
     "/dashboard/advocate/:path*",
+    "/brand-deals",
+    "/brand-deals/:path*",
     "/brand-deals/marketplace",
     "/brand-deals/marketplace/:path*",
     "/dashboard/vault",

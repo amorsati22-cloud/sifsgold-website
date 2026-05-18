@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { isAdvocateUserType } from "@/lib/auth-advocate";
+import { createClient } from "@/lib/supabase/server";
 import {
   ArrowRight,
   BadgePercent,
@@ -50,7 +52,19 @@ const REVENUE_STREAMS = [
 
 const TIERS = ["Newcomer", "Rising", "Sif's Advocate", "Gold Partner", "Founding Gold"] as const;
 
-export default function AdvocatesLandingPage() {
+export default async function AdvocatesLandingPage() {
+  const supabase = await createClient();
+  let advocateDashboard = false;
+  if (supabase) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase.from("profiles").select("user_type").eq("id", user.id).single();
+      advocateDashboard = isAdvocateUserType(profile?.user_type);
+    }
+  }
+
   return (
     <article className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-navy font-body text-cream">
       <Breadcrumb
@@ -70,14 +84,24 @@ export default function AdvocatesLandingPage() {
             Sif&apos;s Advocates earn through five revenue streams — all tied to revenue Sif&apos;s Gold earned first, never
             view-based. When the platform wins, your upside is tied to receipts clients already paid — not vanity metrics.
           </p>
-          <div className="mt-10">
-            <Link
-              href="/advocates/apply"
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-3 text-base font-semibold text-navy shadow-sm transition hover:bg-gold-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-            >
-              Apply now
-              <ArrowRight className="h-5 w-5" aria-hidden />
-            </Link>
+          <div className="mt-10 flex flex-wrap gap-4">
+            {advocateDashboard ? (
+              <Link
+                href="/dashboard/advocate"
+                className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-3 text-base font-semibold text-navy shadow-sm transition hover:bg-gold-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+              >
+                Open dashboard
+                <ArrowRight className="h-5 w-5" aria-hidden />
+              </Link>
+            ) : (
+              <Link
+                href="/advocates/apply"
+                className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-3 text-base font-semibold text-navy shadow-sm transition hover:bg-gold-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+              >
+                Apply now
+                <ArrowRight className="h-5 w-5" aria-hidden />
+              </Link>
+            )}
           </div>
         </div>
       </header>

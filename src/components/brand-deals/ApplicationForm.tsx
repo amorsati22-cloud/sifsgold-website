@@ -22,7 +22,7 @@ export function ApplicationForm({ campaignId }: Props) {
       .filter(Boolean)
       .map((url) => ({ url }));
 
-    const res = await fetch(`/api/brand-campaigns/${campaignId}/applications`, {
+    const res = await fetch(`/api/brand-deals/${campaignId}/apply`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -32,7 +32,7 @@ export function ApplicationForm({ campaignId }: Props) {
       }),
     });
 
-    if (res.ok) router.push("/dashboard/advocate/brand-deals");
+    if (res.ok) router.push("/dashboard/advocate/deals");
   }
 
   const inputClass =

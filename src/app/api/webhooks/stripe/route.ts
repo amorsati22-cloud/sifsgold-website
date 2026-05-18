@@ -70,6 +70,14 @@ export async function POST(request: Request) {
       const session = event.data.object as Stripe.Checkout.Session;
       if (session.mode === "subscription") {
         await handleSubscriptionCheckoutCompleted(event, session);
+      } else if (session.mode === "payment" && session.metadata?.advocate_id && admin) {
+        const advocateId = session.metadata.advocate_id;
+        const boostDays = Number(session.metadata.boost_days ?? 7);
+        await admin.from("advocate_profiles").update({ featured: true }).eq("id", advocateId);
+        await logStripeWebhookEvent(event, "Advocate profile boost purchased", {
+          advocateId,
+          boostDays,
+        });
       }
       break;
     }

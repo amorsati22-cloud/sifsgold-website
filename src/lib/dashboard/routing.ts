@@ -4,8 +4,12 @@ import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
 import { BRAND_USER_TYPES } from "@/lib/auth-brand";
 import { PRO_USER_TYPES } from "@/lib/auth-pro";
 import { isSalonUserType } from "@/lib/auth-salon";
+import { isSchoolUserType } from "@/lib/auth-school";
 
 export function getDashboardHomePath(userType: string | null | undefined): string {
+  if (isSchoolUserType(userType)) {
+    return "/dashboard/school/home";
+  }
   if (isSalonUserType(userType)) {
     return "/dashboard/salon/home";
   }

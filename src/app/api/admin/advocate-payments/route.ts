@@ -70,7 +70,7 @@ export async function POST(request: Request) {
   if (applicationId) {
     await auth.admin
       .from("campaign_applications")
-      .update({ status: "completed", payment_status: stripeTransferId ? "paid" : "processing" })
+      .update({ status: "accepted", reviewed_at: new Date().toISOString() })
       .eq("id", applicationId);
   }
 

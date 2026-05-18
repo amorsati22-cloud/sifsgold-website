@@ -19,7 +19,10 @@ export type AdminAuditAction =
   | "sent_campaign"
   | "sent_campaign_test"
   | "responded_support_ticket"
-  | "updated_support_ticket";
+  | "updated_support_ticket"
+  | "advocate_payout"
+  | "generate_1099"
+  | "ftc_strike";
 
 export type LogAdminAuditInput = {
   admin: SupabaseClient;
