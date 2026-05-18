@@ -18,6 +18,7 @@ export function HlsPlayer({ src, poster, live = true }: Props) {
     let hls: { destroy: () => void } | null = null;
 
     async function setup() {
+      if (!video || !src) return;
       if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = src;
         return;

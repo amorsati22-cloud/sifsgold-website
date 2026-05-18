@@ -122,9 +122,9 @@ export async function startLiveBroadcast(roomName: string): Promise<{
   }
 
   return {
-    rtmpUrl: started.data?.rtmp_url ?? null,
+    rtmpUrl: started.data?.rtmp_url ?? undefined,
     hlsPlaybackUrl:
-      started.data?.hls_playback_url ?? started.data?.playback_url ?? null,
+      started.data?.hls_playback_url ?? started.data?.playback_url ?? undefined,
   };
 }
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { activateLiveStream } from "@/lib/streaming/activate";
 import { createLiveStreamRoom } from "@/lib/streaming/daily-streaming";
 import type { StreamCategory, StreamVisibility } from "@/lib/streaming/types";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -97,18 +98,20 @@ export async function POST(request: Request) {
   }
 
   if (body.go_live_now) {
-    const startRes = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/api/streams/${stream.id}/start`,
-      {
-        method: "POST",
-        headers: {
-          cookie: request.headers.get("cookie") ?? "",
-        },
-      },
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name, email")
+      .eq("id", user.id)
+      .maybeSingle();
+    const activated = await activateLiveStream(
+      stream.id as string,
+      user.id,
+      profile?.full_name ?? profile?.email ?? "Streamer",
     );
-    if (!startRes.ok) {
+    if ("error" in activated) {
       return NextResponse.json({ stream, warning: "Created but go-live failed" });
     }
+    return NextResponse.json({ stream: { ...stream, status: "live" }, ...activated });
   }
 
   return NextResponse.json({ stream });
