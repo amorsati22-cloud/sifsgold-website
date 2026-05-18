@@ -6,6 +6,7 @@ import { HELP_CATEGORIES } from "@/data/help-categories";
 import { ALL_STATE_SLUGS } from "@/data/states";
 import { getAllPosts, getAllTags, tagToSlug } from "@/lib/blog";
 import { BRAND, LEGAL_PAGES } from "@/lib/constants";
+import { getVisibleProUsernames } from "@/lib/pro-profiles";
 
 type ChangeFreq = MetadataRoute.Sitemap[number]["changeFrequency"];
 
@@ -18,7 +19,7 @@ function push(
   out.push({ path, changeFrequency, priority });
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const routes: Array<{ path: string; changeFrequency: ChangeFreq; priority: number }> = [];
 
@@ -101,6 +102,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]);
   for (const href of legalSet) {
     push(routes, href, "yearly", 0.5);
+  }
+
+  const proUsernames = await getVisibleProUsernames();
+  for (const username of proUsernames) {
+    push(routes, `/${username}`, "weekly", 0.75);
+    push(routes, `/${username}/portfolio`, "weekly", 0.55);
+    push(routes, `/${username}/services`, "weekly", 0.6);
+    push(routes, `/${username}/credentials`, "monthly", 0.45);
+    push(routes, `/${username}/reviews`, "weekly", 0.5);
   }
 
   return routes.map(({ path, changeFrequency, priority }) => ({

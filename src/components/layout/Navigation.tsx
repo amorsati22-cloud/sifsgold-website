@@ -7,8 +7,10 @@ import { useCallback, useEffect, useState } from "react";
 import { GoddessProfile } from "@/components/decorative/GoddessProfile";
 import { WheatBranch } from "@/components/decorative/WheatBranch";
 import { GoldButton } from "@/components/ui/GoldButton";
+import { NavDashboardLinks } from "@/components/layout/NavDashboardLinks";
 
 const NAV_LINKS = [
+  { label: "Shop", href: "/shop" },
   { label: "For Pros", href: "/for-pros" },
   { label: "For Clients", href: "/for-clients" },
   { label: "Schools & Salons", href: "/for-schools" },
@@ -100,6 +102,7 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
+            <NavDashboardLinks />
             <Link href="/sign-in" className={desktopLinkClass(pathname, "/sign-in")}>
               Sign In
             </Link>
@@ -162,6 +165,9 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
+            <div className="mt-2 flex flex-col gap-1 border-t border-gold/10 pt-4">
+              <NavDashboardLinks mobile />
+            </div>
             <Link
               href="/sign-in"
               className={`rounded-brand-md px-2 py-3 font-body text-lg font-medium ${

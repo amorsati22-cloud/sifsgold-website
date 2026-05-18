@@ -53,6 +53,7 @@ export function ContactPageForm({ idPrefix }: { idPrefix: string }) {
         name: trimmedName,
         email: trimmedEmail,
         message: body,
+        reason,
         source: "contact_form",
       },
       {

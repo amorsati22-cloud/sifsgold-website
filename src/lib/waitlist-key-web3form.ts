@@ -1,4 +1,4 @@
-import type { Web3FormsSubmitResult } from "@/lib/web3forms";
+import type { Web3FormsSubmitResult, Web3FormsSubmitOptions } from "@/lib/web3forms";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
@@ -13,6 +13,7 @@ function getWaitlistKey(): string | undefined {
 export async function submitWeb3WithWaitlistKey(
   fields: Record<string, string>,
   options: { subject: string; fromName?: string },
+  submitOptions?: Web3FormsSubmitOptions,
 ): Promise<Web3FormsSubmitResult> {
   const accessKey = getWaitlistKey();
   if (!accessKey) {
@@ -48,6 +49,28 @@ export async function submitWeb3WithWaitlistKey(
       ok: false,
       message: data?.message || "Submission failed",
     };
+  }
+
+  const email = fields.email?.trim();
+  const source = fields.source ?? "contact_form";
+
+  if (email) {
+    const { triggerTransactionalEmail, resolveClientTemplateFromSource } = await import(
+      "@/lib/email/trigger-client"
+    );
+    if (submitOptions?.onSuccess) {
+      await submitOptions.onSuccess();
+    }
+    if (submitOptions?.triggerEmail !== false) {
+      const type = resolveClientTemplateFromSource(source);
+      await triggerTransactionalEmail(type, email, {
+        name: fields.name,
+        reason: fields.reason,
+        source,
+      });
+    }
+  } else if (submitOptions?.onSuccess) {
+    await submitOptions.onSuccess();
   }
 
   return {

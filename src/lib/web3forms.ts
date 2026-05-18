@@ -37,11 +37,38 @@ export type SubmitNewsletterSignupInput = {
   email: string;
 };
 
-export async function submitWaitlist({
-  email,
-  source,
-  userType,
-}: WaitlistSubmission): Promise<Web3FormsSubmitResult> {
+export type Web3FormsSubmitOptions = {
+  /** Called after Web3Forms accepts the submission (before optional email trigger). */
+  onSuccess?: () => void | Promise<void>;
+  /** When true (default), fire transactional email via /api/email/send after success. */
+  triggerEmail?: boolean;
+};
+
+async function afterSuccessfulSubmit(
+  options: Web3FormsSubmitOptions | undefined,
+  emailTrigger?: { source: string; email: string; name?: string; reason?: string },
+) {
+  if (options?.onSuccess) {
+    await options.onSuccess();
+  }
+
+  if (options?.triggerEmail !== false && emailTrigger) {
+    const { triggerTransactionalEmail, resolveClientTemplateFromSource } = await import(
+      "@/lib/email/trigger-client"
+    );
+    const type = resolveClientTemplateFromSource(emailTrigger.source);
+    await triggerTransactionalEmail(type, emailTrigger.email, {
+      name: emailTrigger.name,
+      reason: emailTrigger.reason,
+      source: emailTrigger.source,
+    });
+  }
+}
+
+export async function submitWaitlist(
+  { email, source, userType }: WaitlistSubmission,
+  options?: Web3FormsSubmitOptions,
+): Promise<Web3FormsSubmitResult> {
   if (!WAITLIST_KEY) {
     return {
       ok: false,
@@ -72,13 +99,18 @@ export async function submitWaitlist({
     };
   }
 
+  await afterSuccessfulSubmit(options, { source, email });
+
   return {
     ok: true,
     message: "You're in Sif's Circle. Watch your inbox — and welcome.",
   };
 }
 
-export async function submitAdvocateApplication(application: AdvocateSubmission) {
+export async function submitAdvocateApplication(
+  application: AdvocateSubmission,
+  options?: Web3FormsSubmitOptions,
+) {
   if (!ADVOCATE_KEY) {
     throw new Error("Advocate key missing — set NEXT_PUBLIC_WEB3FORMS_ADVOCATE_KEY in env");
   }
@@ -103,14 +135,20 @@ export async function submitAdvocateApplication(application: AdvocateSubmission)
   if (!data?.success) {
     throw new Error(data?.message || "Submission failed");
   }
+
+  await afterSuccessfulSubmit(options, {
+    source: "sifs_advocate_application",
+    email: application.email,
+    name: application.name,
+  });
+
   return data;
 }
 
-export async function submitDeletionRequest({
-  fullName,
-  email,
-  reason,
-}: SubmitDeletionRequestInput): Promise<Web3FormsSubmitResult> {
+export async function submitDeletionRequest(
+  { fullName, email, reason }: SubmitDeletionRequestInput,
+  options?: Web3FormsSubmitOptions,
+): Promise<Web3FormsSubmitResult> {
   if (!WAITLIST_KEY) {
     return {
       ok: false,
@@ -146,6 +184,12 @@ export async function submitDeletionRequest({
     };
   }
 
+  await afterSuccessfulSubmit(options, {
+    source: "account_deletion_request",
+    email,
+    name: fullName,
+  });
+
   return {
     ok: true,
     message:
@@ -153,9 +197,10 @@ export async function submitDeletionRequest({
   };
 }
 
-export async function submitNewsletterSignup({
-  email,
-}: SubmitNewsletterSignupInput): Promise<Web3FormsSubmitResult> {
+export async function submitNewsletterSignup(
+  { email }: SubmitNewsletterSignupInput,
+  options?: Web3FormsSubmitOptions,
+): Promise<Web3FormsSubmitResult> {
   if (!WAITLIST_KEY) {
     return {
       ok: false,
@@ -184,6 +229,8 @@ export async function submitNewsletterSignup({
       message: data?.message || "We couldn't subscribe you right now. Please try again.",
     };
   }
+
+  await afterSuccessfulSubmit(options, { source: "newsletter_signup", email });
 
   return {
     ok: true,

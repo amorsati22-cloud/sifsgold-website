@@ -3,12 +3,7 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { GlassInput } from "@/components/ui/GlassInput";
-
-const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
-
-/** Public Web3Forms access key for advocate applications (override with env in production). */
-const ADVOCATE_FORM_ACCESS_KEY =
-  process.env.NEXT_PUBLIC_WEB3FORMS_ADVOCATE_KEY ?? "81476d95-3f7c-4f37-855b-bf4fba5b6cdb";
+import { submitAdvocateApplication } from "@/lib/web3forms";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -73,42 +68,26 @@ export function AdvocateApplicationForm({ idPrefix }: { idPrefix: string }) {
     const sampleUrls = [url1, url2, url3].map((u) => u.trim()).filter(Boolean);
     const sampleContent = sampleUrls.length ? sampleUrls.join("\n") : "(none provided)";
 
-    const body: Record<string, string> = {
-      access_key: ADVOCATE_FORM_ACCESS_KEY,
-      subject: `Sif's Advocate application — ${trimmedName}`,
-      from_name: "Advocate application",
-      name: trimmedName,
-      email: trimmedEmail,
-      social_handles: socialHandles.trim(),
-      specialty_niche: specialty.trim(),
-      sample_content_urls: sampleContent,
-      license_status: licenseStatus,
-      why_join: reason.trim(),
-      source: "advocate_application",
-      botcheck: "",
-    };
-
     try {
-      const res = await fetch(WEB3FORMS_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(body),
+      await submitAdvocateApplication({
+        name: trimmedName,
+        email: trimmedEmail,
+        socialHandles: socialHandles.trim(),
+        specialty: specialty.trim(),
+        sampleContent,
+        licenseStatus,
+        reason: reason.trim(),
       });
-      const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
-      if (res.ok && data?.success) {
-        setName("");
-        setEmail("");
-        setSocialHandles("");
-        setSpecialty("");
-        setUrl1("");
-        setUrl2("");
-        setUrl3("");
-        setLicenseStatus("");
-        setReason("");
-        setStatus("success");
-        return;
-      }
-      setStatus("error");
+      setName("");
+      setEmail("");
+      setSocialHandles("");
+      setSpecialty("");
+      setUrl1("");
+      setUrl2("");
+      setUrl3("");
+      setLicenseStatus("");
+      setReason("");
+      setStatus("success");
     } catch {
       setStatus("error");
     }
