@@ -90,7 +90,8 @@ export function ToolsHubClient({ signedIn }: { signedIn: boolean }) {
         </h2>
         <ul className="mt-6 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((t) => {
-            const Icon = (Icons as Record<string, Icons.LucideIcon>)[t.icon] ?? Icons.Wrench;
+            const Icon =
+              (Icons as unknown as Record<string, Icons.LucideIcon>)[t.icon] ?? Icons.Wrench;
             return (
               <li key={t.slug}>
                 <Link

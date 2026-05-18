@@ -61,9 +61,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   push(routes, "/glossary", "monthly", 0.65);
-  push(routes, "/tools/tip-calculator", "monthly", 0.55);
-  push(routes, "/tools/pricing-calculator", "monthly", 0.55);
-  push(routes, "/tools/license-checker", "monthly", 0.55);
+  push(routes, "/tools", "weekly", 0.75);
+  push(routes, "/tools/tip-calculator", "monthly", 0.6);
+  push(routes, "/tools/color-formula", "monthly", 0.58);
+  push(routes, "/tools/dilution-calculator", "monthly", 0.58);
+  push(routes, "/tools/appointment-roi", "monthly", 0.58);
+  push(routes, "/tools/booth-rent-calculator", "monthly", 0.58);
+  push(routes, "/tools/pricing-strategy", "monthly", 0.6);
+  push(routes, "/tools/timing-calculator", "monthly", 0.58);
+  push(routes, "/tools/inventory-cost", "monthly", 0.58);
+  push(routes, "/tools/state-board-countdown", "monthly", 0.58);
+  push(routes, "/tools/license-renewal-tracker", "monthly", 0.58);
+  push(routes, "/tools/business-tax-estimator", "monthly", 0.55);
+  push(routes, "/tools/social-media-scheduler", "monthly", 0.55);
+  push(routes, "/tools/pricing-calculator", "monthly", 0.5);
+  push(routes, "/tools/license-checker", "monthly", 0.5);
   push(routes, "/tools/hours-tracker", "monthly", 0.5);
 
   push(routes, "/trust", "monthly", 0.65);

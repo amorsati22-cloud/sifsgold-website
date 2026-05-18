@@ -15,7 +15,7 @@ export default function HoursTrackerDemoPage() {
       <Breadcrumb
         items={[
           { name: "Home", href: "/" },
-          { name: "Tools", href: "/tools/hours-tracker" },
+          { name: "Tools", href: "/tools" },
           { name: "Hours tracker demo", href: "/tools/hours-tracker" },
         ]}
       />
