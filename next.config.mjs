@@ -1,5 +1,15 @@
+import createMDX from "@next/mdx";
+
 /** @type {import('next').NextConfig} */
 const isProd = process.env.NODE_ENV === "production";
+
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
 
 const csp = [
   "default-src 'self'",
@@ -14,6 +24,7 @@ const csp = [
 ].join("; ");
 
 const nextConfig = {
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   async redirects() {
     return [
       { source: "/login", destination: "/sign-in", permanent: false },
@@ -46,4 +57,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);

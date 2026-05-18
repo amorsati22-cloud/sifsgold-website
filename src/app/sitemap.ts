@@ -4,6 +4,7 @@ import { CAREER_PATH_STUBS } from "@/data/career-paths";
 import { FEATURE_DEEP_DIVES } from "@/data/feature-deep-dives";
 import { HELP_CATEGORIES } from "@/data/help-categories";
 import { ALL_STATE_SLUGS } from "@/data/states";
+import { getAllPosts, getAllTags, tagToSlug } from "@/lib/blog";
 import { BRAND, LEGAL_PAGES } from "@/lib/constants";
 
 type ChangeFreq = MetadataRoute.Sitemap[number]["changeFrequency"];
@@ -30,7 +31,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   push(routes, "/brand", "monthly", 0.65);
   push(routes, "/help", "weekly", 0.7);
   push(routes, "/delete", "yearly", 0.35);
-  push(routes, "/blog", "monthly", 0.45);
+  push(routes, "/blog", "weekly", 0.7);
+  push(routes, "/blog/rss.xml", "weekly", 0.4);
+  for (const post of getAllPosts()) {
+    push(routes, `/blog/${post.slug}`, "monthly", 0.55);
+  }
+  for (const tag of getAllTags()) {
+    push(routes, `/blog/tag/${tagToSlug(tag)}`, "monthly", 0.45);
+  }
   push(routes, "/fashion", "monthly", 0.55);
   push(routes, "/features", "weekly", 0.85);
 
