@@ -8,6 +8,7 @@ import { createServerClient } from "@supabase/ssr";
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/env";
 
 const DASHBOARD_PRO_PATHS = [
+  "/dashboard/pro",
   "/dashboard/profile",
   "/dashboard/portfolio",
   "/dashboard/credentials",
@@ -149,8 +150,16 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/dashboard/pro",
+    "/dashboard/pro/:path*",
     "/dashboard/profile",
     "/dashboard/profile/:path*",
+    "/dashboard/calendar",
+    "/dashboard/calendar/:path*",
+    "/dashboard/availability",
+    "/dashboard/availability/:path*",
+    "/dashboard/services",
+    "/dashboard/services/:path*",
     "/dashboard/portfolio",
     "/dashboard/portfolio/:path*",
     "/dashboard/credentials",

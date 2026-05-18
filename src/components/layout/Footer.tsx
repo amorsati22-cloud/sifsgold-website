@@ -121,7 +121,7 @@ export function Footer() {
               </li>
             </ul>
           </nav>
-        </motion-safe>
+        </div>
 
         <div className="pt-10">
           <p className="text-center text-sm text-cream/60">
@@ -141,9 +141,9 @@ export function Footer() {
                 <Icon className="h-5 w-5" aria-hidden />
               </a>
             ))}
-          </motion-safe>
-        </motion-safe>
-      </motion-safe>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

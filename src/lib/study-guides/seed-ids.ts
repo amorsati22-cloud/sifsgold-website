@@ -1,0 +1,18 @@
+/** Deterministic UUIDs for study guide seeds (match schema-study-guides.sql). */
+export const SEED_GUIDE_IDS = {
+  texas: "a0000001-0001-4001-8001-000000000001",
+  california: "a0000002-0002-4002-8002-000000000002",
+  florida: "a0000003-0003-4003-8003-000000000003",
+} as const;
+
+export const SEED_DECK_IDS = {
+  txSanitation: "b1000001-0001-4001-8001-000000000101",
+  txColor: "b1000002-0002-4002-8002-000000000102",
+  txAnatomy: "b1000003-0003-4003-8003-000000000103",
+  caSanitation: "b2000001-0001-4001-8001-000000000201",
+  caColor: "b2000002-0002-4002-8002-000000000202",
+  caAnatomy: "b2000003-0003-4003-8003-000000000203",
+  flSanitation: "b3000001-0001-4001-8001-000000000301",
+  flColor: "b3000002-0002-4002-8002-000000000302",
+  flAnatomy: "b3000003-0003-4003-8003-000000000303",
+} as const;

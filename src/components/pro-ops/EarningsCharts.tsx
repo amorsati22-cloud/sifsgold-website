@@ -16,7 +16,7 @@ export function EarningsCharts({ thisMonth, lastMonth, byCategory }: Props) {
 
   return (
     <div className="space-y-8">
-      <motionless className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-brand-lg border border-gold/15 bg-navy/50 p-5">
           <p className="font-body text-xs uppercase text-gold-body">This month (net)</p>
           <p className="mt-2 font-heading text-3xl text-gold">${thisMonth.toFixed(2)}</p>
@@ -31,7 +31,7 @@ export function EarningsCharts({ thisMonth, lastMonth, byCategory }: Props) {
           <p className="font-body text-xs uppercase text-gold-body">Last month (net)</p>
           <p className="mt-2 font-heading text-3xl text-cream">${lastMonth.toFixed(2)}</p>
         </div>
-      </motionless>
+      </div>
 
       {byCategory.length > 0 ? (
         <section>
