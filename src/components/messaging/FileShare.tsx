@@ -93,9 +93,9 @@ export function FileShare({ threadId, threadKey, onSent }: Props) {
         </ul>
       )}
       {progress > 0 && progress < 100 && (
-        <motion.div className="mt-2 h-2 overflow-hidden rounded-full bg-navy-deep">
-          <motion.div className="h-full bg-gold transition-all" style={{ width: `${progress}%` }} />
-        </motion.div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-navy-deep">
+          <div className="h-full bg-gold transition-all" style={{ width: `${progress}%` }} />
+        </div>
       )}
       {error && (
         <p className="mt-2 text-sm text-red-400" role="alert">
@@ -111,6 +111,6 @@ export function FileShare({ threadId, threadKey, onSent }: Props) {
           Send {files.length} file(s)
         </button>
       )}
-    </motion.div>
+    </div>
   );
 }

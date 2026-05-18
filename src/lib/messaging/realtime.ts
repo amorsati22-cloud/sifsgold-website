@@ -13,12 +13,14 @@ export type DecryptedMessage = Message & {
 export function subscribeToThreadMessages(
   threadId: string,
   participantIds: string[],
+  threadType: string,
+  groupKeyVersion: number,
   onMessage: (message: DecryptedMessage) => void,
 ) {
   if (!isSupabaseConfigured()) return () => {};
 
   const supabase = createClient();
-  const threadKey = deriveThreadKey(threadId, participantIds);
+  const threadKey = deriveThreadKeyForType(threadId, participantIds, threadType, groupKeyVersion);
 
   const channel = supabase
     .channel(`messages-${threadId}`)

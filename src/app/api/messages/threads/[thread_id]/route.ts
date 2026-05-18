@@ -84,17 +84,23 @@ export async function POST(request: Request, { params }: RouteCtx) {
 
   const deliveredTo = participantIds.filter((id) => id !== session.user.id);
 
+  const isScheduled = Boolean(body.scheduled_for) && body.delivered === false;
+
   const { data: message, error } = await session.supabase
     .from("messages")
     .insert({
       thread_id: threadId,
       sender_id: session.user.id,
+      message_type: body.message_type ?? "text",
       encrypted_body: body.encrypted_body,
       iv: body.iv,
       encrypted_attachments: body.encrypted_attachments ?? null,
       attachments_iv: body.attachments_iv ?? null,
       reply_to_message_id: body.reply_to_message_id ?? null,
-      delivered_to: deliveredTo,
+      poll_data: body.poll_data ?? null,
+      scheduled_for: body.scheduled_for ?? null,
+      delivered: isScheduled ? false : true,
+      delivered_to: isScheduled ? [] : deliveredTo,
       read_by: [session.user.id],
     })
     .select("*")
@@ -107,14 +113,16 @@ export async function POST(request: Request, { params }: RouteCtx) {
   const admin = createAdminClient();
   const db = admin ?? session.supabase;
 
-  await db
-    .from("threads")
-    .update({
-      last_message_at: message.created_at,
-      encrypted_last_preview: body.encrypted_preview ?? body.encrypted_body,
-      preview_iv: body.preview_iv ?? body.iv,
-    })
-    .eq("id", threadId);
+  if (!isScheduled) {
+    await db
+      .from("threads")
+      .update({
+        last_message_at: message.created_at,
+        encrypted_last_preview: body.encrypted_preview ?? body.encrypted_body,
+        preview_iv: body.preview_iv ?? body.iv,
+      })
+      .eq("id", threadId);
+  }
 
   return NextResponse.json({ message, participant_ids: participantIds });
 }

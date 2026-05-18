@@ -20,7 +20,11 @@ export async function GET() {
 
   const threads = await Promise.all(
     (memberships ?? []).map(async (m) => {
-      const thread = m.thread as Record<string, unknown> | null;
+      const threadRaw = m.thread;
+      const thread = (Array.isArray(threadRaw) ? threadRaw[0] : threadRaw) as Record<
+        string,
+        unknown
+      > | null;
       if (!thread) return null;
 
       const { data: participants } = await supabase
@@ -68,13 +72,11 @@ export async function GET() {
     }),
   );
 
-  const sorted = threads
-    .filter(Boolean)
-    .sort(
-      (a, b) =>
-        new Date((b as { last_message_at: string | null }).last_message_at ?? 0).getTime() -
-        new Date((a as { last_message_at: string | null }).last_message_at ?? 0).getTime(),
-    );
+  type ThreadListItem = NonNullable<(typeof threads)[number]>;
+  const sorted = (threads.filter(Boolean) as ThreadListItem[]).sort(
+    (a, b) =>
+      new Date(b.last_message_at ?? 0).getTime() - new Date(a.last_message_at ?? 0).getTime(),
+  );
 
   return NextResponse.json({ threads: sorted });
 }
@@ -108,13 +110,23 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
   const db = admin ?? session.supabase;
 
+  if (threadType === "group" && participantIds.length < 3) {
+    return NextResponse.json({ error: "Group threads require at least 3 participants" }, { status: 400 });
+  }
+
   const { data: thread, error } = await db
     .from("threads")
     .insert({
       thread_type: threadType,
       linked_appointment_id: body.linked_appointment_id ?? null,
       title: body.title ?? null,
+      avatar_url: body.avatar_url ?? null,
       created_by: session.user.id,
+      created_by_role: body.created_by_role ?? "pro",
+      group_purpose: body.group_purpose ?? "team",
+      max_participants: body.max_participants ?? 50,
+      group_settings: body.group_settings ?? { who_can_add: "admins", who_can_post: "all" },
+      group_key_version: 1,
     })
     .select("id")
     .single();
@@ -123,10 +135,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error?.message ?? "Could not create thread" }, { status: 500 });
   }
 
-  const rows = participantIds.map((uid, i) => ({
+  const rows = participantIds.map((uid) => ({
     thread_id: thread.id,
     user_id: uid,
-    role: uid === session.user.id && i === 0 ? "admin" : "member",
+    role: uid === session.user.id ? "admin" : "member",
   }));
 
   await db.from("thread_participants").insert(rows);

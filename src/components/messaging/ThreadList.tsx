@@ -8,6 +8,7 @@ import { GoldButton } from "@/components/ui/GoldButton";
 type ThreadRow = {
   id: string;
   thread_type: string;
+  group_key_version?: number;
   title: string | null;
   last_message_at: string | null;
   encrypted_last_preview: string | null;
@@ -50,7 +51,12 @@ export function ThreadList() {
 
   function preview(t: ThreadRow) {
     if (!t.encrypted_last_preview || !t.preview_iv) return "No messages yet";
-    const key = deriveThreadKey(t.id, t.participant_ids);
+    const key = deriveThreadKeyForType(
+      t.id,
+      t.participant_ids,
+      t.thread_type,
+      t.group_key_version ?? 1,
+    );
     return decryptMessage(t.encrypted_last_preview, t.preview_iv, key) ?? "Encrypted message";
   }
 

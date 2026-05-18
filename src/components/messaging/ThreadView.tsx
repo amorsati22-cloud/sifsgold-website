@@ -42,8 +42,15 @@ export function ThreadView({
   const [replyTo, setReplyTo] = useState<DecryptedMessage | null>(null);
   const [typingUser, setTypingUser] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const threadKey = deriveThreadKey(threadId, participantIds);
+  const threadKey = deriveThreadKeyForType(
+    threadId,
+    participantIds,
+    initialThread.thread_type,
+    initialThread.group_key_version ?? 1,
+  );
   const bubbleStyle: BubbleStyle = "gold";
 
   const decryptRow = useCallback(
@@ -67,10 +74,31 @@ export function ThreadView({
 
   useEffect(() => {
     setMessages(initialMessages.map(decryptRow));
+    if (initialMessages.length > 0) {
+      setNextCursor(initialMessages[0]?.created_at ?? null);
+    }
   }, [initialMessages, decryptRow]);
 
+  async function loadOlder() {
+    if (!nextCursor || loadingOlder) return;
+    setLoadingOlder(true);
+    const res = await fetch(
+      `/api/messages/${threadId}?cursor=${encodeURIComponent(nextCursor)}&limit=30`,
+    );
+    const data = await res.json();
+    const older = (data.messages ?? []).map((row: Message) => decryptRow(row));
+    setMessages((prev) => [...older, ...prev]);
+    setNextCursor(data.next_cursor ?? null);
+    setLoadingOlder(false);
+  }
+
   useEffect(() => {
-    const unsub = subscribeToThreadMessages(threadId, participantIds, (msg) => {
+    const unsub = subscribeToThreadMessages(
+      threadId,
+      participantIds,
+      initialThread.thread_type,
+      initialThread.group_key_version ?? 1,
+      (msg) => {
       setMessages((prev) => {
         const idx = prev.findIndex((m) => m.id === msg.id);
         if (idx >= 0) {
@@ -80,9 +108,10 @@ export function ThreadView({
         }
         return [...prev, msg];
       });
-    });
+      },
+    );
     return unsub;
-  }, [threadId, participantIds]);
+  }, [threadId, participantIds, initialThread.thread_type, initialThread.group_key_version]);
 
   useEffect(() => {
     const unsub = subscribeToTyping(threadId, (uid) => {
@@ -242,6 +271,16 @@ export function ThreadView({
       </header>
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
+        {nextCursor ? (
+          <button
+            type="button"
+            onClick={() => void loadOlder()}
+            disabled={loadingOlder}
+            className="mb-4 w-full rounded-brand-sm border border-gold/20 py-2 font-body text-xs text-gold-body hover:text-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          >
+            {loadingOlder ? "Loading…" : "Load earlier messages"}
+          </button>
+        ) : null}
         {messages.map((m) => (
           <div key={m.id} className="mb-3">
             <MessageBubble
