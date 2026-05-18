@@ -152,6 +152,24 @@ export async function submitAdvocateApplication(
     name: application.name,
   });
 
+  try {
+    await fetch("/api/advocate-applications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: application.name,
+        email: application.email,
+        socialHandles: application.socialHandles,
+        specialty: application.specialty,
+        sampleContent: application.sampleContent,
+        licenseStatus: application.licenseStatus,
+        reason: application.reason,
+      }),
+    });
+  } catch {
+    // Web3Forms succeeded; Supabase persistence is best-effort from the client.
+  }
+
   return data;
 }
 

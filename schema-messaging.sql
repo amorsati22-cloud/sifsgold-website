@@ -218,6 +218,8 @@ CREATE POLICY "Users read own reports"
   ON public.message_reports FOR SELECT
   USING (reporter_id = auth.uid());
 
--- Realtime
-ALTER PUBLICATION supabase_realtime ADD TABLE public.messages;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.threads;
+-- Realtime (enable in Supabase Dashboard → Database → Replication if not already)
+-- ALTER PUBLICATION supabase_realtime ADD TABLE public.messages;
+-- ALTER PUBLICATION supabase_realtime ADD TABLE public.threads;
+
+-- Storage bucket: create `message-attachments` (private) in Supabase Storage dashboard

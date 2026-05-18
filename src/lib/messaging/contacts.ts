@@ -67,7 +67,8 @@ export async function getMessagingContacts(userId: string, userType: string | nu
       const proId = a.pro_id as string;
       if (seen.has(proId)) continue;
       seen.add(proId);
-      const pro = a.pro_profiles as {
+      const proRaw = a.pro_profiles;
+      const pro = (Array.isArray(proRaw) ? proRaw[0] : proRaw) as {
         display_name: string;
         username: string;
         avatar_url: string | null;
@@ -89,7 +90,8 @@ export async function getMessagingContacts(userId: string, userType: string | nu
       const proId = f.pro_id as string;
       if (seen.has(proId)) continue;
       seen.add(proId);
-      const pro = f.pro_profiles as {
+      const proRaw = f.pro_profiles;
+      const pro = (Array.isArray(proRaw) ? proRaw[0] : proRaw) as {
         display_name: string;
         username: string;
         avatar_url: string | null;

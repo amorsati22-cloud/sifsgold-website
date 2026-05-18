@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { decryptMessage, deriveThreadKey } from "@/lib/messaging/encryption";
+import { decryptMessage, deriveThreadKeyForType } from "@/lib/messaging/encryption";
 import { GoldButton } from "@/components/ui/GoldButton";
 
 type ThreadRow = {

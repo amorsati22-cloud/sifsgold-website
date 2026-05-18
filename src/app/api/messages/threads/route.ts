@@ -38,18 +38,24 @@ export async function GET() {
         .neq("sender_id", user.id);
 
       const others = participantIds.filter((id) => id !== user.id);
-      let otherProfiles: { id: string; label: string }[] = [];
+      let otherProfiles: { id: string; label: string; username?: string; avatar_url?: string | null }[] = [];
       if (others.length > 0) {
         const { data: pros } = await supabase
           .from("pro_profiles")
           .select("id, display_name, username, avatar_url")
           .in("id", others);
+        const found = new Set((pros ?? []).map((p) => p.id as string));
         otherProfiles = (pros ?? []).map((p) => ({
           id: p.id as string,
-          label: p.display_name as string,
+          label: (p.display_name as string) ?? "User",
           avatar_url: p.avatar_url as string | null,
           username: p.username as string,
-        })) as { id: string; label: string }[];
+        }));
+        for (const oid of others) {
+          if (!found.has(oid)) {
+            otherProfiles.push({ id: oid, label: "Member" });
+          }
+        }
       }
 
       return {

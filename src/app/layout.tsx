@@ -10,6 +10,7 @@ import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { GoddessProfile } from "@/components/decorative/GoddessProfile";
 import { generateOrganizationSchema, generateWebSiteSchema } from "@/lib/schema";
+import { getServerSession } from "@/lib/supabase/server";
 import { sifsGoldTheme } from "@/lib/theme";
 import "./globals.css";
 
@@ -116,7 +117,7 @@ export default function RootLayout({
           </a>
           <StarfieldBackground />
           <div className="relative z-10 flex min-h-screen flex-col">
-            <Navigation />
+            <Navigation initialUserEmail={user?.email ?? null} />
             <main
               id="main-content"
               tabIndex={-1}

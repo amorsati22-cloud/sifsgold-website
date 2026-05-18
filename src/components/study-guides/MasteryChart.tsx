@@ -31,29 +31,29 @@ export function MasteryChart({ data }: { data: Row[] }) {
     <div className="h-64 w-full" aria-label="Mastery by deck chart">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} layout="vertical" margin={{ left: 8, right: 16 }}>
-          <CartesianGrid stroke={theme.colors.borderMuted} strokeDasharray="3 3" />
-          <XAxis type="number" stroke={theme.colors.creamMuted} fontSize={11} />
+          <CartesianGrid stroke={theme.colors.goldBody} strokeOpacity={0.15} strokeDasharray="3 3" />
+          <XAxis type="number" tick={{ fill: theme.colors.cream, fontSize: 11 }} />
           <YAxis
             type="category"
             dataKey="name"
             width={100}
-            stroke={theme.colors.creamMuted}
-            fontSize={11}
+            tick={{ fill: theme.colors.cream, fontSize: 11 }}
           />
           <Tooltip
             contentStyle={{
-              background: theme.colors.navyDeep,
-              border: `1px solid ${theme.colors.goldMuted}`,
+              backgroundColor: theme.colors.navyDeep,
+              border: `1px solid ${theme.colors.gold}`,
               borderRadius: 8,
             }}
             labelStyle={{ color: theme.colors.gold }}
           />
-          <Bar dataKey="mastered" stackId="a" fill={theme.colors.gold} name="Mastered" />
+          <Bar dataKey="mastered" stackId="a" fill={theme.colors.gold} name="Mastered" isAnimationActive={false} />
           <Bar
             dataKey="remaining"
             stackId="a"
-            fill={theme.colors.navyLight}
+            fill={theme.colors.navyLift}
             name="Remaining"
+            isAnimationActive={false}
           />
         </BarChart>
       </ResponsiveContainer>

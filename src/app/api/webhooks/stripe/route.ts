@@ -114,13 +114,14 @@ export async function POST(request: Request) {
 
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
+      const subscriptionRef = (invoice as Stripe.Invoice & {
+        subscription?: string | { id?: string } | null;
+      }).subscription;
       await logStripeWebhookEvent(event, "Invoice payment failed", {
         customer:
           typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id,
         subscription:
-          typeof invoice.subscription === "string"
-            ? invoice.subscription
-            : invoice.subscription?.id,
+          typeof subscriptionRef === "string" ? subscriptionRef : subscriptionRef?.id,
       });
       console.info(
         "[stripe/webhook] payment failure email template pending — invoice",

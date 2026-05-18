@@ -307,16 +307,20 @@ export async function getStudyAnalytics(userId: string): Promise<StudyAnalytics>
   }
 
   const { data: decks } = await supabase.from("flashcard_decks").select("id, name, card_count");
+  const { data: cards } = await supabase.from("flashcards").select("id, deck_id");
   const { data: progress } = await supabase
     .from("user_card_progress")
-    .select("mastery_level, card_id, flashcards(deck_id)")
+    .select("card_id, mastery_level")
     .eq("user_id", userId)
     .eq("mastery_level", "mastered");
 
+  const cardToDeck = new Map(
+    (cards ?? []).map((c) => [c.id as string, c.deck_id as string]),
+  );
   const masteredByDeck = new Map<string, number>();
   for (const row of progress ?? []) {
-    const deckId = (row as { flashcards: { deck_id: string } }).flashcards.deck_id;
-    masteredByDeck.set(deckId, (masteredByDeck.get(deckId) ?? 0) + 1);
+    const deckId = cardToDeck.get(row.card_id as string);
+    if (deckId) masteredByDeck.set(deckId, (masteredByDeck.get(deckId) ?? 0) + 1);
   }
 
   const masteryByDeck = (decks ?? []).map((d) => ({

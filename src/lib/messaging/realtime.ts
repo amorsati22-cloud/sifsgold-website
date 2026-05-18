@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
-import { decryptJson, decryptMessage, deriveThreadKey } from "@/lib/messaging/encryption";
+import { decryptJson, decryptMessage, deriveThreadKeyForType } from "@/lib/messaging/encryption";
 import type { Message } from "@/types/messaging";
 
 export type DecryptedMessage = Message & {

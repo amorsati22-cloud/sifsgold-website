@@ -31,6 +31,7 @@
     "argon2-browser": "^1.18.0",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
+    "emoji-picker-react": "^4.19.1",
     "framer-motion": "^11.18.2",
     "gray-matter": "^4.0.3",
     "html-to-image": "^1.11.13",
@@ -54,6 +55,7 @@
     "stripe": "^22.1.1",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
+    "wavesurfer.js": "^7.12.7",
     "yet-another-react-lightbox": "^3.32.0",
     "zod": "^4.4.3"
   },

@@ -3,9 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { ALL_STATE_SLUGS, getStateBoardStub } from "@/data/states";
+import { SEED_GUIDE_IDS } from "@/lib/study-guides/seed-ids";
 import { BRAND } from "@/lib/constants";
 
 type Props = { params: { state: string } };
+
+const STATE_TO_GUIDE: Record<string, string> = {
+  tx: SEED_GUIDE_IDS.texas,
+  ca: SEED_GUIDE_IDS.california,
+  fl: SEED_GUIDE_IDS.florida,
+};
 
 export function generateStaticParams(): { state: string }[] {
   return ALL_STATE_SLUGS.map((state) => ({ state }));
@@ -18,8 +25,8 @@ export function generateMetadata({ params }: Props): Metadata {
   }
   return {
     title: `${stub.displayName} study guide`,
-    description: `State board orientation for ${stub.displayName}: hours, exam vendor, CE, and statute pointers — full prep in the Sif's Gold app.`,
-    alternates: { canonical: `${BRAND.url}/study-guides/${stub.slug}` },
+    description: `State board orientation for ${stub.displayName}: hours, exam vendor, CE, and statute pointers.`,
+    alternates: { canonical: `${BRAND.url}/study-guides/state/${stub.slug}` },
   };
 }
 
@@ -29,13 +36,15 @@ export default function StateStudyGuidePage({ params }: Props) {
     notFound();
   }
 
+  const interactiveGuideId = STATE_TO_GUIDE[stub.slug];
+
   return (
     <article className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-navy font-body text-cream">
       <Breadcrumb
         items={[
           { name: "Home", href: "/" },
           { name: "Study guides", href: "/study-guides" },
-          { name: stub.displayName, href: `/study-guides/${stub.slug}` },
+          { name: stub.displayName, href: `/study-guides/state/${stub.slug}` },
         ]}
       />
 
@@ -44,6 +53,14 @@ export default function StateStudyGuidePage({ params }: Props) {
           <p className="text-xs font-semibold uppercase tracking-widest text-gold/90">Study guide summary</p>
           <h1 className="mt-3 font-heading text-4xl font-black text-gold md:text-5xl">{stub.displayName}</h1>
           <p className="mt-4 max-w-3xl text-cream/85">{stub.boardName}</p>
+          {interactiveGuideId ? (
+            <Link
+              href={`/study-guides/${interactiveGuideId}`}
+              className="mt-6 inline-flex rounded-full border border-gold bg-gold px-5 py-2.5 text-sm font-semibold text-navy hover:bg-gold-light focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            >
+              Open interactive flashcards
+            </Link>
+          ) : null}
         </div>
       </header>
 
@@ -83,21 +100,15 @@ export default function StateStudyGuidePage({ params }: Props) {
       <section className="bg-navy py-14 md:py-18">
         <div className="mx-auto max-w-content px-4 sm:px-6 md:px-8">
           <p className="max-w-3xl text-pretty text-base leading-relaxed text-cream/88">
-            Cover the basics here. Full prep with <strong className="text-gold">300 questions per license type</strong> lives
-            in the app — timed modes, photo-based practical prompts, and mentor checkpoints ship at launch.
+            Interactive flashcards with spaced repetition are available for select states. Always verify hours,
+            vendors, and passing scores with your school and licensing board.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/study-guides"
-              className="inline-flex rounded-full border border-gold/50 px-5 py-2.5 text-sm font-semibold text-gold hover:bg-gold/10"
+              className="inline-flex rounded-full border border-gold/50 px-5 py-2.5 text-sm font-semibold text-gold hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
-              All states
-            </Link>
-            <Link
-              href="/#waitlist"
-              className="inline-flex rounded-full border border-gold bg-gold px-5 py-2.5 text-sm font-semibold text-navy hover:bg-gold-light"
-            >
-              Join Sif&apos;s Circle
+              All study guides
             </Link>
           </div>
         </div>

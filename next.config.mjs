@@ -39,6 +39,11 @@ const nextConfig = {
     return [
       { source: "/login", destination: "/sign-in", permanent: false },
       { source: "/for-professionals", destination: "/for-pros", permanent: true },
+      {
+        source: "/study-guides/:state([a-z]{2})",
+        destination: "/study-guides/state/:state",
+        permanent: true,
+      },
     ];
   },
   async headers() {

@@ -117,7 +117,7 @@ export default async function StudyGuideDetailPage({ params }: Props) {
                     </Link>
                   ) : null}
                 </div>
-                <motion.div
+                <div
                   className="mt-4 h-2 overflow-hidden rounded-full bg-navy"
                   role="progressbar"
                   aria-valuenow={deck.progressPercent}
@@ -129,12 +129,12 @@ export default async function StudyGuideDetailPage({ params }: Props) {
                     className="h-full bg-gold transition-[width]"
                     style={{ width: `${deck.progressPercent}%` }}
                   />
-                </motion.div>
+                </div>
                 <p className="mt-1 text-xs text-goldBody">{deck.progressPercent}% mastered</p>
               </li>
             ))}
           </ol>
-        </motion.div>
+        </div>
       </section>
     </article>
   );

@@ -4,7 +4,7 @@ export const PRO_OPS_NAV = [
   { href: "/dashboard/pro/clients", label: "Clients" },
   { href: "/dashboard/pro/earnings", label: "Earnings" },
   { href: "/dashboard/pro/insights", label: "Insights" },
-  { href: "/dashboard/pro/messages", label: "Messages" },
+  { href: "/dashboard/messages", label: "Messages" },
   { href: "/dashboard/pro/intake-forms", label: "Intake forms" },
   { href: "/dashboard/pro/business", label: "Business" },
   { href: "/dashboard/pro/marketing", label: "Marketing" },

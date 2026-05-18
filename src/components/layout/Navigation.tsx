@@ -8,6 +8,7 @@ import { GoddessProfile } from "@/components/decorative/GoddessProfile";
 import { WheatBranch } from "@/components/decorative/WheatBranch";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { NavDashboardLinks } from "@/components/layout/NavDashboardLinks";
+import { NavigationAuthActions } from "@/components/layout/NavigationAuthActions";
 
 const RESOURCE_LINKS = [
   { label: "Study Guides", href: "/study-guides" },
@@ -124,7 +125,11 @@ function NavResourcesDropdown({
   );
 }
 
-export function Navigation() {
+type NavigationProps = {
+  initialUserEmail?: string | null;
+};
+
+export function Navigation({ initialUserEmail = null }: NavigationProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -200,9 +205,7 @@ export function Navigation() {
               ),
             )}
             <NavDashboardLinks />
-            <Link href="/sign-in" className={desktopLinkClass(pathname, "/sign-in")}>
-              Sign In
-            </Link>
+            <NavigationAuthActions initialUserEmail={initialUserEmail} pathname={pathname} />
             <GoldButton label="Join Sif's Circle" href="/#waitlist" variant="solid" size="sm" />
           </nav>
 
@@ -301,15 +304,12 @@ export function Navigation() {
             <div className="mt-2 flex flex-col gap-1 border-t border-gold/10 pt-4">
               <NavDashboardLinks mobile />
             </div>
-            <Link
-              href="/sign-in"
-              className={`rounded-brand-md px-2 py-3 font-body text-lg font-medium ${
-                linkActive(pathname, "/sign-in") ? "text-gold" : "text-cream/90"
-              }`}
-              onClick={closeMenu}
-            >
-              Sign In
-            </Link>
+            <NavigationAuthActions
+              initialUserEmail={initialUserEmail}
+              pathname={pathname}
+              mobile
+              onNavigate={closeMenu}
+            />
           </nav>
           <div className="mt-auto border-t border-gold/15 pt-8">
             <GoldButton

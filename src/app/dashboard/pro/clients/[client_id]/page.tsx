@@ -48,7 +48,7 @@ export default async function ProClientDetailPage({ params }: Props) {
         <div className="flex flex-wrap gap-2">
           <GoldButton
             label="Send message"
-            href={`/dashboard/pro/messages?client=${encodeURIComponent(client.id)}`}
+            href={`/dashboard/messages/new?to=${encodeURIComponent(client.client_id ?? client.id)}`}
             variant="outlined"
             size="md"
           />

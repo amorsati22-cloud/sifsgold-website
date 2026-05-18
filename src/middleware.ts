@@ -7,6 +7,8 @@ import { updateSession } from "@/lib/supabase/middleware";
 import { createServerClient } from "@supabase/ssr";
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/env";
 
+const DASHBOARD_MESSAGES_PATHS = ["/dashboard/messages"];
+
 const DASHBOARD_PRO_PATHS = [
   "/dashboard/pro",
   "/dashboard/profile",
@@ -151,6 +153,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/dashboard/messages",
+    "/dashboard/messages/:path*",
     "/dashboard/pro",
     "/dashboard/pro/:path*",
     "/dashboard/profile",

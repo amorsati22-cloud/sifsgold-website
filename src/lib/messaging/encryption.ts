@@ -1,22 +1,33 @@
 "use client";
 
 import nacl from "tweetnacl";
-import { decodeBase64, decodeUTF8, encodeBase64, encodeUTF8 } from "tweetnacl-util";
+import { decodeBase64, encodeBase64 } from "tweetnacl-util";
+
+function utf8ToBytes(value: string): Uint8Array {
+  return new TextEncoder().encode(value);
+}
+
+function bytesToUtf8(value: Uint8Array): string {
+  return new TextDecoder().decode(value);
+}
 
 export type EncryptedPayload = {
   ciphertext: string;
   iv: string;
 };
 
-/** Deterministic 32-byte key from thread + sorted participant IDs (shared secret protocol). */
+import { deriveDmThreadKey, deriveThreadKeyForType } from "@/lib/messaging/group-key-derivation";
+
+/** @deprecated Use deriveThreadKeyForType with thread metadata */
 export function deriveThreadKey(threadId: string, participantIds: string[]): Uint8Array {
-  const material = `${threadId}:${[...participantIds].sort().join(":")}`;
-  return nacl.hash(decodeUTF8(material)).slice(0, nacl.secretbox.keyLength);
+  return deriveDmThreadKey(threadId, participantIds);
 }
+
+export { deriveThreadKeyForType, deriveGroupThreadKey, deriveDmThreadKey } from "@/lib/messaging/group-key-derivation";
 
 export function encryptMessage(plaintext: string, threadKey: Uint8Array): EncryptedPayload {
   const iv = nacl.randomBytes(nacl.secretbox.nonceLength);
-  const ciphertext = nacl.secretbox(encodeUTF8(plaintext), iv, threadKey);
+  const ciphertext = nacl.secretbox(utf8ToBytes(plaintext), iv, threadKey);
   return {
     ciphertext: encodeBase64(ciphertext),
     iv: encodeBase64(iv),
@@ -27,7 +38,7 @@ export function decryptMessage(ciphertextB64: string, ivB64: string, threadKey: 
   try {
     const opened = nacl.secretbox.open(decodeBase64(ciphertextB64), decodeBase64(ivB64), threadKey);
     if (!opened) return null;
-    return encodeUTF8(opened);
+    return bytesToUtf8(opened);
   } catch {
     return null;
   }

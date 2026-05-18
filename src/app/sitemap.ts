@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   push(routes, "/study-guides", "weekly", 0.8);
   for (const state of ALL_STATE_SLUGS) {
-    push(routes, `/study-guides/${state}`, "monthly", 0.65);
+    push(routes, `/study-guides/state/${state}`, "monthly", 0.65);
   }
 
   push(routes, "/career-paths", "weekly", 0.78);

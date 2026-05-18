@@ -37,7 +37,7 @@ export function StateHoneycombMap() {
           const abbr = slug.toUpperCase();
           const label = STATE_BOARD_STUBS[slug]?.displayName ?? abbr;
           return (
-            <a key={slug} href={`/study-guides/${slug}`} className="group cursor-pointer focus:outline-none">
+            <a key={slug} href={`/study-guides/state/${slug}`} className="group cursor-pointer focus:outline-none">
               <path
                 d={hexPath(cx, cy, HEX_R)}
                 className="fill-navy-deep/90 stroke-gold/40 stroke-[1.5] transition group-hover:fill-gold/15 group-hover:stroke-gold group-focus-visible:fill-gold/20"

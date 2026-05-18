@@ -8,7 +8,7 @@ import { MessageBubble } from "@/components/messaging/MessageBubble";
 import {
   decryptJson,
   decryptMessage,
-  deriveThreadKey,
+  deriveThreadKeyForType,
   encryptJson,
   encryptMessage,
   previewPlaintext,
