@@ -7,6 +7,7 @@ export const CLIENT_DASHBOARD_NAV = [
   { href: "/dashboard/state-board-progress", label: "State board" },
   { href: "/dashboard/career-plan", label: "Career plan" },
   { href: "/dashboard/payments", label: "Payments" },
+  { href: "/dashboard/loyalty", label: "Loyalty" },
   { href: "/dashboard/discover", label: "Discover" },
   { href: "/dashboard/messages", label: "Messages" },
   { href: "/dashboard/settings", label: "Settings" },

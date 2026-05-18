@@ -15,6 +15,14 @@
     {
       "path": "/api/video-calls/cron/expire-recordings",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/loyalty/expire-inactive",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/loyalty/birthday-bonus",
+      "schedule": "0 8 * * *"
     }
   ]
 }

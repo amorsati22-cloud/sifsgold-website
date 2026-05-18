@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { awardLoyaltyForOrder } from "@/lib/loyalty/integrations";
 import { guestCartCookieOptions } from "@/lib/shop/cart";
 import { decrementInventoryOnOrder } from "@/lib/shop/inventory";
 import { PLATFORM_FEE_PERCENT } from "@/lib/shop/constants";
@@ -131,6 +132,7 @@ export async function POST(request: Request) {
 
   if (user) {
     await admin.from("cart_items").delete().eq("user_id", user.id);
+    await awardLoyaltyForOrder(order.id as string, user.id);
   }
 
   const storefrontTotals = new Map<string, number>();
