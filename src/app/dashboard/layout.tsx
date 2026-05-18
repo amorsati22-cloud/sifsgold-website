@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 const DASHBOARD_LINKS = [
   { href: "/dashboard", label: "Home", exact: true },
   { href: "/dashboard/health-hub", label: "Health Hub", badge: "Private" },
+  { href: "/dashboard/photo-studio", label: "Photo Studio", badge: "Pro" },
 ] as const;
 
 export default async function DashboardLayout({

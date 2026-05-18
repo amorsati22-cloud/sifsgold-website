@@ -11,6 +11,8 @@ const DASHBOARD_PRO_PATHS = [
   "/dashboard/portfolio",
   "/dashboard/credentials",
   "/dashboard/reviews",
+  "/dashboard/services",
+  "/dashboard/photo-studio",
 ];
 
 const DASHBOARD_BUYER_PATHS = ["/dashboard/orders", "/dashboard/wishlist", "/dashboard/returns"];

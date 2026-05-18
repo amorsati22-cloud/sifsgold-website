@@ -1,7 +1,14 @@
 "use client";
 
 import { Check } from "lucide-react";
-import type { PricingTier } from "@/data/pricing";
+import Link from "next/link";
+import {
+  getStripeIds,
+  isCustomPricingTier,
+  isFreePricingTier,
+  tierHasFreeTrial,
+  type PricingTier,
+} from "@/data/pricing";
 
 type BillingMode = "monthly" | "annual";
 
@@ -34,6 +41,41 @@ function getPriceLabel(tier: PricingTier, billing: BillingMode) {
   return { main: formatUSD(tier.annualPrice), sub: "/yr", isCustom: false };
 }
 
+function getTierCta(tier: PricingTier, billing: BillingMode) {
+  if (isFreePricingTier(tier)) {
+    return { label: "Get Started Free", href: "/sign-up", external: false };
+  }
+
+  if (isCustomPricingTier(tier) || tier.ctaType === "contact") {
+    return {
+      label: "Contact Sales",
+      href: "/contact?reason=sales",
+      external: false,
+    };
+  }
+
+  const stripeIds = getStripeIds(tier.id);
+  const paymentLink =
+    billing === "monthly"
+      ? stripeIds?.paymentLinkMonthly
+      : stripeIds?.paymentLinkAnnual;
+
+  if (paymentLink) {
+    return {
+      label: tierHasFreeTrial(tier) ? "Start Free Trial" : "Subscribe",
+      href: paymentLink,
+      external: true,
+    };
+  }
+
+  const label = tierHasFreeTrial(tier) ? "Start Free Trial" : "Subscribe";
+  return {
+    label,
+    href: `/checkout/${tier.id}?billing=${billing}`,
+    external: false,
+  };
+}
+
 export function TierCard({
   tier,
   billing,
@@ -47,12 +89,16 @@ export function TierCard({
   const savings = billing === "annual" ? getSavings(tier) : null;
   const showInfrastructureNote =
     !price.isCustom && tier.monthlyPrice !== 0 && tier.monthlyPrice !== null;
+  const cta = getTierCta(tier, billing);
+
+  const ctaClassName =
+    "group mt-6 inline-flex w-full items-center justify-center rounded-full border border-gold bg-gold px-5 py-2.5 font-body text-sm font-semibold text-navy transition-all duration-brand-fast hover:shadow-lg hover:shadow-gold/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold";
 
   return (
     <article
       tabIndex={0}
       aria-label={`${tier.name} plan`}
-      className="group flex h-full flex-col rounded-brand-lg border border-gold/40 bg-cream p-6 text-navy transition-all duration-brand-medium hover:-translate-y-1 hover:border-gold hover:shadow-lg focus-visible:-translate-y-1 focus-visible:border-gold focus-visible:shadow-lg"
+      className="group flex h-full flex-col rounded-brand-lg border border-gold/40 bg-cream p-6 text-navy transition-all duration-brand-medium hover:-translate-y-1 hover:border-gold hover:shadow-lg focus-visible:-translate-y-1 focus-visible:border-gold focus-visible:shadow-lg motion-safe:hover:-translate-y-1 motion-safe:focus-visible:-translate-y-1"
     >
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {tier.isPopular ? (
@@ -70,7 +116,9 @@ export function TierCard({
       <h3 className="font-heading text-2xl text-gold">{tier.name}</h3>
       <p className="mt-4 font-mono text-4xl font-bold tabular-nums text-navy">
         {price.main}
-        {price.sub ? <span className="ml-1 text-base font-medium text-navy/70">{price.sub}</span> : null}
+        {price.sub ? (
+          <span className="ml-1 text-base font-medium text-navy/70">{price.sub}</span>
+        ) : null}
       </p>
       {billing === "annual" && tier.annualPrice !== null && !price.isCustom ? (
         <p className="mt-2 text-sm text-navy/70">Billed {formatUSD(tier.annualPrice)}/year</p>
@@ -97,13 +145,20 @@ export function TierCard({
         </p>
       ) : null}
 
-      <button
-        type="button"
-        className="group mt-6 inline-flex w-full items-center justify-center rounded-full border border-gold bg-gold px-5 py-2.5 font-body text-sm font-semibold text-navy transition-all duration-brand-fast hover:shadow-lg hover:shadow-gold/20"
-      >
-        <span className="group-hover:animate-gold-shimmer">{tier.ctaLabel}</span>
-      </button>
+      {cta.external ? (
+        <a
+          href={cta.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={ctaClassName}
+        >
+          <span className="group-hover:animate-gold-shimmer">{cta.label}</span>
+        </a>
+      ) : (
+        <Link href={cta.href} className={ctaClassName}>
+          <span className="group-hover:animate-gold-shimmer">{cta.label}</span>
+        </Link>
+      )}
     </article>
   );
 }
-

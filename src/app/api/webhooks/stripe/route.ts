@@ -1,16 +1,51 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
+import { getPricingTierById } from "@/data/pricing";
 import { getStripe } from "@/lib/stripe";
+import { logStripeWebhookEvent } from "@/lib/stripe/webhook-log";
+import { sendSubscriptionWelcomeEmail } from "@/lib/stripe/welcome-email";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
+function sessionTierId(session: Stripe.Checkout.Session): string | undefined {
+  return session.metadata?.tierId;
+}
+
+function subscriptionTierId(subscription: Stripe.Subscription): string | undefined {
+  return subscription.metadata?.tierId;
+}
+
+async function handleSubscriptionCheckoutCompleted(
+  event: Stripe.Event,
+  session: Stripe.Checkout.Session,
+) {
+  const tierId = sessionTierId(session);
+  const tier = tierId ? getPricingTierById(tierId) : null;
+  const email =
+    session.customer_details?.email ?? session.customer_email ?? undefined;
+
+  await logStripeWebhookEvent(
+    event,
+    `Checkout completed for tier ${tierId ?? "unknown"}`,
+    {
+      tierId,
+      billing: session.metadata?.billing,
+      customer:
+        typeof session.customer === "string" ? session.customer : session.customer?.id,
+    },
+  );
+
+  if (email) {
+    await sendSubscriptionWelcomeEmail(email, tier);
+  }
+}
+
 export async function POST(request: Request) {
   const stripe = getStripe();
-  const admin = createAdminClient();
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
 
-  if (!stripe || !webhookSecret) {
+  if (!stripe || !webhookSecret || webhookSecret === "whsec_placeholder") {
     return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
   }
 
@@ -28,15 +63,79 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  if (!admin) {
-    return NextResponse.json({ received: true });
-  }
+  const admin = createAdminClient();
 
   switch (event.type) {
+    case "checkout.session.completed": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      if (session.mode === "subscription") {
+        await handleSubscriptionCheckoutCompleted(event, session);
+      }
+      break;
+    }
+
+    case "customer.subscription.created": {
+      const subscription = event.data.object as Stripe.Subscription;
+      await logStripeWebhookEvent(event, "Subscription created", {
+        tierId: subscriptionTierId(subscription),
+        status: subscription.status,
+        customer:
+          typeof subscription.customer === "string"
+            ? subscription.customer
+            : subscription.customer?.id,
+      });
+      break;
+    }
+
+    case "customer.subscription.updated": {
+      const subscription = event.data.object as Stripe.Subscription;
+      await logStripeWebhookEvent(event, "Subscription updated", {
+        tierId: subscriptionTierId(subscription),
+        status: subscription.status,
+        customer:
+          typeof subscription.customer === "string"
+            ? subscription.customer
+            : subscription.customer?.id,
+      });
+      break;
+    }
+
+    case "customer.subscription.deleted": {
+      const subscription = event.data.object as Stripe.Subscription;
+      await logStripeWebhookEvent(event, "Subscription canceled", {
+        tierId: subscriptionTierId(subscription),
+        customer:
+          typeof subscription.customer === "string"
+            ? subscription.customer
+            : subscription.customer?.id,
+      });
+      break;
+    }
+
+    case "invoice.payment_failed": {
+      const invoice = event.data.object as Stripe.Invoice;
+      await logStripeWebhookEvent(event, "Invoice payment failed", {
+        customer:
+          typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id,
+        subscription:
+          typeof invoice.subscription === "string"
+            ? invoice.subscription
+            : invoice.subscription?.id,
+      });
+      console.info(
+        "[stripe/webhook] payment failure email template pending — invoice",
+        invoice.id,
+      );
+      break;
+    }
+
     case "charge.refunded": {
+      if (!admin) break;
       const charge = event.data.object as Stripe.Charge;
       const paymentIntentId =
-        typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id;
+        typeof charge.payment_intent === "string"
+          ? charge.payment_intent
+          : charge.payment_intent?.id;
 
       if (paymentIntentId) {
         const fullyRefunded = charge.amount_refunded >= charge.amount;
@@ -49,6 +148,7 @@ export async function POST(request: Request) {
     }
 
     case "charge.dispute.created": {
+      if (!admin) break;
       const dispute = event.data.object as Stripe.Dispute;
       const chargeId = typeof dispute.charge === "string" ? dispute.charge : dispute.charge?.id;
       if (chargeId) {
@@ -63,6 +163,7 @@ export async function POST(request: Request) {
     }
 
     case "payment_intent.payment_failed": {
+      if (!admin) break;
       const intent = event.data.object as Stripe.PaymentIntent;
       if (intent.receipt_email) {
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sifsgold.com";

@@ -1,3 +1,9 @@
+import {
+  getStripePriceId as getStripePriceIdFromProducts,
+  getStripeProductRow,
+  type StripeProductMapping,
+} from "@/data/stripe-products";
+
 export type PricingBucket =
   | "beautyAndGroomingPros"
   | "salonsAndStudios"
@@ -1329,6 +1335,72 @@ export const pricingTiers: PricingTiersByBucket = {
     },
   ],
 };
+
+export function getAllPricingTiers(): PricingTier[] {
+  return Object.values(pricingTiers).flat();
+}
+
+export function getPricingTierById(id: string): PricingTier | null {
+  return getAllPricingTiers().find((tier) => tier.id === id) ?? null;
+}
+
+export type StripeIdsForTier = Pick<
+  StripeProductMapping,
+  | "stripeProductId"
+  | "stripePriceMonthlyId"
+  | "stripePriceAnnualId"
+  | "paymentLinkMonthly"
+  | "paymentLinkAnnual"
+>;
+
+export function getStripeIds(tierId: string): StripeIdsForTier | null {
+  const row = getStripeProductRow(tierId);
+  if (!row) return null;
+  return {
+    stripeProductId: row.stripeProductId,
+    stripePriceMonthlyId: row.stripePriceMonthlyId,
+    stripePriceAnnualId: row.stripePriceAnnualId,
+    paymentLinkMonthly: row.paymentLinkMonthly,
+    paymentLinkAnnual: row.paymentLinkAnnual,
+  };
+}
+
+export function getStripePriceId(
+  tierId: string,
+  billing: "monthly" | "annual",
+): string | null {
+  return getStripePriceIdFromProducts(tierId, billing) ?? null;
+}
+
+/** Pro / Premium named tiers get a 7-day trial; Standard tiers do not. */
+export function tierHasFreeTrial(tier: PricingTier): boolean {
+  if (
+    PRICING_CONFIG.freeTrialAppliesTo.includes(
+      tier.id as (typeof PRICING_CONFIG.freeTrialAppliesTo)[number],
+    )
+  ) {
+    return true;
+  }
+  const id = tier.id.toLowerCase();
+  const name = tier.name.toLowerCase();
+  if (id.includes("standard") || name.includes("standard")) return false;
+  if (id.includes("free") || tier.isFree) return false;
+  return (
+    id.endsWith("-pro") ||
+    id.endsWith("-premium") ||
+    id.includes("-pro-") ||
+    name.includes(" pro") ||
+    name.includes("premium")
+  );
+}
+
+export function isCustomPricingTier(tier: PricingTier): boolean {
+  return tier.monthlyPrice === null || tier.annualPrice === null;
+}
+
+export function isFreePricingTier(tier: PricingTier): boolean {
+  return tier.isFree || tier.monthlyPrice === 0;
+}
 
 export const PRICING_FAQS: PricingFaq[] = [
   {

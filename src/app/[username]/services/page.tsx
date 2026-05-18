@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ServicesMenu } from "@/components/services/ServicesMenu";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { getBookingUrl } from "@/lib/booking";
 import { BRAND } from "@/lib/constants";
-import { formatPriceCents } from "@/lib/format-price";
 import { getPublicProProfileByUsername } from "@/lib/pro-profiles";
+import { getServiceCategories, groupServicesByCategory } from "@/lib/services/data";
 
 type PageProps = {
   params: { username: string };
@@ -31,6 +32,8 @@ export default async function ProServicesPage({ params }: PageProps) {
   if (!bundle) notFound();
 
   const { profile, services } = bundle;
+  const categories = await getServiceCategories();
+  const groups = groupServicesByCategory(services, categories);
 
   return (
     <div className="-mx-4 flex min-w-0 flex-1 flex-col sm:-mx-6 md:-mx-8">
@@ -50,40 +53,13 @@ export default async function ProServicesPage({ params }: PageProps) {
             Services menu
           </h1>
           <p className="mt-2 max-w-2xl font-body text-sm text-cream/75">
-            Every service books through Sif&apos;s Gold with the privacy and policies you set in your dashboard.
+            Every service books through Sif&apos;s Gold with the privacy and policies you set in your
+            dashboard.
           </p>
         </div>
       </div>
       <div className="mx-auto w-full max-w-content px-4 py-10 sm:px-6 md:px-8">
-        {services.length === 0 ? (
-          <p className="font-body text-cream/70">No services listed yet. Check back soon.</p>
-        ) : (
-          <ul className="list-none space-y-4 p-0">
-            {services.map((service) => (
-              <li
-                key={service.id}
-                className="flex flex-col gap-4 rounded-brand-lg border border-gold/10 bg-navy/50 p-5 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div>
-                  <h2 className="font-heading text-xl text-cream">{service.name}</h2>
-                  {service.description ? (
-                    <p className="mt-2 font-body text-sm text-cream/80">{service.description}</p>
-                  ) : null}
-                  <p className="mt-2 font-body text-sm text-gold-body">
-                    {formatPriceCents(service.price_cents)}
-                    {service.duration_minutes ? ` · ${service.duration_minutes} minutes` : ""}
-                    {service.category ? ` · ${service.category}` : ""}
-                  </p>
-                </div>
-                <GoldButton
-                  label="Book this service"
-                  href={getBookingUrl(profile.username, service.id)}
-                  size="md"
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        <ServicesMenu username={profile.username} groups={groups} categories={categories} />
         <div className="mt-10">
           <GoldButton label="Book any service" href={getBookingUrl(profile.username)} size="lg" />
         </div>

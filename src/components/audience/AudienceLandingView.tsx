@@ -10,6 +10,8 @@ import { AudienceWaitlistCTA } from "@/components/audience/AudienceWaitlistCTA";
 import { AudiencePricingTeaser } from "@/components/audience/AudiencePricingTeaser";
 import { findTiersByIds } from "@/lib/audience-pricing";
 import { getAudienceIcon } from "@/components/audience/audience-icons";
+import { ServicesMenuPreview } from "@/components/audience/ServicesMenuPreview";
+import { isProAudienceSlug } from "@/lib/audience-pro-slugs";
 import type { AudienceLandingConfig } from "@/types/audience-landing";
 
 const primaryCta = { label: "Join Sif's Circle", href: "#audience-waitlist" };
@@ -55,6 +57,8 @@ export function AudienceLandingView({ config }: { config: AudienceLandingConfig 
       </section>
 
       <HowItWorks steps={config.steps} />
+
+      {isProAudienceSlug(config.slug) ? <ServicesMenuPreview /> : null}
 
       <AudiencePricingTeaser tiers={tiers} />
 

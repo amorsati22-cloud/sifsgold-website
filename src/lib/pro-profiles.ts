@@ -3,12 +3,14 @@ import "server-only";
 import { isReservedUsername } from "@/lib/reserved-usernames";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
-import type { Credential, PortfolioItem, ProProfile, ProService, Testimonial } from "@/types/pro-profile";
+import { getPublicBookableServices } from "@/lib/services/data";
+import type { Credential, PortfolioItem, ProProfile, Testimonial } from "@/types/pro-profile";
+import type { ServiceWithAddons } from "@/types/services";
 
 export type PublicProProfileBundle = {
   profile: ProProfile;
   portfolio: PortfolioItem[];
-  services: ProService[];
+  services: ServiceWithAddons[];
   credentials: Credential[];
   testimonials: Testimonial[];
 };
@@ -65,19 +67,13 @@ export async function getPublicProProfileByUsername(
 
   const proId = profile.id as string;
 
-  const [portfolioRes, servicesRes, credentialsRes, testimonialsRes] = await Promise.all([
+  const [portfolioRes, credentialsRes, testimonialsRes] = await Promise.all([
     supabase
       .from("portfolio_items")
       .select("*")
       .eq("pro_id", proId)
       .order("display_order", { ascending: true })
       .order("created_at", { ascending: false }),
-    supabase
-      .from("services")
-      .select("*")
-      .eq("pro_id", proId)
-      .eq("active", true)
-      .order("display_order", { ascending: true }),
     supabase
       .from("credentials")
       .select("id, pro_id, type, name, issuing_authority, issue_date, expiry_date, credential_number, verification_url, public")
@@ -92,10 +88,12 @@ export async function getPublicProProfileByUsername(
       .order("created_at", { ascending: false }),
   ]);
 
+  const services = await getPublicBookableServices(proId);
+
   return {
     profile: profile as ProProfile,
     portfolio: (portfolioRes.data ?? []) as PortfolioItem[],
-    services: (servicesRes.data ?? []) as ProService[],
+    services,
     credentials: (credentialsRes.data ?? []) as Credential[],
     testimonials: (testimonialsRes.data ?? []) as Testimonial[],
   };

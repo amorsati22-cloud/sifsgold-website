@@ -46,17 +46,8 @@ export type PortfolioItem = {
   tags: string[] | null;
 };
 
-export type ProService = {
-  id: string;
-  pro_id: string;
-  name: string;
-  description: string | null;
-  duration_minutes: number | null;
-  price_cents: number | null;
-  category: string | null;
-  active: boolean;
-  display_order: number | null;
-};
+/** @deprecated Import Service / ServiceWithAddons from @/types/services */
+export type { Service as ProService, ServiceWithAddons } from "@/types/services";
 
 export type Credential = {
   id: string;

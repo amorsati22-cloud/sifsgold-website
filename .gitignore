@@ -36,6 +36,7 @@ yarn-error.log*
 
 # local email preference store (until Supabase auth)
 /data/email-preferences.json
+/data/stripe-webhook-events.json
 
 # vercel
 .vercel
