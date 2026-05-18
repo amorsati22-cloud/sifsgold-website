@@ -64,6 +64,19 @@ export function ContactPageForm({ idPrefix }: { idPrefix: string }) {
     setStatus(result.ok ? "success" : "error");
     setServerMessage(result.message);
     if (result.ok) {
+      void fetch("/api/support-ticket", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          name: trimmedName,
+          reason,
+          subject: `Sif's Gold contact — ${reason}`,
+          message: body,
+          source: "contact_form",
+        }),
+      }).catch(() => {});
+
       setName("");
       setEmail("");
       setMessage("");

@@ -131,7 +131,7 @@ export function WaitlistAdmin() {
       </div>
 
       {selected.size > 0 ? (
-        <motion-safe className="mt-4 flex flex-wrap items-center gap-3 rounded-brand-md border border-gold/20 bg-navy-deep/60 p-4">
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-brand-md border border-gold/20 bg-navy-deep/60 p-4">
           <span className="text-sm text-cream/80">{selected.size} selected</span>
           <button type="button" onClick={() => void bulkMarkConverted()} className="text-sm text-gold underline">
             Mark converted
@@ -150,7 +150,7 @@ export function WaitlistAdmin() {
           <button type="button" onClick={() => void bulkEmail()} className="text-sm text-gold underline">
             Send email to selection
           </button>
-        </motion-safe>
+        </div>
       ) : null}
 
       {message ? (

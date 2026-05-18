@@ -70,7 +70,7 @@ export async function PATCH(request: Request) {
     await auth.admin
       .from("profiles")
       .update({ user_type: "sifs_advocate" })
-      .eq("email", (app.email as string).toLowerCase());
+      .ilike("email", app.email as string);
   } else if (action === "reject") {
     newStatus = "rejected";
     auditAction = "rejected_advocate";

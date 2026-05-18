@@ -12,6 +12,7 @@ const TEMPLATE_LABELS: Record<EmailTemplateType, string> = {
   data_deletion_request_received: "Data Deletion Request",
   dmca_takedown_received: "DMCA Takedown Received",
   launch_day_announcement: "Launch Day Announcement",
+  sifs_advocate_rejection: "Sif's Advocate — Application Update",
 };
 
 export function EmailPreview() {

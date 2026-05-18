@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { resolveTemplateFromSource, sendTemplateEmail } from "@/lib/email/send-template";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -53,6 +54,21 @@ export async function POST(request: Request) {
 
   const email = extractEmail(payload);
   const source = payload.source ?? payload.data?.source ?? payload.subject ?? "";
+  const messageBody =
+    payload.data?.message ?? payload.reason ?? (typeof payload.data === "object" ? JSON.stringify(payload.data) : "");
+
+  if (source.toLowerCase().includes("contact") && email && messageBody) {
+    const admin = createAdminClient();
+    if (admin) {
+      await admin.from("support_tickets").insert({
+        from_email: email,
+        subject: payload.subject ?? `Contact — ${source}`,
+        body: String(messageBody),
+        category: "general",
+        status: "open",
+      });
+    }
+  }
 
   if (!email) {
     return NextResponse.json({ ok: true, skipped: true, reason: "no_email" });
