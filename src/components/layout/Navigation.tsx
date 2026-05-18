@@ -2,23 +2,31 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { GoddessProfile } from "@/components/decorative/GoddessProfile";
 import { WheatBranch } from "@/components/decorative/WheatBranch";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { NavDashboardLinks } from "@/components/layout/NavDashboardLinks";
 
-const NAV_LINKS = [
-  { label: "Shop", href: "/shop" },
-  { label: "For Pros", href: "/for-pros" },
-  { label: "For Clients", href: "/for-clients" },
-  { label: "Schools & Salons", href: "/for-schools" },
-  { label: "Fashion", href: "/for-fashion" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
-  { label: "Features", href: "/#features" },
+const RESOURCE_LINKS = [
+  { label: "Study Guides", href: "/study-guides" },
+  { label: "Career Paths", href: "/career-paths" },
+  { label: "Glossary", href: "/glossary" },
+  { label: "Tools", href: "/tools" },
 ] as const;
+
+const NAV_ITEMS = [
+  { type: "link" as const, label: "Shop", href: "/shop" },
+  { type: "link" as const, label: "For Pros", href: "/for-pros" },
+  { type: "link" as const, label: "For Clients", href: "/for-clients" },
+  { type: "link" as const, label: "Schools & Salons", href: "/for-schools" },
+  { type: "dropdown" as const, label: "Resources", items: RESOURCE_LINKS },
+  { type: "link" as const, label: "Fashion", href: "/for-fashion" },
+  { type: "link" as const, label: "Pricing", href: "/pricing" },
+  { type: "link" as const, label: "About", href: "/about" },
+  { type: "link" as const, label: "Features", href: "/#features" },
+];
 
 const SCROLL_SOLID_PX = 80;
 
@@ -28,6 +36,10 @@ function linkActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+function resourcesActive(pathname: string) {
+  return RESOURCE_LINKS.some((item) => linkActive(pathname, item.href));
+}
+
 function desktopLinkClass(pathname: string, href: string) {
   const active = linkActive(pathname, href);
   return `font-body text-sm font-medium transition hover:text-gold ${
@@ -35,12 +47,93 @@ function desktopLinkClass(pathname: string, href: string) {
   }`;
 }
 
+function NavResourcesDropdown({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const menuId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const active = resourcesActive(pathname);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        className={`inline-flex items-center gap-1 font-body text-sm font-medium transition hover:text-gold ${
+          active ? "text-gold" : "text-cream/80"
+        }`}
+        aria-expanded={open}
+        aria-haspopup="true"
+        aria-controls={menuId}
+        onClick={() => setOpen((value) => !value)}
+      >
+        Resources
+        <ChevronDown
+          className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+      {open ? (
+        <ul
+          id={menuId}
+          role="menu"
+          className="absolute left-0 top-full z-50 mt-2 min-w-[12rem] rounded-brand-md border border-gold/25 bg-navy-deep py-2 shadow-nav"
+        >
+          {RESOURCE_LINKS.map((item) => (
+            <li key={item.href} role="none">
+              <Link
+                href={item.href}
+                role="menuitem"
+                className={`block px-4 py-2 font-body text-sm transition hover:bg-gold/10 hover:text-gold ${
+                  linkActive(pathname, item.href) ? "text-gold" : "text-cream/85"
+                }`}
+                onClick={() => {
+                  setOpen(false);
+                  onNavigate?.();
+                }}
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
 export function Navigation() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
 
-  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    setMobileResourcesOpen(false);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_SOLID_PX);
@@ -96,12 +189,16 @@ export function Navigation() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-6 lg:gap-8 lg:flex" aria-label="Main navigation">
-            {NAV_LINKS.map((item) => (
-              <Link key={item.href} href={item.href} className={desktopLinkClass(pathname, item.href)}>
-                {item.label}
-              </Link>
-            ))}
+          <nav className="hidden items-center gap-6 lg:flex lg:gap-8" aria-label="Main navigation">
+            {NAV_ITEMS.map((item) =>
+              item.type === "link" ? (
+                <Link key={item.href} href={item.href} className={desktopLinkClass(pathname, item.href)}>
+                  {item.label}
+                </Link>
+              ) : (
+                <NavResourcesDropdown key={item.label} pathname={pathname} />
+              ),
+            )}
             <NavDashboardLinks />
             <Link href="/sign-in" className={desktopLinkClass(pathname, "/sign-in")}>
               Sign In
@@ -153,18 +250,54 @@ export function Navigation() {
             </button>
           </div>
           <nav className="mt-10 flex flex-col gap-1" aria-label="Mobile main navigation">
-            {NAV_LINKS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-brand-md px-2 py-3 font-body text-lg font-medium ${
-                  linkActive(pathname, item.href) ? "text-gold" : "text-cream/90"
-                }`}
-                onClick={closeMenu}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.type === "link" ? (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`rounded-brand-md px-2 py-3 font-body text-lg font-medium ${
+                    linkActive(pathname, item.href) ? "text-gold" : "text-cream/90"
+                  }`}
+                  onClick={closeMenu}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <div key={item.label} className="rounded-brand-md px-2 py-1">
+                  <button
+                    type="button"
+                    className={`flex w-full items-center justify-between py-2 font-body text-lg font-medium ${
+                      resourcesActive(pathname) ? "text-gold" : "text-cream/90"
+                    }`}
+                    aria-expanded={mobileResourcesOpen}
+                    onClick={() => setMobileResourcesOpen((value) => !value)}
+                  >
+                    Resources
+                    <ChevronDown
+                      className={`h-5 w-5 transition-transform ${mobileResourcesOpen ? "rotate-180" : ""}`}
+                      aria-hidden
+                    />
+                  </button>
+                  {mobileResourcesOpen ? (
+                    <ul className="mb-2 ml-3 space-y-1 border-l border-gold/20 pl-3">
+                      {RESOURCE_LINKS.map((resource) => (
+                        <li key={resource.href}>
+                          <Link
+                            href={resource.href}
+                            className={`block py-2 font-body text-base ${
+                              linkActive(pathname, resource.href) ? "text-gold" : "text-cream/80"
+                            }`}
+                            onClick={closeMenu}
+                          >
+                            {resource.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              ),
+            )}
             <div className="mt-2 flex flex-col gap-1 border-t border-gold/10 pt-4">
               <NavDashboardLinks mobile />
             </div>

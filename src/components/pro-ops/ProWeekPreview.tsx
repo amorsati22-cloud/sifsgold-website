@@ -12,7 +12,7 @@ export function ProWeekPreview({
   const days = Array.from({ length: 7 }, (_, i) => addDays(new Date(), i));
 
   return (
-    <motionless className="grid gap-2 sm:grid-cols-7">
+    <div className="grid gap-2 sm:grid-cols-7">
       {days.map((day) => {
         const key = format(day, "yyyy-MM-dd");
         const dayAppts = appointments.filter(
@@ -37,6 +37,6 @@ export function ProWeekPreview({
           </div>
         );
       })}
-    </motionless>
+    </div>
   );
 }
