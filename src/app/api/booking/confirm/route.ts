@@ -5,6 +5,7 @@ import {
   logStatusChange,
 } from "@/lib/booking/appointments";
 import { sendAppointmentConfirmedEmails } from "@/lib/booking/notifications";
+import { createSessionForAppointment, videoCallLobbyUrl } from "@/lib/video-calls/booking-hook";
 import { getStripe } from "@/lib/stripe/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
 
   const { data: appointment } = await admin
     .from("appointments")
-    .select("*, services(name), pro_profiles(username, display_name, location_city, location_state)")
+    .select("*, services(name, service_type), pro_profiles(username, display_name, location_city, location_state)")
     .eq("id", body.appointment_id)
     .maybeSingle();
 
@@ -113,8 +114,15 @@ export async function POST(request: Request) {
     location_city: string | null;
     location_state: string | null;
   };
-  const service = appointment.services as { name: string } | null;
+  const service = appointment.services as { name: string; service_type?: string } | null;
   const locationLabel = [pro?.location_city, pro?.location_state].filter(Boolean).join(", ") || undefined;
+
+  const videoSession = await createSessionForAppointment(appointment.id as string);
+  const videoCallUrl =
+    videoSession?.lobbyUrl ??
+    (appointment.video_call_session_id
+      ? videoCallLobbyUrl(appointment.video_call_session_id as string)
+      : undefined);
 
   await sendAppointmentConfirmedEmails({
     appointmentId: appointment.id as string,
@@ -129,6 +137,7 @@ export async function POST(request: Request) {
     timezone: appointment.timezone as string,
     clientTimezone: body.client_details.client_timezone,
     locationLabel,
+    videoCallUrl,
   });
 
   return NextResponse.json({

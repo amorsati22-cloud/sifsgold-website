@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getClientIp, logAdminAudit } from "@/lib/admin/audit";
 import { isAdminApiResult, requireAdminApi } from "@/lib/admin/auth";
+import {
+  createAdvocateProfileFromApplication,
+  findProfileIdByEmail,
+} from "@/lib/advocates/profile";
 import { getSiteUrl } from "@/lib/auth/site-url";
 import { sendTemplateEmail } from "@/lib/email/send-template";
 
@@ -61,16 +65,32 @@ export async function PATCH(request: Request) {
   if (action === "approve") {
     newStatus = "approved";
     auditAction = "approved_advocate";
+
+    const userId = await findProfileIdByEmail(auth.admin, app.email as string);
+    if (userId) {
+      await createAdvocateProfileFromApplication(auth.admin, {
+        userId,
+        applicationId: id,
+        email: app.email as string,
+        fullName: app.full_name as string,
+        specialty: app.specialty as string | null,
+        socialHandles: app.social_handles as string | null,
+        sampleUrls: (app.sample_content_urls as string[] | null) ?? [],
+      });
+      await auth.admin.from("profiles").update({ user_type: "sifs_advocate" }).eq("id", userId);
+    } else {
+      await auth.admin
+        .from("profiles")
+        .update({ user_type: "sifs_advocate" })
+        .ilike("email", app.email as string);
+    }
+
     await sendTemplateEmail("sifs_advocate_acceptance", app.email as string, {
       name: app.full_name as string,
-      tier: "Advocate",
-      dashboardUrl: `${siteUrl}/advocates`,
-      agreementUrl: `${siteUrl}/legal/advocate-agreement`,
+      tier: "Gold Advocate",
+      dashboardUrl: `${siteUrl}/dashboard/advocate/onboarding`,
+      agreementUrl: `${siteUrl}/legal/sifs-advocate-agreement.pdf`,
     });
-    await auth.admin
-      .from("profiles")
-      .update({ user_type: "sifs_advocate" })
-      .ilike("email", app.email as string);
   } else if (action === "reject") {
     newStatus = "rejected";
     auditAction = "rejected_advocate";

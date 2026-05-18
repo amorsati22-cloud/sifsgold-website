@@ -16,6 +16,12 @@ import { FoundingMemberWelcome, foundingMemberWelcomeSubject } from "@/lib/email
 import { LaunchDayAnnouncement, launchDayAnnouncementSubject } from "@/lib/email/templates/LaunchDayAnnouncement";
 import { SifsAdvocateAcceptance, sifsAdvocateAcceptanceSubject } from "@/lib/email/templates/SifsAdvocateAcceptance";
 import { SifsAdvocateRejection, sifsAdvocateRejectionSubject } from "@/lib/email/templates/SifsAdvocateRejection";
+import { BrandDealMatched, brandDealMatchedSubject } from "@/lib/email/templates/BrandDealMatched";
+import { BrandDealAccepted, brandDealAcceptedSubject } from "@/lib/email/templates/BrandDealAccepted";
+import { AdvocatePaymentSent, advocatePaymentSentSubject } from "@/lib/email/templates/AdvocatePaymentSent";
+import { FTCStrikeWarning, ftcStrikeWarningSubject } from "@/lib/email/templates/FTCStrikeWarning";
+import { AdvocateSuspended, advocateSuspendedSubject } from "@/lib/email/templates/AdvocateSuspended";
+import { Annual1099Available, annual1099AvailableSubject } from "@/lib/email/templates/Annual1099Available";
 import {
   SifsAdvocateApplicationReceived,
   sifsAdvocateApplicationReceivedSubject,
@@ -160,6 +166,80 @@ export function buildEmailTemplate(
           <SifsAdvocateRejection
             {...links}
             applicantName={data.name}
+          />
+        ),
+      };
+    case "brand_deal_matched":
+      return {
+        subject: brandDealMatchedSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: (
+          <BrandDealMatched
+            {...links}
+            brandName={data.brandName}
+            dealTitle={data.dealTitle}
+            applicationUrl={data.applicationUrl}
+          />
+        ),
+      };
+    case "brand_deal_accepted":
+      return {
+        subject: brandDealAcceptedSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: (
+          <BrandDealAccepted
+            {...links}
+            advocateName={data.name}
+            dealTitle={data.dealTitle}
+            contractUrl={data.contractUrl}
+          />
+        ),
+      };
+    case "advocate_payment_sent":
+      return {
+        subject: advocatePaymentSentSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: (
+          <AdvocatePaymentSent
+            {...links}
+            amount={data.amount}
+            dealTitle={data.dealTitle}
+          />
+        ),
+      };
+    case "ftc_strike_warning":
+      return {
+        subject: ftcStrikeWarningSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: (
+          <FTCStrikeWarning
+            {...links}
+            strikeCount={data.strikeCount}
+            maxStrikes={data.maxStrikes}
+          />
+        ),
+      };
+    case "advocate_suspended":
+      return {
+        subject: advocateSuspendedSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: <AdvocateSuspended {...links} />,
+      };
+    case "annual_1099_available":
+      return {
+        subject: annual1099AvailableSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: (
+          <Annual1099Available
+            {...links}
+            taxYear={data.taxYear}
+            downloadUrl={data.downloadUrl}
           />
         ),
       };

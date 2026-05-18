@@ -9,6 +9,7 @@ export type AppointmentConfirmedProps = {
   serviceName: string;
   whenLabel: string;
   locationLabel?: string;
+  videoCallUrl?: string;
   appointmentUrl: string;
   viewInBrowserUrl: string;
   unsubscribeUrl: string;
@@ -23,6 +24,7 @@ export function AppointmentConfirmed({
   serviceName,
   whenLabel,
   locationLabel,
+  videoCallUrl,
   appointmentUrl,
   viewInBrowserUrl,
   unsubscribeUrl,
@@ -59,6 +61,14 @@ export function AppointmentConfirmed({
           </>
         ) : null}
       </Text>
+      {videoCallUrl ? (
+        <Text style={emailStyles.p}>
+          <strong style={{ color: emailStyles.link.color }}>Video call:</strong>{" "}
+          <Link href={videoCallUrl} style={emailStyles.link}>
+            Join lobby (device check)
+          </Link>
+        </Text>
+      ) : null}
       <Text style={emailStyles.p}>
         <Link href={appointmentUrl} style={emailStyles.link}>
           View appointment details

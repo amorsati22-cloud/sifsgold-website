@@ -21,6 +21,7 @@ export type BookingEmailContext = {
   timezone: string;
   clientTimezone?: string;
   locationLabel?: string;
+  videoCallUrl?: string;
 };
 
 function appointmentUrl(id: string) {
@@ -62,6 +63,7 @@ export async function sendAppointmentConfirmedEmails(ctx: BookingEmailContext) {
         whenLabel={whenClient}
         locationLabel={ctx.locationLabel}
         appointmentUrl={url}
+        videoCallUrl={ctx.videoCallUrl}
         {...clientLinks}
       />
     ),
@@ -82,6 +84,7 @@ export async function sendAppointmentConfirmedEmails(ctx: BookingEmailContext) {
         whenLabel={whenPro}
         locationLabel={ctx.locationLabel}
         appointmentUrl={`${SITE_URL}/dashboard/calendar`}
+        videoCallUrl={ctx.videoCallUrl}
         viewInBrowserUrl={`${SITE_URL}/dashboard/calendar`}
         unsubscribeUrl={clientLinks.unsubscribeUrl}
         preferencesUrl={clientLinks.preferencesUrl}

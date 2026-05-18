@@ -3,12 +3,14 @@ import { isAdmin } from "@/lib/admin/allowlist";
 import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
 import { BRAND_USER_TYPES } from "@/lib/auth-brand";
 import { PRO_USER_TYPES } from "@/lib/auth-pro";
+import { isSalonUserType } from "@/lib/auth-salon";
 import { isReservedUsername } from "@/lib/reserved-usernames";
 import { updateSession } from "@/lib/supabase/middleware";
 import { createServerClient } from "@supabase/ssr";
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/env";
 
 const DASHBOARD_MESSAGES_PATHS = ["/dashboard/messages"];
+const DASHBOARD_SALON_PATHS = ["/dashboard/salon"];
 
 const DASHBOARD_PRO_PATHS = [
   "/dashboard/pro",
@@ -21,6 +23,7 @@ const DASHBOARD_PRO_PATHS = [
   "/dashboard/availability",
   "/dashboard/photo-studio",
   "/dashboard/vault",
+  "/dashboard/video-calls",
 ];
 
 const DASHBOARD_BUYER_PATHS = ["/dashboard/orders", "/dashboard/wishlist", "/dashboard/returns"];
@@ -98,13 +101,18 @@ export async function middleware(request: NextRequest) {
     (p) => pathname === p || pathname.startsWith(`${p}/`),
   );
 
+  const isDashboardSalonRoute = DASHBOARD_SALON_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
   const isProtectedDashboard =
     isDashboardProRoute ||
     isDashboardBuyerRoute ||
     isDashboardStorefrontRoute ||
     isDashboardBrandDealsRoute ||
     isDashboardAdvocateDealsRoute ||
-    isBrandDealsMarketplaceRoute;
+    isBrandDealsMarketplaceRoute ||
+    isDashboardSalonRoute;
 
   if (isProtectedDashboard) {
     if (!isSupabaseConfigured()) {
@@ -197,6 +205,8 @@ export const config = {
     "/admin/:path*",
     "/dashboard/messages",
     "/dashboard/messages/:path*",
+    "/dashboard/salon",
+    "/dashboard/salon/:path*",
     "/dashboard/pro",
     "/dashboard/pro/:path*",
     "/dashboard/profile",

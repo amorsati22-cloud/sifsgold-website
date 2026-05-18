@@ -5,6 +5,7 @@ export const CLIENT_DASHBOARD_NAV = [
   { href: "/dashboard/vision", label: "Client Vision" },
   { href: "/dashboard/study-progress", label: "Study progress" },
   { href: "/dashboard/state-board-progress", label: "State board" },
+  { href: "/dashboard/career-plan", label: "Career plan" },
   { href: "/dashboard/payments", label: "Payments" },
   { href: "/dashboard/discover", label: "Discover" },
   { href: "/dashboard/messages", label: "Messages" },

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { audienceLandingSlugs } from "@/data/audience-landings";
 import { CAREER_PATH_STUBS } from "@/data/career-paths";
+import { PATH_IDS } from "@/lib/career-paths/constants";
 import { FEATURE_DEEP_DIVES } from "@/data/feature-deep-dives";
 import { HELP_CATEGORIES } from "@/data/help-categories";
 import { ALL_STATE_SLUGS } from "@/data/states";
@@ -50,8 +51,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   push(routes, "/career-paths", "weekly", 0.78);
+  push(routes, "/career-paths/roles", "weekly", 0.72);
+  push(routes, "/career-paths/quiz", "monthly", 0.68);
+  for (const pathId of Object.values(PATH_IDS)) {
+    push(routes, `/career-paths/${pathId}`, "monthly", 0.7);
+  }
   for (const c of CAREER_PATH_STUBS) {
-    push(routes, `/career-paths/${c.slug}`, "monthly", 0.65);
+    push(routes, `/career-paths/${c.slug}`, "monthly", 0.6);
   }
 
   push(routes, "/glossary", "monthly", 0.65);
