@@ -4,9 +4,10 @@ type LegalDocumentLayoutProps = {
   title: string;
   /** Name inserted into the placeholder line, e.g. "Privacy Policy". */
   documentLabel: string;
+  children?: React.ReactNode;
 };
 
-export function LegalDocumentLayout({ title, documentLabel }: LegalDocumentLayoutProps) {
+export function LegalDocumentLayout({ title, documentLabel, children }: LegalDocumentLayoutProps) {
   return (
     <div className="min-h-screen bg-navy font-body text-offwhite">
       <div className="border-b border-white/10 bg-gradient-to-b from-navy-light/30 to-navy">
@@ -21,9 +22,11 @@ export function LegalDocumentLayout({ title, documentLabel }: LegalDocumentLayou
           className="rounded-2xl border border-white/10 bg-navy-light/20 p-8 sm:p-10 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-white/80"
           aria-label="Document preview"
         >
-          <p className="font-mono text-sm text-white/70">
-            [This page will contain the full {documentLabel} document. Content coming at launch.]
-          </p>
+          {children ?? (
+            <p className="font-mono text-sm text-white/70">
+              [This page will contain the full {documentLabel} document. Content coming at launch.]
+            </p>
+          )}
         </article>
 
         <section className="mt-16 border-t border-white/10 pt-12">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { ContractSignButton } from "@/components/brand-deals/ContractSignButton";
+import { DisputeForm } from "@/components/brand-deals/DisputeForm";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { ADVOCATE_BRAND_DEALS_NAV } from "@/lib/dashboard/brand-deals-nav";
 import { DEFAULT_FTC_DISCLOSURE_TEMPLATE } from "@/lib/brand-deals/constants";
@@ -16,6 +17,7 @@ export default function AdvocateContractPage() {
   const [contract, setContract] = useState<{
     signed_by_advocate: boolean;
     status: string;
+    campaign_id?: string;
     campaign?: { title: string; ftc_disclosure_template: string | null };
   } | null>(null);
   const [deliverables, setDeliverables] = useState<
@@ -95,6 +97,14 @@ export default function AdvocateContractPage() {
       <p className="mt-8 font-body text-xs text-gold-body">
         Questions for the Gold Partner? Use Pass-a-Note in the mobile app when your campaign thread is linked.
       </p>
+
+      {contract?.campaign_id && (
+        <DisputeForm
+          campaignId={contract.campaign_id}
+          contractId={contractId}
+          raisedByType="advocate"
+        />
+      )}
     </DashboardShell>
   );
 }

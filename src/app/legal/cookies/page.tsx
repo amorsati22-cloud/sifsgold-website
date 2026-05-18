@@ -32,10 +32,12 @@ export default function CookiesPolicyPage() {
         functional cookies or local storage may remember those selections so you do not have to reconfigure every visit.
       </p>
 
-      <h2 id="analytics">Analytics</h2>
+      <h2 id="analytics">Analytics (cookieless, always on)</h2>
       <p>
-        We use Vercel Web Analytics in a privacy-preserving configuration that is cookie-free at the visitor level and focuses
-        on aggregate page performance — not individual ad profiles.
+        We use Vercel Web Analytics and Vercel Speed Insights. Vercel documents Web Analytics as not using
+        third-party cookies — data is aggregated and not used to reconstruct cross-site browsing sessions.
+        Speed Insights reports anonymous performance metrics (such as Core Web Vitals) without identifying
+        visitors. These services load automatically and are not toggled in cookie preferences.
       </p>
 
       <h2 id="opt-out">Opting out</h2>

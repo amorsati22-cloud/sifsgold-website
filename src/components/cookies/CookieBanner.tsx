@@ -197,18 +197,18 @@ export function CookieBanner() {
 
               <div className="rounded-brand-md border border-gold/20 bg-navy p-4">
                 <div className="flex items-start justify-between gap-4">
-                  <motion-safe>
+                  <div>
                     <p className="font-semibold text-cream">Analytics (cookieless)</p>
                     <p className="mt-1 text-sm text-cream/75">
                       Vercel Web Analytics and Speed Insights run without third-party cookies — aggregate
                       page views and performance only.
                     </p>
-                  </motion-safe>
+                  </div>
                   <span className="rounded-full border border-teal/50 bg-teal/10 px-3 py-1 text-xs font-semibold text-cream">
                     Always on
                   </span>
-                </motion-safe>
-              </motion-safe>
+                </div>
+              </div>
 
               <div className="rounded-brand-md border border-gold/20 bg-navy p-4">
                 <div className="flex items-start justify-between gap-4">

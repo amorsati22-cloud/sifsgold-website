@@ -61,6 +61,15 @@ function HealthHubPrivacySection({ last }: { last: string }) {
         for full terms.
       </p>
 
+      <h2>Website analytics (cookieless)</h2>
+      <p>
+        We use Vercel Web Analytics and Vercel Speed Insights to understand aggregate traffic and page
+        performance. Per Vercel&apos;s documentation, Web Analytics does not use third-party cookies — visitors
+        are identified by a request hash for aggregated statistics, not cross-site ad profiles. Speed Insights
+        collects anonymous performance metrics (for example Core Web Vitals) without tying data to an
+        individual. These tools load on every visit and are not controlled by our cookie preference banner.
+      </p>
+
       <p className="mt-6 text-sm text-cream/70">
         Additional policy sections are under final legal review before public launch in June 2026. Last
         updated: {last}

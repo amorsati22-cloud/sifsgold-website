@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { ContractSignButton } from "@/components/brand-deals/ContractSignButton";
+import { DisputeForm } from "@/components/brand-deals/DisputeForm";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { BRAND_DEALS_NAV } from "@/lib/dashboard/brand-deals-nav";
 import { createClient } from "@/lib/supabase/client";
@@ -82,14 +83,16 @@ export default function BrandContractPage() {
             <p className="mt-1 text-xs text-teal">
               FTC verified: {d.ftc_compliance_verified ? "Yes" : "Pending / failed"}
             </p>
-            {d.status === "under_review" && (
-              <div className="mt-3 flex gap-2">
+            {(d.status === "under_review" || d.status === "submitted") && (
+              <div className="mt-3 flex flex-wrap gap-2">
                 <GoldButton label="Approve & pay (70/30)" onClick={() => void approveDeliverable(d.id)} variant="solid" size="sm" />
               </div>
             )}
           </li>
         ))}
       </ul>
+
+      <DisputeForm campaignId={campaignId} contractId={contractId} raisedByType="brand" />
     </DashboardShell>
   );
 }
