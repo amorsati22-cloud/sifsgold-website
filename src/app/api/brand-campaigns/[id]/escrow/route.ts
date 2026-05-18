@@ -13,7 +13,12 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
-  const body = (await request.json()) as { payment_intent_id?: string; fund?: boolean };
+  let body: { payment_intent_id?: string; fund?: boolean } = {};
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {
+    body = {};
+  }
 
   const { data: campaign } = await brand.supabase
     .from("brand_campaigns")
@@ -24,10 +29,14 @@ export async function POST(request: Request, { params }: Params) {
 
   if (!campaign) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  if (body.payment_intent_id && body.fund) {
+  if (body.fund) {
+    const paymentIntentId = body.payment_intent_id ?? campaign.stripe_payment_intent_id;
+    if (!paymentIntentId) {
+      return NextResponse.json({ error: "Missing payment intent" }, { status: 400 });
+    }
     const admin = createAdminClient();
     if (!admin) return NextResponse.json({ error: "Unavailable" }, { status: 503 });
-    await markEscrowFunded(admin, params.id, body.payment_intent_id, Number(campaign.total_budget));
+    await markEscrowFunded(admin, params.id, paymentIntentId, Number(campaign.total_budget));
     return NextResponse.json({ ok: true, status: "published" });
   }
 

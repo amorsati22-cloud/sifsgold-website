@@ -36,8 +36,9 @@ export async function GET(_request: Request, { params }: Params) {
 export async function POST(request: Request, { params }: Params) {
   const advocate = await requireAdvocate();
   if (!advocate.authorized || !advocate.supabase) {
+    const suspended = "suspended" in advocate && advocate.suspended;
     return NextResponse.json(
-      { error: advocate.suspended ? "Marketplace access suspended (FTC strikes)" : "Advocate access required" },
+      { error: suspended ? "Marketplace access suspended (FTC strikes)" : "Advocate access required" },
       { status: 403 },
     );
   }

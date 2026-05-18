@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Montserrat, Playfair_Display, Space_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
 import { StarfieldBackground } from "@/components/decorative/StarfieldBackground";
-import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
 import { CookieBanner } from "@/components/cookies/CookieBanner";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { GoddessProfile } from "@/components/decorative/GoddessProfile";
@@ -134,7 +134,7 @@ export default function RootLayout({
           </div>
           <CookieBanner />
           <Analytics />
-          <AnalyticsGate />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

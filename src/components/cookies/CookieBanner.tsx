@@ -14,14 +14,12 @@ export function CookieBanner() {
   const [isReady, setIsReady] = useState(false);
   const [isBannerVisible, setIsBannerVisible] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
   const dialogRef = useRef<HTMLElement | null>(null);
   const lastFocusedRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const consent = getConsent();
     if (consent) {
-      setAnalyticsEnabled(consent.analytics);
       setIsBannerVisible(false);
     } else {
       setIsBannerVisible(true);
@@ -107,7 +105,7 @@ export function CookieBanner() {
   const onSavePreferences = () => {
     setConsent({
       essential: true,
-      analytics: analyticsEnabled,
+      analytics: false,
       marketing: false,
       timestamp: new Date().toISOString(),
     });
@@ -197,21 +195,20 @@ export function CookieBanner() {
                 </div>
               </div>
 
-              <label className="flex items-start justify-between gap-4 rounded-brand-md border border-gold/20 bg-navy p-4">
-                <div>
-                  <p className="font-semibold text-cream">Analytics</p>
-                  <p className="mt-1 text-sm text-cream/75">
-                    Helps us understand how visitors use the site (Vercel Speed Insights)
-                  </p>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={analyticsEnabled}
-                  onChange={(event) => setAnalyticsEnabled(event.target.checked)}
-                  aria-label="Enable analytics cookies"
-                  className="mt-1 h-5 w-5 accent-gold"
-                />
-              </label>
+              <div className="rounded-brand-md border border-gold/20 bg-navy p-4">
+                <div className="flex items-start justify-between gap-4">
+                  <motion-safe>
+                    <p className="font-semibold text-cream">Analytics (cookieless)</p>
+                    <p className="mt-1 text-sm text-cream/75">
+                      Vercel Web Analytics and Speed Insights run without third-party cookies — aggregate
+                      page views and performance only.
+                    </p>
+                  </motion-safe>
+                  <span className="rounded-full border border-teal/50 bg-teal/10 px-3 py-1 text-xs font-semibold text-cream">
+                    Always on
+                  </span>
+                </motion-safe>
+              </motion-safe>
 
               <div className="rounded-brand-md border border-gold/20 bg-navy p-4">
                 <div className="flex items-start justify-between gap-4">

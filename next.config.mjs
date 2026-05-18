@@ -17,7 +17,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://vercel.live https://api.web3forms.com https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://checkout.stripe.com",
+  "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://vercel.live https://api.web3forms.com https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://checkout.stripe.com https://cdn.jsdelivr.net https://unpkg.com",
   "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -26,17 +26,6 @@ const csp = [
 
 const nextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
-  experimental: {
-    serverComponentsExternalPackages: ["@imgly/background-removal"],
-  },
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "onnxruntime-node": false,
-    };
-    config.externals = [...(config.externals || []), { "onnxruntime-node": "commonjs onnxruntime-node" }];
-    return config;
-  },
   images: {
     remotePatterns: [
       {

@@ -66,7 +66,7 @@ export default async function CampaignManagePage({ params }: Props) {
               href={`/dashboard/brand-deals/${campaign_id}/contracts/${c.id}`}
               className="block rounded-brand-sm border border-gold/15 px-4 py-3 font-body text-cream hover:border-gold/40"
             >
-              {(c.advocate as { display_name: string })?.display_name} — {c.status}
+              {(c.advocate as unknown as { display_name: string })?.display_name} — {c.status}
             </Link>
           </li>
         ))}

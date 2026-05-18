@@ -53,7 +53,7 @@ export default async function AdvocateBrandDealsPage() {
         {(contracts ?? []).map((c) => (
           <li key={c.id}>
             <Link href={`/dashboard/advocate/contracts/${c.id}`} className="text-gold hover:underline">
-              {(c.campaign as { title: string }).title} — {c.status}
+              {(c.campaign as unknown as { title: string }).title} — {c.status}
             </Link>
           </li>
         ))}

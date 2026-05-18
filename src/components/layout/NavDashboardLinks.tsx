@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
+import { BRAND_USER_TYPES } from "@/lib/auth-brand";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 
@@ -19,19 +21,42 @@ function linkClass(pathname: string, href: string, mobile: boolean) {
 export function NavDashboardLinks({ mobile = false }: { mobile?: boolean }) {
   const pathname = usePathname();
   const [signedIn, setSignedIn] = useState(false);
+  const [userType, setUserType] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     const supabase = createClient();
 
-    supabase.auth.getUser().then(({ data }) => {
+    async function load() {
+      const { data } = await supabase.auth.getUser();
       setSignedIn(Boolean(data.user));
-    });
+      if (data.user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("user_type")
+          .eq("id", data.user.id)
+          .maybeSingle();
+        setUserType(profile?.user_type ?? null);
+      } else {
+        setUserType(null);
+      }
+    }
+
+    void load();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSignedIn(Boolean(session?.user));
+      if (!session?.user) setUserType(null);
+      else {
+        void supabase
+          .from("profiles")
+          .select("user_type")
+          .eq("id", session.user.id)
+          .maybeSingle()
+          .then(({ data: profile }) => setUserType(profile?.user_type ?? null));
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -65,6 +90,24 @@ export function NavDashboardLinks({ mobile = false }: { mobile?: boolean }) {
           Pro
         </span>
       </Link>
+      {userType && BRAND_USER_TYPES.includes(userType as (typeof BRAND_USER_TYPES)[number]) && (
+        <Link href="/dashboard/brand-deals" className={linkClass(pathname, "/dashboard/brand-deals", mobile)}>
+          Brand Deals
+        </Link>
+      )}
+      {userType && ADVOCATE_USER_TYPES.includes(userType as (typeof ADVOCATE_USER_TYPES)[number]) && (
+        <>
+          <Link
+            href="/dashboard/advocate/brand-deals"
+            className={linkClass(pathname, "/dashboard/advocate/brand-deals", mobile)}
+          >
+            Brand Deals
+          </Link>
+          <Link href="/brand-deals/marketplace" className={linkClass(pathname, "/brand-deals/marketplace", mobile)}>
+            Campaign marketplace
+          </Link>
+        </>
+      )}
     </Wrapper>
   );
 }

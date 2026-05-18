@@ -37,57 +37,49 @@ type FormValues = {
 function EscrowPayment({ campaignId, onFunded }: { campaignId: string; onFunded: () => void }) {
   const stripe = useStripe();
   const elements = useElements();
-  const [ready, setReady] = useState(false);
-  const [piId, setPiId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  async function initIntent() {
-    const res = await fetch(`/api/brand-campaigns/${campaignId}/escrow`, { method: "POST" });
-    const data = await res.json();
-    setPiId(data.payment_intent_id);
-    setReady(true);
-    return data.client_secret as string;
-  }
-
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-
-  if (!clientSecret) {
-    return (
-      <GoldButton
-        label="Initialize escrow payment"
-        onClick={async () => {
-          const secret = await initIntent();
-          setClientSecret(secret);
-        }}
-        variant="solid"
-      />
-    );
-  }
+  const [loading, setLoading] = useState(false);
 
   async function confirmEscrow() {
-    if (!stripe || !elements || !piId) return;
+    if (!stripe || !elements) return;
+    setLoading(true);
+    setError(null);
     const { error: err } = await stripe.confirmPayment({ elements, redirect: "if_required" });
     if (err) {
       setError(err.message ?? "Payment failed");
+      setLoading(false);
       return;
     }
-    await fetch(`/api/brand-campaigns/${campaignId}/escrow`, {
+    const fundRes = await fetch(`/api/brand-campaigns/${campaignId}/escrow`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ payment_intent_id: piId, fund: true }),
+      body: JSON.stringify({ fund: true }),
     });
+    setLoading(false);
+    if (!fundRes.ok) {
+      const data = await fundRes.json();
+      setError((data as { error?: string }).error ?? "Could not mark escrow funded");
+      return;
+    }
     onFunded();
   }
 
   return (
     <div className="space-y-4">
-      {ready && <PaymentElement />}
+      <p className="font-body text-sm text-cream/80">
+        Fund the full campaign budget upfront. Escrow releases 70% to advocates on approval; platform retains 30%.
+      </p>
+      <PaymentElement />
       {error && (
         <p className="font-body text-sm text-red-400" role="alert">
           {error}
         </p>
       )}
-      <GoldButton label="Fund escrow & publish" onClick={() => void confirmEscrow()} variant="solid" />
+      <GoldButton
+        label={loading ? "Processing…" : "Fund escrow & publish"}
+        onClick={() => void confirmEscrow()}
+        variant="solid"
+      />
     </div>
   );
 }

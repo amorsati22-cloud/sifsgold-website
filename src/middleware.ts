@@ -42,8 +42,25 @@ export async function middleware(request: NextRequest) {
     (p) => pathname === p || pathname.startsWith(`${p}/`),
   );
 
+  const isDashboardBrandDealsRoute = DASHBOARD_BRAND_DEALS_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
+  const isDashboardAdvocateDealsRoute = DASHBOARD_ADVOCATE_DEALS_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
+  const isBrandDealsMarketplaceRoute = BRAND_DEALS_MARKETPLACE_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
   const isProtectedDashboard =
-    isDashboardProRoute || isDashboardBuyerRoute || isDashboardStorefrontRoute;
+    isDashboardProRoute ||
+    isDashboardBuyerRoute ||
+    isDashboardStorefrontRoute ||
+    isDashboardBrandDealsRoute ||
+    isDashboardAdvocateDealsRoute ||
+    isBrandDealsMarketplaceRoute;
 
   if (isProtectedDashboard) {
     if (!isSupabaseConfigured()) {

@@ -11,6 +11,8 @@ import { ProTestimonialsSection } from "@/components/pro-profile/ProTestimonials
 import { ProSocialFooter } from "@/components/pro-profile/ProSocialFooter";
 import { BRAND } from "@/lib/constants";
 import { generatePersonSchema } from "@/lib/pro-profile-schema";
+import { ProProfileClientActions } from "@/components/client-dashboard/ProProfileClientActions";
+import { createClient } from "@/lib/supabase/server";
 import { getPublicProProfileByUsername, getVisibleProUsernames } from "@/lib/pro-profiles";
 
 type PageProps = {
@@ -64,13 +66,33 @@ export default async function ProProfilePage({ params }: PageProps) {
   const { profile, portfolio, services, credentials, testimonials } = bundle;
   const personSchema = generatePersonSchema(profile, testimonials);
 
+  let favorited = false;
+  const supabase = await createClient();
+  if (supabase) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data } = await supabase
+        .from("client_favorites")
+        .select("id")
+        .eq("client_id", user.id)
+        .eq("pro_id", profile.id)
+        .maybeSingle();
+      favorited = Boolean(data);
+    }
+  }
+
   return (
     <ProProfileShell>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
       />
-      <ProProfileHero profile={profile} />
+      <ProProfileHero
+        profile={profile}
+        clientActions={<ProProfileClientActions proId={profile.id} initialFavorited={favorited} />}
+      />
       <ProProfileBio profile={profile} />
       <ProProfileSpecialties profile={profile} />
       <PortfolioGallery username={profile.username} items={portfolio} maxItems={8} />

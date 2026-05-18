@@ -9,9 +9,10 @@ import type { ProProfile } from "@/types/pro-profile";
 
 type ProProfileHeroProps = {
   profile: ProProfile;
+  clientActions?: React.ReactNode;
 };
 
-export function ProProfileHero({ profile }: ProProfileHeroProps) {
+export function ProProfileHero({ profile, clientActions }: ProProfileHeroProps) {
   const location = formatLocation(profile);
   const canBook = profile.book_status !== "closed";
   const bookingLabel =
@@ -72,6 +73,7 @@ export function ProProfileHero({ profile }: ProProfileHeroProps) {
               </p>
             ) : null}
             <div className="mt-4 flex flex-wrap items-center gap-3">
+              {clientActions}
               <BookStatusBadge status={profile.book_status} acceptingNewClients={profile.accepting_new_clients} />
               {profile.years_experience ? (
                 <span className="font-body text-xs text-cream/60">

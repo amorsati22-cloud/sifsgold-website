@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FeatureDeepDiveWithSchema } from "@/components/features/FeatureDeepDiveWithSchema";
+import { GoldButton } from "@/components/ui/GoldButton";
 import { getFeatureDeepDive } from "@/data/feature-deep-dives";
 import type { FeatureDeepDiveConfig } from "@/types/feature-deep-dive";
 import { BRAND } from "@/lib/constants";
