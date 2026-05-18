@@ -1,0 +1,237 @@
+-- Sif's Gold — Daily affirmations + Beauty Body Map
+-- Run after public.profiles exists.
+-- Seeds: npx tsx scripts/gen-affirmations-sql.ts
+
+CREATE TABLE IF NOT EXISTS public.daily_affirmations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  text text NOT NULL,
+  category text NOT NULL CHECK (
+    category IN ('self_worth', 'craft_pride', 'client_care', 'rest_recovery', 'abundance')
+  ),
+  target_audience text[] NOT NULL DEFAULT '{}',
+  season text CHECK (season IN ('winter', 'spring', 'summer', 'fall')),
+  active boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS daily_affirmations_category_idx ON public.daily_affirmations (category);
+CREATE INDEX IF NOT EXISTS daily_affirmations_active_idx ON public.daily_affirmations (active);
+
+CREATE TABLE IF NOT EXISTS public.user_affirmation_history (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  affirmation_id uuid NOT NULL REFERENCES public.daily_affirmations(id) ON DELETE CASCADE,
+  shown_at timestamptz NOT NULL DEFAULT now(),
+  saved boolean NOT NULL DEFAULT false,
+  shared_to_platform text
+);
+
+CREATE INDEX IF NOT EXISTS user_affirmation_history_user_idx
+  ON public.user_affirmation_history (user_id, shown_at DESC);
+
+CREATE TABLE IF NOT EXISTS public.beauty_body_zones (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  description text NOT NULL,
+  icon_svg text
+);
+
+CREATE TABLE IF NOT EXISTS public.beauty_body_services (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  zone_id text NOT NULL REFERENCES public.beauty_body_zones(id) ON DELETE CASCADE,
+  service_name text NOT NULL,
+  description text NOT NULL,
+  category text NOT NULL,
+  average_duration_minutes integer NOT NULL,
+  average_price_range text NOT NULL,
+  finding_pros_filter jsonb NOT NULL DEFAULT '{}',
+  what_to_expect text,
+  prep_tips text,
+  aftercare text
+);
+
+CREATE INDEX IF NOT EXISTS beauty_body_services_zone_idx ON public.beauty_body_services (zone_id);
+
+ALTER TABLE public.daily_affirmations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_affirmation_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.beauty_body_zones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.beauty_body_services ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public read affirmations" ON public.daily_affirmations;
+CREATE POLICY "Public read affirmations"
+  ON public.daily_affirmations FOR SELECT USING (active = true);
+
+DROP POLICY IF EXISTS "Users manage affirmation history" ON public.user_affirmation_history;
+CREATE POLICY "Users manage affirmation history"
+  ON public.user_affirmation_history FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Public read body zones" ON public.beauty_body_zones;
+CREATE POLICY "Public read body zones"
+  ON public.beauty_body_zones FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public read body services" ON public.beauty_body_services;
+CREATE POLICY "Public read body services"
+  ON public.beauty_body_services FOR SELECT USING (true);
+
+-- Auto-generated (100 affirmations, 8 zones, 40 services)
+INSERT INTO public.daily_affirmations (id, text, category, target_audience, season, active) VALUES
+  ('a0000001-0001-4001-8001-000000000001'::uuid, 'You are allowed to take up space in this industry.', 'self_worth', ARRAY['pros', 'clients', 'students']::text[], NULL, true),
+  ('a0000002-0001-4001-8001-000000000002'::uuid, 'Your presence in the chair is a gift — to clients and to yourself.', 'self_worth', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000003-0001-4001-8001-000000000003'::uuid, 'You do not need to earn rest to deserve it.', 'self_worth', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000004-0001-4001-8001-000000000004'::uuid, 'Being new does not mean being less. Every expert was once a beginner.', 'self_worth', ARRAY['students']::text[], NULL, true),
+  ('a0000005-0001-4001-8001-000000000005'::uuid, 'Your worth is not measured by how booked you are this week.', 'self_worth', ARRAY['pros']::text[], NULL, true),
+  ('a0000006-0001-4001-8001-000000000006'::uuid, 'You can be proud of small progress. Small still counts.', 'self_worth', ARRAY['students', 'clients']::text[], NULL, true),
+  ('a0000007-0001-4001-8001-000000000007'::uuid, 'The mirror reflects a person who chose to show up today.', 'self_worth', ARRAY['clients']::text[], NULL, true),
+  ('a0000008-0001-4001-8001-000000000008'::uuid, 'You are more than your last appointment.', 'self_worth', ARRAY['pros']::text[], NULL, true),
+  ('a0000009-0001-4001-8001-000000000009'::uuid, 'Gentleness toward yourself makes you steadier for others.', 'self_worth', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000010-0001-4001-8001-000000000010'::uuid, 'Your voice in consultation matters as much as your technique.', 'self_worth', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000011-0001-4001-8001-000000000011'::uuid, 'You belong in rooms where beauty is built with care.', 'self_worth', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000012-0001-4001-8001-000000000012'::uuid, 'Choosing self-respect is never wasted time.', 'self_worth', ARRAY['clients', 'pros']::text[], NULL, true),
+  ('a0000013-0001-4001-8001-000000000013'::uuid, 'You are learning in public — that takes courage.', 'self_worth', ARRAY['students']::text[], NULL, true),
+  ('a0000014-0001-4001-8001-000000000014'::uuid, 'Your body carries your story with dignity.', 'self_worth', ARRAY['clients']::text[], NULL, true),
+  ('a0000015-0001-4001-8001-000000000015'::uuid, 'You can set boundaries and still be deeply caring.', 'self_worth', ARRAY['pros']::text[], NULL, true),
+  ('a0000016-0001-4001-8001-000000000016'::uuid, 'Today you are enough for the step in front of you.', 'self_worth', ARRAY['pros', 'clients', 'students']::text[], NULL, true),
+  ('a0000017-0001-4001-8001-000000000017'::uuid, 'Confidence grows when you honor your own pace.', 'self_worth', ARRAY['students', 'pros']::text[], NULL, true),
+  ('a0000018-0001-4001-8001-000000000018'::uuid, 'You deserve the same patience you offer in the chair.', 'self_worth', ARRAY['pros']::text[], NULL, true),
+  ('a0000019-0001-4001-8001-000000000019'::uuid, 'Your uniqueness is part of your craft, not a flaw.', 'self_worth', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000020-0001-4001-8001-000000000020'::uuid, 'Every appointment is an act of care. Yours included.', 'self_worth', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000021-0001-4001-8001-000000000021'::uuid, 'Your hands carry years of practice. They are trusted.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000022-0001-4001-8001-000000000022'::uuid, 'Precision is built rep by rep — you are building something real.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000023-0001-4001-8001-000000000023'::uuid, 'The details you notice are what clients remember.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000024-0001-4001-8001-000000000024'::uuid, 'Your chair is a studio. Your tools are instruments.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000025-0001-4001-8001-000000000025'::uuid, 'Continuing education is proof you respect the craft.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000026-0001-4001-8001-000000000026'::uuid, 'A steady hand comes from a steady mind.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000027-0001-4001-8001-000000000027'::uuid, 'You turn intention into texture, shape, and color.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000028-0001-4001-8001-000000000028'::uuid, 'Mastery is a direction, not a finish line.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000029-0001-4001-8001-000000000029'::uuid, 'Your portfolio is a timeline of growth — honor it.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000030-0001-4001-8001-000000000030'::uuid, 'Sanitation and setup are acts of professional love.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000031-0001-4001-8001-000000000031'::uuid, 'You read hair, skin, and nails like a language.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000032-0001-4001-8001-000000000032'::uuid, 'Each consultation sharpens your eye.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000033-0001-4001-8001-000000000033'::uuid, 'You protect the integrity of the hair and the person wearing it.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000034-0001-4001-8001-000000000034'::uuid, 'Technique plus empathy is your signature.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000035-0001-4001-8001-000000000035'::uuid, 'The work you do today trains the pro you become tomorrow.', 'craft_pride', ARRAY['students']::text[], NULL, true),
+  ('a0000036-0001-4001-8001-000000000036'::uuid, 'You are allowed to be proud without being perfect.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000037-0001-4001-8001-000000000037'::uuid, 'Your timing at the bowl matters as much as the formula.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000038-0001-4001-8001-000000000038'::uuid, 'Craft is repetition with curiosity.', 'craft_pride', ARRAY['students', 'pros']::text[], NULL, true),
+  ('a0000039-0001-4001-8001-000000000039'::uuid, 'You elevate industry standards one appointment at a time.', 'craft_pride', ARRAY['pros']::text[], NULL, true),
+  ('a0000040-0001-4001-8001-000000000040'::uuid, 'Trust the hours you have already invested.', 'craft_pride', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000041-0001-4001-8001-000000000041'::uuid, 'The way you make people feel matters more than the technique.', 'client_care', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000042-0001-4001-8001-000000000042'::uuid, 'Listening is a service. You offer it generously.', 'client_care', ARRAY['pros']::text[], NULL, true),
+  ('a0000043-0001-4001-8001-000000000043'::uuid, 'Clear expectations are a form of kindness.', 'client_care', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000044-0001-4001-8001-000000000044'::uuid, 'You create safety before you create transformation.', 'client_care', ARRAY['pros']::text[], NULL, true),
+  ('a0000045-0001-4001-8001-000000000045'::uuid, 'A calm chair changes the whole appointment.', 'client_care', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000046-0001-4001-8001-000000000046'::uuid, 'You honor each person''s history with their hair and skin.', 'client_care', ARRAY['pros']::text[], NULL, true),
+  ('a0000047-0001-4001-8001-000000000047'::uuid, 'Consent and comfort are never optional extras.', 'client_care', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000048-0001-4001-8001-000000000048'::uuid, 'You explain without condescending — that is rare care.', 'client_care', ARRAY['pros']::text[], NULL, true),
+  ('a0000049-0001-4001-8001-000000000049'::uuid, 'Clients remember how you held space for their nerves.', 'client_care', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000050-0001-4001-8001-000000000050'::uuid, 'You celebrate wins that only they can see.', 'client_care', ARRAY['pros']::text[], NULL, true),
+  ('a0000051-0001-4001-8001-000000000051'::uuid, 'Aftercare guidance is care that continues at home.', 'client_care', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000052-0001-4001-8001-000000000052'::uuid, 'You meet people where they are, not where you wish they were.', 'client_care', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000053-0001-4001-8001-000000000053'::uuid, 'Your chair can be the gentlest part of someone''s week.', 'client_care', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000054-0001-4001-8001-000000000054'::uuid, 'You protect dignity in every draping, every word.', 'client_care', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000055-0001-4001-8001-000000000055'::uuid, 'Being seen without judgment is healing work.', 'client_care', ARRAY['clients']::text[], NULL, true),
+  ('a0000056-0001-4001-8001-000000000056'::uuid, 'You deserve a provider who explains, not pressures.', 'client_care', ARRAY['clients']::text[], NULL, true),
+  ('a0000057-0001-4001-8001-000000000057'::uuid, 'Your comfort during a service is non-negotiable.', 'client_care', ARRAY['clients']::text[], NULL, true),
+  ('a0000058-0001-4001-8001-000000000058'::uuid, 'Questions are welcome. You are allowed to ask them.', 'client_care', ARRAY['clients', 'students']::text[], NULL, true),
+  ('a0000059-0001-4001-8001-000000000059'::uuid, 'Care looks like patience, not hurry.', 'client_care', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000060-0001-4001-8001-000000000060'::uuid, 'You hold standards that keep people safe and seen.', 'client_care', ARRAY['pros']::text[], NULL, true),
+  ('a0000061-0001-4001-8001-000000000061'::uuid, 'Rest is part of the work. You are not your output.', 'rest_recovery', ARRAY['pros']::text[], NULL, true),
+  ('a0000062-0001-4001-8001-000000000062'::uuid, 'A day off refuels your hands and your heart.', 'rest_recovery', ARRAY['pros']::text[], NULL, true),
+  ('a0000063-0001-4001-8001-000000000063'::uuid, 'Hydration and meals are professional tools too.', 'rest_recovery', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000064-0001-4001-8001-000000000064'::uuid, 'Your body asks for breaks — answering is wisdom.', 'rest_recovery', ARRAY['pros']::text[], NULL, true),
+  ('a0000065-0001-4001-8001-000000000065'::uuid, 'Closing the books can wait. Closing your eyes cannot.', 'rest_recovery', ARRAY['pros']::text[], NULL, true),
+  ('a0000066-0001-4001-8001-000000000066'::uuid, 'Saying no to one booking can mean yes to your longevity.', 'rest_recovery', ARRAY['pros']::text[], NULL, true),
+  ('a0000067-0001-4001-8001-000000000067'::uuid, 'Stretching between clients is maintenance for your career.', 'rest_recovery', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000068-0001-4001-8001-000000000068'::uuid, 'You are not lazy for needing recovery after standing all day.', 'rest_recovery', ARRAY['pros']::text[], NULL, true),
+  ('a0000069-0001-4001-8001-000000000069'::uuid, 'Quiet mornings are allowed in a loud industry.', 'rest_recovery', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000070-0001-4001-8001-000000000070'::uuid, 'Sleep is part of showing up with steady hands.', 'rest_recovery', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000071-0001-4001-8001-000000000071'::uuid, 'Recovery today prevents burnout tomorrow.', 'rest_recovery', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000072-0001-4001-8001-000000000072'::uuid, 'You can log off without guilt.', 'rest_recovery', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000073-0001-4001-8001-000000000073'::uuid, 'Stillness is not falling behind.', 'rest_recovery', ARRAY['pros', 'clients', 'students']::text[], NULL, true),
+  ('a0000074-0001-4001-8001-000000000074'::uuid, 'Your nervous system deserves the same care you give skin.', 'rest_recovery', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000075-0001-4001-8001-000000000075'::uuid, 'Taking a slow evening is productive for your wellbeing.', 'rest_recovery', ARRAY['clients', 'pros']::text[], NULL, true),
+  ('a0000076-0001-4001-8001-000000000076'::uuid, 'Exam season needs sleep as much as flashcards.', 'rest_recovery', ARRAY['students']::text[], NULL, true),
+  ('a0000077-0001-4001-8001-000000000077'::uuid, 'You can pause without losing momentum.', 'rest_recovery', ARRAY['students', 'pros']::text[], NULL, true),
+  ('a0000078-0001-4001-8001-000000000078'::uuid, 'Winter asks for softer pacing. Listen.', 'rest_recovery', ARRAY['pros', 'clients']::text[], 'winter', true),
+  ('a0000079-0001-4001-8001-000000000079'::uuid, 'Summer heat asks for shade and water. Grant yourself both.', 'rest_recovery', ARRAY['pros']::text[], 'summer', true),
+  ('a0000080-0001-4001-8001-000000000080'::uuid, 'A full calendar is not the only measure of success.', 'rest_recovery', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000081-0001-4001-8001-000000000081'::uuid, 'You did not come this far to come only this far.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000082-0001-4001-8001-000000000082'::uuid, 'Sustainable income honors your skill and your time.', 'abundance', ARRAY['pros']::text[], NULL, true),
+  ('a0000083-0001-4001-8001-000000000083'::uuid, 'You can charge fairly and still be deeply generous.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000084-0001-4001-8001-000000000084'::uuid, 'Referrals are trust returning to you.', 'abundance', ARRAY['pros']::text[], NULL, true),
+  ('a0000085-0001-4001-8001-000000000085'::uuid, 'There is room for your success beside others doing well.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000086-0001-4001-8001-000000000086'::uuid, 'Your pipeline can grow without hustling past your limits.', 'abundance', ARRAY['pros']::text[], NULL, true),
+  ('a0000087-0001-4001-8001-000000000087'::uuid, 'Financial clarity is self-respect in spreadsheet form.', 'abundance', ARRAY['pros']::text[], NULL, true),
+  ('a0000088-0001-4001-8001-000000000088'::uuid, 'You are building a career, not just filling a schedule.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000089-0001-4001-8001-000000000089'::uuid, 'Investing in tools is investing in future you.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000090-0001-4001-8001-000000000090'::uuid, 'Gratitude and ambition can share the same heart.', 'abundance', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000091-0001-4001-8001-000000000091'::uuid, 'Spring is a season for planting new offerings.', 'abundance', ARRAY['pros']::text[], 'spring', true),
+  ('a0000092-0001-4001-8001-000000000092'::uuid, 'Fall is for refining what already works.', 'abundance', ARRAY['pros']::text[], 'fall', true),
+  ('a0000093-0001-4001-8001-000000000093'::uuid, 'Clients who value you will find you.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000094-0001-4001-8001-000000000094'::uuid, 'You can celebrate income without apologizing for it.', 'abundance', ARRAY['pros']::text[], NULL, true),
+  ('a0000095-0001-4001-8001-000000000095'::uuid, 'Abundance includes time, health, and joy — not only revenue.', 'abundance', ARRAY['pros', 'clients']::text[], NULL, true),
+  ('a0000096-0001-4001-8001-000000000096'::uuid, 'Your first paid service was proof the market makes space.', 'abundance', ARRAY['students']::text[], NULL, true),
+  ('a0000097-0001-4001-8001-000000000097'::uuid, 'Learning now compounds into earning later.', 'abundance', ARRAY['students']::text[], NULL, true),
+  ('a0000098-0001-4001-8001-000000000098'::uuid, 'You are worthy of support while you grow.', 'abundance', ARRAY['students', 'clients']::text[], NULL, true),
+  ('a0000099-0001-4001-8001-000000000099'::uuid, 'Small wins stack into a stable practice.', 'abundance', ARRAY['pros', 'students']::text[], NULL, true),
+  ('a0000100-0001-4001-8001-000000000100'::uuid, 'Prosperity can be quiet and still be real.', 'abundance', ARRAY['pros', 'clients']::text[], NULL, true)
+ON CONFLICT (id) DO UPDATE SET text = EXCLUDED.text, active = EXCLUDED.active;
+
+INSERT INTO public.beauty_body_zones (id, name, description, icon_svg) VALUES
+  ('head', 'Head & scalp', 'Scalp treatments, growth care, and protective styling foundations.', NULL),
+  ('face', 'Face', 'Skin, makeup, brows, and facial hair framing.', NULL),
+  ('hair', 'Hair', 'Cuts, color, styling, and texture services.', NULL),
+  ('neck', 'Neck & décolleté', 'Neckline care, waxing, and finishing details.', NULL),
+  ('hands', 'Hands', 'Manicures, nail art, and hand treatments.', NULL),
+  ('body', 'Body', 'Massage, body treatments, waxing, and tanning.', NULL),
+  ('feet', 'Feet', 'Pedicures, foot care, and reflexology.', NULL),
+  ('nails', 'Nails', 'Full nail services across fingers and toes.', NULL)
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+INSERT INTO public.beauty_body_services (
+  id, zone_id, service_name, description, category, average_duration_minutes,
+  average_price_range, finding_pros_filter, what_to_expect, prep_tips, aftercare
+) VALUES
+  ('s0000001-0002-4002-8002-000000000001'::uuid, 'head', 'Scalp treatment', 'Deep cleanse and treatment for scalp health.', 'hair_treatments', 45, '$45–$85', '{"serviceCategories":["hair_treatments"],"specialties":["hair"],"searchTerms":["scalp"]}'::jsonb, 'Analysis, exfoliation, mask, and massage.', 'Arrive with dry hair unless instructed otherwise.', 'Avoid heavy oils 24h if a detox treatment was used.'),
+  ('s0000002-0002-4002-8002-000000000002'::uuid, 'head', 'Keratin smoothing', 'Smoothing treatment to reduce frizz.', 'hair_treatments', 180, '$250–$450', '{"serviceCategories":["hair_treatments"],"specialties":["hair"]}'::jsonb, 'Long appointment with ventilation; results last months.', 'Clarifying wash often required; discuss prior color.', 'Wait 72h before washing; sulfate-free home care.'),
+  ('s0000003-0002-4002-8002-000000000003'::uuid, 'head', 'Scalp massage', 'Relaxation-focused scalp work.', 'massage', 20, '$25–$55', '{"serviceCategories":["massage"],"specialties":["hair"]}'::jsonb, 'Seated massage, often add-on to cut or color.', 'Mention headaches or tension areas.', 'Hydrate; gentle brushing.'),
+  ('s0000004-0002-4002-8002-000000000004'::uuid, 'head', 'Protective braid install', 'Braids that protect natural hair.', 'hair_styling', 240, '$150–$350', '{"serviceCategories":["hair_styling"],"specialties":["hair"],"searchTerms":["braid"]}'::jsonb, 'Long session; tension should stay comfortable.', 'Come with washed, stretched hair if requested.', 'Moisturize scalp; avoid excessive tension.'),
+  ('s0000005-0002-4002-8002-000000000005'::uuid, 'face', 'Classic facial', 'Cleanse, exfoliate, extract, mask, moisturize.', 'facials', 60, '$85–$150', '{"serviceCategories":["facials","skincare"],"specialties":["skin"]}'::jsonb, 'Customized steps for your skin type.', 'Skip retinoids 48h before if advised.', 'SPF daily; gentle products 24h.'),
+  ('s0000006-0002-4002-8002-000000000006'::uuid, 'face', 'Dermaplaning', 'Exfoliation and peach-fuzz removal.', 'facials', 45, '$75–$130', '{"serviceCategories":["facials"],"specialties":["skin"]}'::jsonb, 'Blade exfoliation; smooth finish for makeup.', 'Disclose acne or active breakouts.', 'Avoid sun and harsh acids 48h.'),
+  ('s0000007-0002-4002-8002-000000000007'::uuid, 'face', 'Chemical peel', 'Controlled exfoliation by skin depth.', 'facials', 30, '$100–$250', '{"serviceCategories":["facials","med_spa"],"specialties":["skin","medspa"]}'::jsonb, 'Tingling; peeling days after.', 'Pre-peel regimen may be required.', 'Strict SPF; follow post-care sheet.'),
+  ('s0000008-0002-4002-8002-000000000008'::uuid, 'face', 'Bridal makeup', 'Event-ready makeup application.', 'makeup_bridal', 90, '$150–$350', '{"serviceCategories":["makeup_bridal","makeup"],"specialties":["makeup"]}'::jsonb, 'Trial often booked separately.', 'Bring inspiration photos.', 'Setting spray; blotting only if needed.'),
+  ('s0000009-0002-4002-8002-000000000009'::uuid, 'face', 'Brow lamination', 'Brush-up brow shape that lasts weeks.', 'brows', 45, '$65–$110', '{"serviceCategories":["brows"],"specialties":["brow","lash"]}'::jsonb, 'Lift, set, and tint optional.', 'Avoid retinoids on brows beforehand.', 'Keep dry 24h; no oil on brows.'),
+  ('s0000010-0002-4002-8002-000000000010'::uuid, 'face', 'Lash lift', 'Natural lash curl without extensions.', 'lashes', 60, '$75–$125', '{"serviceCategories":["lashes"],"specialties":["lash"]}'::jsonb, 'Patch test if tint included.', 'Remove eye makeup.', 'No water/steam 24h.'),
+  ('s0000011-0002-4002-8002-000000000011'::uuid, 'hair', 'Haircut', 'Cut and finish for your hair type.', 'hair_cut', 60, '$45–$120', '{"serviceCategories":["hair_cut"],"specialties":["hair"]}'::jsonb, 'Consultation, cut, blowdry or diffuse.', 'Bring reference photos.', 'Style as recommended; book maintenance.'),
+  ('s0000012-0002-4002-8002-000000000012'::uuid, 'hair', 'Balayage', 'Hand-painted lightening for dimension.', 'hair_color', 180, '$200–$400', '{"serviceCategories":["hair_color"],"specialties":["hair"],"searchTerms":["balayage","color"]}'::jsonb, 'Multi-hour process; toner often included.', 'Wash 24h before unless told otherwise.', 'Bond treatments; color-safe shampoo.'),
+  ('s0000013-0002-4002-8002-000000000013'::uuid, 'hair', 'Full color', 'All-over color application.', 'hair_color', 120, '$120–$250', '{"serviceCategories":["hair_color"],"specialties":["hair"]}'::jsonb, 'Roots to ends or regrowth focus.', 'Share allergy history.', 'Wait 48h before clarifying washes.'),
+  ('s0000014-0002-4002-8002-000000000014'::uuid, 'hair', 'Blowout', 'Wash and smooth styling.', 'hair_styling', 45, '$40–$85', '{"serviceCategories":["hair_styling"],"specialties":["hair"]}'::jsonb, 'Volume or sleek finish.', 'Come with clean or day-old hair per policy.', 'Silk pillowcase helps longevity.'),
+  ('s0000015-0002-4002-8002-000000000015'::uuid, 'hair', 'Tape-in extensions', 'Semi-permanent length and volume.', 'hair_extensions', 150, '$300–$600+', '{"serviceCategories":["hair_extensions"],"specialties":["hair"],"searchTerms":["extension"]}'::jsonb, 'Install and blend cut.', 'Color match consult first.', 'Brush gently; avoid oily roots.'),
+  ('s0000016-0002-4002-8002-000000000016'::uuid, 'hair', 'Highlights', 'Foil or babylight dimension.', 'hair_color', 150, '$150–$320', '{"serviceCategories":["hair_color"],"specialties":["hair"]}'::jsonb, 'Partial or full head options.', 'Bring inspiration; discuss maintenance.', 'Purple shampoo as directed.'),
+  ('s0000017-0002-4002-8002-000000000017'::uuid, 'hair', 'Silk press', 'Smoothing on natural texture.', 'hair_styling', 90, '$65–$130', '{"serviceCategories":["hair_styling"],"specialties":["hair"]}'::jsonb, 'Heat styling with heat protectant.', 'Clarifying wash may be required.', 'Wrap hair at night; limit moisture until redo.'),
+  ('s0000018-0002-4002-8002-000000000018'::uuid, 'hair', 'Barber fade', 'Tapered clipper work and line-up.', 'barbering', 45, '$35–$65', '{"serviceCategories":["barbering"],"specialties":["barber"]}'::jsonb, 'Consultation on guard lengths.', 'Know your last fade height.', 'Edge upkeep between visits.'),
+  ('s0000019-0002-4002-8002-000000000019'::uuid, 'neck', 'Neckline cleanup', 'Detail trim for nape and sides.', 'barbering', 15, '$15–$35', '{"serviceCategories":["barbering"],"specialties":["barber","hair"]}'::jsonb, 'Quick add-on or standalone.', 'Specify beard overlap if any.', 'Soothe with alcohol-free aftershave.'),
+  ('s0000020-0002-4002-8002-000000000020'::uuid, 'neck', 'Décolleté facial', 'Care for chest and neck skin.', 'facials', 30, '$50–$95', '{"serviceCategories":["facials","skincare"],"specialties":["skin"]}'::jsonb, 'Often paired with facial.', 'Note sun damage or sensitivity.', 'SPF on exposed area.'),
+  ('s0000021-0002-4002-8002-000000000021'::uuid, 'neck', 'Neck wax', 'Hair removal for neckline.', 'waxing', 15, '$20–$45', '{"serviceCategories":["waxing"],"specialties":["skin","hair"]}'::jsonb, 'Quick strip or hard wax.', 'Hair length ~¼ inch.', 'Avoid sweat 24h.'),
+  ('s0000022-0002-4002-8002-000000000022'::uuid, 'hands', 'Gel manicure', 'Long-wear polish with cure.', 'nails_manicure', 60, '$40–$75', '{"serviceCategories":["nails_manicure","nails"],"specialties":["nail"]}'::jsonb, 'Prep, gel application, cure.', 'No heavy hand lotion before.', 'Cuticle oil daily; avoid picking.'),
+  ('s0000023-0002-4002-8002-000000000023'::uuid, 'hands', 'Classic manicure', 'Shape, cuticle care, polish.', 'nails_manicure', 45, '$25–$50', '{"serviceCategories":["nails_manicure"],"specialties":["nail"]}'::jsonb, 'Soak, file, polish.', 'Remove old polish if possible.', 'Gloves for cleaning 24h.'),
+  ('s0000024-0002-4002-8002-000000000024'::uuid, 'hands', 'Acrylic full set', 'Sculpted length and shape.', 'nails', 90, '$55–$95', '{"serviceCategories":["nails"],"specialties":["nail"]}'::jsonb, 'Fill needed every 2–3 weeks.', 'Choose shape in advance.', 'Report lifting early.'),
+  ('s0000025-0002-4002-8002-000000000025'::uuid, 'hands', 'Nail art', 'Custom design on natural or enhanced nails.', 'nails', 30, '$15–$60+', '{"serviceCategories":["nails"],"specialties":["nail"],"searchTerms":["nail art"]}'::jsonb, 'Priced per nail or set.', 'Bring reference images.', 'Top coat refresh as needed.'),
+  ('s0000026-0002-4002-8002-000000000026'::uuid, 'hands', 'Paraffin hand treatment', 'Warm wax hydration for hands.', 'nails', 20, '$15–$35', '{"serviceCategories":["nails"],"specialties":["nail","skin"]}'::jsonb, 'Add-on warmth and softness.', 'Disclose circulation issues.', 'Avoid hot water immediately.'),
+  ('s0000027-0002-4002-8002-000000000027'::uuid, 'body', 'Swedish massage', 'Relaxation-focused full body work.', 'massage', 60, '$80–$140', '{"serviceCategories":["massage"],"specialties":["massage"]}'::jsonb, 'Draping maintained; pressure adjustable.', 'Hydrate; arrive early.', 'Water and light movement.'),
+  ('s0000028-0002-4002-8002-000000000028'::uuid, 'body', 'Deep tissue massage', 'Focused pressure for tension.', 'massage', 60, '$95–$160', '{"serviceCategories":["massage"],"specialties":["massage"]}'::jsonb, 'May be intense; speak up on pressure.', 'Avoid heavy meals before.', 'Soreness 24h can be normal.'),
+  ('s0000029-0002-4002-8002-000000000029'::uuid, 'body', 'Body scrub', 'Exfoliation for smooth skin.', 'skincare', 45, '$70–$120', '{"serviceCategories":["skincare"],"specialties":["skin"]}'::jsonb, 'Shower before or after per spa.', 'Shave 24h before if sensitive.', 'Moisturize; SPF if exposed.'),
+  ('s0000030-0002-4002-8002-000000000030'::uuid, 'body', 'Brazilian wax', 'Full bikini hair removal.', 'waxing', 45, '$55–$95', '{"serviceCategories":["waxing"],"specialties":["skin"]}'::jsonb, 'Professional draping and technique.', 'Hair ~¼ inch; avoid retinoids.', 'Loose clothing; no heat 24h.'),
+  ('s0000031-0002-4002-8002-000000000031'::uuid, 'body', 'Spray tan', 'Sunless color application.', 'other', 30, '$35–$75', '{"serviceCategories":["other"],"searchTerms":["spray tan"]}'::jsonb, 'Stand or booth; develops over hours.', 'Exfoliate; no lotion day-of.', 'Avoid water 8h; moisturize after.'),
+  ('s0000032-0002-4002-8002-000000000032'::uuid, 'body', 'Lymphatic drainage', 'Gentle rhythm for fluid movement.', 'massage', 60, '$120–$200', '{"serviceCategories":["massage","med_spa"],"specialties":["medspa","massage"]}'::jsonb, 'Light pressure; post-surgical sometimes.', 'Medical clearance if post-op.', 'Water; light activity.'),
+  ('s0000033-0002-4002-8002-000000000033'::uuid, 'body', 'Prenatal massage', 'Side-lying safe pregnancy massage.', 'massage', 60, '$90–$150', '{"serviceCategories":["massage"],"specialties":["massage"],"searchTerms":["prenatal"]}'::jsonb, 'Certified therapist preferred.', 'Doctor note if high-risk.', 'Hydrate; slow position changes.'),
+  ('s0000034-0002-4002-8002-000000000034'::uuid, 'body', 'Back facial', 'Clarifying treatment for back skin.', 'facials', 50, '$75–$130', '{"serviceCategories":["facials"],"specialties":["skin"]}'::jsonb, 'Extract and mask for congestion.', 'Wear open-back top if provided.', 'Clean sheets; breathable fabrics.'),
+  ('s0000035-0002-4002-8002-000000000035'::uuid, 'feet', 'Spa pedicure', 'Soak, exfoliate, polish toes.', 'nails_pedicure', 60, '$45–$85', '{"serviceCategories":["nails_pedicure"],"specialties":["nail"]}'::jsonb, 'Massage and polish included.', 'Open-toe shoes after.', 'Dry between toes well.'),
+  ('s0000036-0002-4002-8002-000000000036'::uuid, 'feet', 'Gel pedicure', 'Long-wear toe color.', 'nails_pedicure', 60, '$50–$90', '{"serviceCategories":["nails_pedicure"],"specialties":["nail"]}'::jsonb, 'Gel cure on toes.', 'No lotion on feet before.', 'Cuticle oil; professional removal.'),
+  ('s0000037-0002-4002-8002-000000000037'::uuid, 'feet', 'Reflexology', 'Pressure points on feet.', 'massage', 45, '$55–$95', '{"serviceCategories":["massage"],"searchTerms":["reflexology"]}'::jsonb, 'Seated; focused on feet.', 'Wear comfortable pants.', 'Water; rest if lightheaded.'),
+  ('s0000038-0002-4002-8002-000000000038'::uuid, 'feet', 'Medical pedicure', 'Clinical foot care for nail/skin concerns.', 'nails_pedicure', 45, '$75–$150', '{"serviceCategories":["nails_pedicure"],"specialties":["nail"],"searchTerms":["medical pedicure"]}'::jsonb, 'Non-cosmetic focus; may refer out.', 'List medications and diabetes status.', 'Follow technician home care.'),
+  ('s0000039-0002-4002-8002-000000000039'::uuid, 'nails', 'Russian manicure', 'E-file cuticle refinement.', 'nails_manicure', 75, '$60–$110', '{"serviceCategories":["nails_manicure"],"specialties":["nail"]}'::jsonb, 'Precise cuticle work; long-lasting.', 'Do not trim cuticles at home before.', 'Oil daily; avoid picking.'),
+  ('s0000040-0002-4002-8002-000000000040'::uuid, 'nails', 'Dip powder manicure', 'Durable powder overlay.', 'nails', 60, '$45–$80', '{"serviceCategories":["nails"],"specialties":["nail"]}'::jsonb, 'Layers dipped and filed.', 'Healthy nail plate preferred.', 'Professional removal only.')
+ON CONFLICT (id) DO UPDATE SET service_name = EXCLUDED.service_name;

@@ -24,6 +24,8 @@ const forYouLinks = [
 const resourcesLinks = [
   { label: "Study Guides", href: "/study-guides" },
   { label: "Career Paths", href: "/career-paths" },
+  { label: "Daily Affirmation", href: "/daily" },
+  { label: "Body Map", href: "/explore/body-map" },
   { label: "Tools", href: "/tools" },
   { label: "Glossary", href: "/glossary" },
   { label: "Blog", href: "/blog" },

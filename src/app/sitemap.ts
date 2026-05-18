@@ -60,6 +60,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     push(routes, `/career-paths/${c.slug}`, "monthly", 0.6);
   }
 
+  push(routes, "/daily", "daily", 0.72);
+  push(routes, "/daily/saved", "monthly", 0.5);
+  push(routes, "/explore/body-map", "weekly", 0.75);
   push(routes, "/glossary", "monthly", 0.65);
   push(routes, "/tools", "weekly", 0.75);
   push(routes, "/tools/tip-calculator", "monthly", 0.6);
