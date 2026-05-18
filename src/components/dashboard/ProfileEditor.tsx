@@ -341,14 +341,19 @@ export function ProfileEditor({ initial, userId }: ProfileEditorProps) {
             </div>
             <p className="mt-2 font-heading text-lg text-gold">{profile.display_name || "Your name"}</p>
             <p className="font-body text-sm text-cream/80">{profile.headline || "Your headline"}</p>
-            <Link
-              href={`/${previewUsername}`}
-              className="mt-3 inline-block font-body text-sm text-gold underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View public profile →
-            </Link>
+            <div className="mt-3 flex flex-col gap-1">
+              <Link
+                href={`/${previewUsername}`}
+                className="font-body text-sm text-gold underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View public profile →
+              </Link>
+              <Link href="/dashboard/services" className="font-body text-sm text-gold-body hover:text-gold">
+                Manage services menu →
+              </Link>
+            </div>
           </div>
         </div>
       </aside>
