@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type Stripe from "stripe";
+import Stripe from "stripe";
 import { getPricingTierById } from "@/data/pricing";
 import { getStripe } from "@/lib/stripe";
 import { logStripeWebhookEvent } from "@/lib/stripe/webhook-log";
@@ -42,10 +42,9 @@ async function handleSubscriptionCheckoutCompleted(
 }
 
 export async function POST(request: Request) {
-  const stripe = getStripe();
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
 
-  if (!stripe || !webhookSecret || webhookSecret === "whsec_placeholder") {
+  if (!webhookSecret) {
     return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
   }
 
@@ -58,11 +57,12 @@ export async function POST(request: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    event = Stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
+  const stripe = getStripe();
   const admin = createAdminClient();
 
   switch (event.type) {

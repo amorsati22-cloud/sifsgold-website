@@ -34,6 +34,7 @@ const nextConfig = {
       ...config.resolve.alias,
       "onnxruntime-node": false,
     };
+    config.externals = [...(config.externals || []), { "onnxruntime-node": "commonjs onnxruntime-node" }];
     return config;
   },
   images: {
