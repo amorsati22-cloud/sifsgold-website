@@ -12,7 +12,6 @@ import {
   downloadBlob,
   loadImage,
 } from "@/lib/photo-studio/exports";
-import { removeImageBackground, revokeBgRemovalUrl } from "@/lib/photo-studio/bg-removal";
 import { uploadPhotoStudioFile } from "@/lib/photo-studio/upload";
 import { CROP_PRESETS } from "@/lib/photo-studio/constants";
 import { GoldButton } from "@/components/ui/GoldButton";
@@ -93,6 +92,7 @@ export function ImageEditor({ userId, asset, isNew, templates }: Props) {
   async function applyBgRemoval() {
     if (!src) return;
     setBgPending(true);
+    const { removeImageBackground } = await import("@/lib/photo-studio/bg-removal");
     const result = await removeImageBackground(src);
     setBgPending(false);
     if ("error" in result) {
@@ -174,8 +174,10 @@ export function ImageEditor({ userId, asset, isNew, templates }: Props) {
 
   useEffect(() => {
     return () => {
-      history.forEach((u) => {
-        if (u.startsWith("blob:")) revokeBgRemovalUrl(u);
+      void import("@/lib/photo-studio/bg-removal").then(({ revokeBgRemovalUrl }) => {
+        history.forEach((u) => {
+          if (u.startsWith("blob:")) revokeBgRemovalUrl(u);
+        });
       });
     };
   }, [history]);

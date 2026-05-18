@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
 import { BRAND_USER_TYPES } from "@/lib/auth-brand";
 import { PRO_USER_TYPES } from "@/lib/auth-pro";
 import { isReservedUsername } from "@/lib/reserved-usernames";
@@ -12,12 +13,17 @@ const DASHBOARD_PRO_PATHS = [
   "/dashboard/credentials",
   "/dashboard/reviews",
   "/dashboard/services",
+  "/dashboard/calendar",
+  "/dashboard/availability",
   "/dashboard/photo-studio",
 ];
 
 const DASHBOARD_BUYER_PATHS = ["/dashboard/orders", "/dashboard/wishlist", "/dashboard/returns"];
 
 const DASHBOARD_STOREFRONT_PATHS = ["/dashboard/storefront"];
+const DASHBOARD_BRAND_DEALS_PATHS = ["/dashboard/brand-deals"];
+const DASHBOARD_ADVOCATE_DEALS_PATHS = ["/dashboard/advocate"];
+const BRAND_DEALS_MARKETPLACE_PATHS = ["/brand-deals/marketplace"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -83,9 +89,15 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    if (isDashboardStorefrontRoute) {
+    if (isDashboardStorefrontRoute || isDashboardBrandDealsRoute) {
       if (!profile || !BRAND_USER_TYPES.includes(profile.user_type as (typeof BRAND_USER_TYPES)[number])) {
         return NextResponse.redirect(new URL("/for-brands", request.url));
+      }
+    }
+
+    if (isDashboardAdvocateDealsRoute || isBrandDealsMarketplaceRoute) {
+      if (!profile || !ADVOCATE_USER_TYPES.includes(profile.user_type as (typeof ADVOCATE_USER_TYPES)[number])) {
+        return NextResponse.redirect(new URL("/advocates", request.url));
       }
     }
   }
@@ -136,6 +148,12 @@ export const config = {
     "/dashboard/returns/:path*",
     "/dashboard/storefront",
     "/dashboard/storefront/:path*",
+    "/dashboard/brand-deals",
+    "/dashboard/brand-deals/:path*",
+    "/dashboard/advocate",
+    "/dashboard/advocate/:path*",
+    "/brand-deals/marketplace",
+    "/brand-deals/marketplace/:path*",
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

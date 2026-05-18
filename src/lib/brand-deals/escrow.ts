@@ -1,7 +1,9 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { centsFromDecimal } from "@/lib/shop/format";
+function centsFromDecimal(amount: number): number {
+  return Math.round(amount * 100);
+}
 import { getStripe } from "@/lib/stripe";
 
 export async function createEscrowPaymentIntent(params: {

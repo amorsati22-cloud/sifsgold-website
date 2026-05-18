@@ -235,12 +235,13 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-fashion",
     source: "for_fashion_waitlist",
+    sourceSignup: "for_fashion_signup",
+    launchIndustry: "fashion",
     title: "For fashion — castings, showrooms, and brand storytelling in one lane",
-    description: "Model, agency, designer, and event workflows with portfolios, measurements, and approvals — fashion modules on the June 30 cadence inside The Gold Collective.",
+    description: "Model, agency, designer, and event workflows with portfolios, measurements, and approvals — fashion modules launch June 30, 2026 inside The Gold Collective.",
     eyebrow: "For fashion",
     headline: "Run castings without chaos.",
     subheadline: "Portfolios, measurements, approvals, and logistics in one Gold Collective lane — so creatives spend time on the work, not the spreadsheet.",
-    heroBadge: "Launching June 30, 2026",
     openGraphTitle: "Run castings without chaos.",
     pricingTierIds: ["aspiring-model","working-model","fashion-designer-standard"],
     features: [
@@ -276,7 +277,7 @@ const pages: AudienceLandingConfig[] = [
       }
 ],
     steps: [{"title":"Tell us who you serve","description":"Pick your lane so intake, scheduling, and compliance templates match how you actually work."},{"title":"Connect your workflow","description":"Bring bookings, forms, and client context into one Gold Collective profile — fewer tabs, fewer mistakes."},{"title":"Launch with your circle","description":"Invite clients, assistants, or partners with clear roles so everyone sees the right information at the right time."}],
-    faqs: [{"question":"What does Sif's Circle mean for fashion teams?","answer":"Sif's Circle is our early access list: launch timing, founding perks when you qualify, and a direct line to the team while Sif's Advocates and Gold Partners help shape the roadmap for The Gold Collective."},{"question":"Will my data stay private?","answer":"We design for least-privilege access, clear consent on sensitive records, and industry-aligned defaults. Exact controls ship with launch documentation and your onboarding checklist."},{"question":"Is this only for big teams?","answer":"No. Solo chairs, single-location studios, and independent pros get the same core workflows — scale features unlock when you actually need them."},{"question":"How does pricing work?","answer":"Transparent tiers with monthly and annual options where applicable. Use the pricing snapshot on this page, then compare everything side-by-side on the full pricing page."},{"question":"When can I start?","answer":"Join the waitlist on this page to reserve your place. Fashion-forward modules roll on the June 30 cadence where noted; other verticals follow the broader launch window."},{"question":"Who are Sif's Advocates?","answer":"Sif's Advocates are trusted pros and educators who stress-test workflows, mentor peers, and keep standards high across The Gold Collective."},{"question":"What is a Gold Partner?","answer":"Gold Partners are brands, schools, and organizations that co-build distribution, education, and compliance rails with us — without turning your client list into ad inventory."}],
+    faqs: [{"question":"What does Sif's Circle mean for fashion teams?","answer":"Sif's Circle is our early access list: launch timing, founding perks when you qualify, and a direct line to the team while Sif's Advocates and Gold Partners help shape the roadmap for The Gold Collective."},{"question":"Will my data stay private?","answer":"We design for least-privilege access, clear consent on sensitive records, and industry-aligned defaults. Exact controls ship with launch documentation and your onboarding checklist."},{"question":"Is this only for big teams?","answer":"No. Solo chairs, single-location studios, and independent pros get the same core workflows — scale features unlock when you actually need them."},{"question":"How does pricing work?","answer":"Transparent tiers with monthly and annual options where applicable. Use the pricing snapshot on this page, then compare everything side-by-side on the full pricing page."},{"question":"When can I start?","answer":"Join the waitlist on this page to reserve your place. Fashion industry modules go live June 30, 2026 — waitlist members receive one week of early access starting June 23."},{"question":"Who are Sif's Advocates?","answer":"Sif's Advocates are trusted pros and educators who stress-test workflows, mentor peers, and keep standards high across The Gold Collective."},{"question":"What is a Gold Partner?","answer":"Gold Partners are brands, schools, and organizations that co-build distribution, education, and compliance rails with us — without turning your client list into ad inventory."},{"question":"When does fashion go live?","answer":"June 30, 2026. Waitlist members get 1 week of early access starting June 23."},{"question":"How does Coogan account integration work?","answer":"Models under 18 in California require a Coogan trust account by state law. Sif's Gold guides you through the setup process and verifies the account before bookings are confirmed."},{"question":"What about Fashion Workers Act compliance?","answer":"If you're a modeling agency based in or operating in New York, the Fashion Workers Act applies to you. Sif's Gold's modeling agency tier includes the registration tracking, wage transparency reporting, and minor protections required by the law."}],
   },
 {
     slug: "for-brands",
@@ -1201,12 +1202,25 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-models",
     source: "for_models_waitlist",
+    sourceSignup: "for_models_signup",
+    launchIndustry: "fashion",
     title: "For models — digitals, measurements, and bookings without inbox chaos",
-    description: "Aspiring and working model tiers with portfolios, comp cards, and logistics — fashion modules on the June 30 cadence in The Gold Collective.",
+    description: "Aspiring and working model tiers with portfolios, comp cards, and logistics — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For models",
     headline: "Your book, always ready.",
     subheadline: "Digitals, measurements, and availability that update everywhere — so castings stop hunting through old threads.",
-    heroBadge: "Launching June 30, 2026",
+    complianceDisclosure: {
+      title: "Built for safe, fair work",
+      bullets: [
+        "Coogan account integration for minor models (California law compliance)",
+        "Fashion Workers Act compliance for NY-based work",
+        "Parental consent flows for models under 18",
+        "Trust account requirements honored",
+        "Hours-per-day limits enforced for minors",
+        "Mandatory adult supervision flag for shoots involving minors",
+        "No agency can sign minors without verified parental authority",
+      ],
+    },
     openGraphTitle: "Your book, always ready.",
     pricingTierIds: ["aspiring-model","working-model","stylist-assistant-fashion"],
     features: [
@@ -1247,12 +1261,24 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-modeling-agencies",
     source: "for_modeling_agencies_waitlist",
+    sourceSignup: "for_modeling_agencies_signup",
+    launchIndustry: "fashion",
     title: "For modeling agencies — rosters, packages, and buyer-ready exports",
-    description: "Boutique through Premium agency tiers with roster tools and approvals — June 30 fashion cadence in The Gold Collective.",
+    description: "Boutique through Premium agency tiers with roster tools and approvals — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For modeling agencies",
     headline: "Rosters that buyers actually open.",
     subheadline: "Packages, polaroids, and digitals with approvals, expirations, and clear usage — so talent stays protected and bookings move faster.",
-    heroBadge: "Launching June 30, 2026",
+    complianceDisclosure: {
+      title: "Compliance built in",
+      bullets: [
+        "NY Fashion Workers Act registration tools",
+        "Minor model protections enforced at platform level",
+        "Wage transparency reporting (NY, CA)",
+        "Workers comp classification flags",
+        "1099 vs W-2 classification audit trail",
+        "Talent agency licensing reminders per state",
+      ],
+    },
     openGraphTitle: "Rosters that buyers actually open.",
     pricingTierIds: ["modeling-agency-boutique","modeling-agency-standard","modeling-agency-premium"],
     features: [
@@ -1293,12 +1319,22 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-designers",
     source: "for_designers_waitlist",
+    sourceSignup: "for_designers_signup",
+    launchIndustry: "fashion",
     title: "For fashion designers — line sheets, appointments, and showroom flow",
-    description: "Designer Standard and Pro with line sheets, appointments, and buyer notes — June 30 cadence in The Gold Collective.",
+    description: "Designer Standard and Pro with line sheets, appointments, and buyer notes — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For designers",
     headline: "Line sheets buyers can navigate.",
     subheadline: "Lookbooks, appointments, and showroom notes connected to the same inventory story — fewer PDFs, fewer mistakes.",
-    heroBadge: "Launching June 30, 2026",
+    complianceDisclosure: {
+      title: "Industry-grade legal awareness",
+      bullets: [
+        "Wholesale order management with terms enforcement",
+        "Sample loan tracking (legal protection)",
+        "IP protection for original designs (not legal advice — work with your attorney)",
+        "Manufacturing partner verification",
+      ],
+    },
     openGraphTitle: "Line sheets buyers can navigate.",
     pricingTierIds: ["fashion-designer-standard","fashion-designer-pro","showroom-boutique"],
     features: [
@@ -1339,12 +1375,13 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-casting-directors",
     source: "for_casting_directors_waitlist",
+    sourceSignup: "for_casting_directors_signup",
+    launchIndustry: "fashion",
     title: "For casting directors — shortlists, callbacks, and talent comms",
-    description: "Indie through Premium casting director tiers with logistics and approvals — June 30 cadence in The Gold Collective.",
+    description: "Indie through Premium casting director tiers with logistics and approvals — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For casting directors",
     headline: "Shortlists that stay respectful.",
     subheadline: "Callbacks, holds, and talent comms with clear status — so nobody learns bad news from a rumor mill.",
-    heroBadge: "Launching June 30, 2026",
     openGraphTitle: "Shortlists that stay respectful.",
     pricingTierIds: ["casting-director-indie","casting-director-pro","casting-director-premium"],
     features: [
@@ -1385,12 +1422,13 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-showrooms",
     source: "for_showrooms_waitlist",
+    sourceSignup: "for_showrooms_signup",
+    launchIndustry: "fashion",
     title: "For showrooms — appointments, lines, and buyer relationships",
-    description: "Boutique and Standard showroom tiers with appointments and notes — June 30 cadence in The Gold Collective.",
+    description: "Boutique and Standard showroom tiers with appointments and notes — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For showrooms",
     headline: "Appointments that feel bespoke.",
     subheadline: "Buyer history, line preferences, and follow-ups in one Gold Collective lane — so the room remembers the relationship.",
-    heroBadge: "Launching June 30, 2026",
     openGraphTitle: "Appointments that feel bespoke.",
     pricingTierIds: ["showroom-boutique","showroom-standard","fashion-designer-standard"],
     features: [
@@ -1431,12 +1469,22 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-clothing-brands",
     source: "for_clothing_brands_waitlist",
+    sourceSignup: "for_clothing_brands_signup",
+    launchIndustry: "fashion",
     title: "For clothing brands — wholesale rhythm and advocate activations",
-    description: "Clothing Brand Standard and Pro with wholesale notes and advocate programs — June 30 cadence in The Gold Collective.",
+    description: "Clothing Brand Standard and Pro with wholesale notes and advocate programs — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For clothing brands",
     headline: "Wholesale rhythm without spreadsheet fatigue.",
     subheadline: "Linesheets, door counts, reorder signals, and advocate activations — so growth does not depend on opaque ad tax.",
-    heroBadge: "Launching June 30, 2026",
+    complianceDisclosure: {
+      title: "Marketing and claims guardrails",
+      bullets: [
+        "FTC-compliant marketing language guides",
+        "Truth in Advertising compliance flags",
+        "Sustainability claim verification (when those features ship)",
+        "MAP and partner claim guardrails for wholesale accounts",
+      ],
+    },
     openGraphTitle: "Wholesale rhythm without spreadsheet fatigue.",
     pricingTierIds: ["clothing-brand-standard","clothing-brand-pro","brand-partner-pro"],
     features: [
@@ -1477,12 +1525,13 @@ const pages: AudienceLandingConfig[] = [
 {
     slug: "for-fashion-events",
     source: "for_fashion_events_waitlist",
+    sourceSignup: "for_fashion_events_signup",
+    launchIndustry: "fashion",
     title: "For fashion events — crews, call times, and vendor coordination",
-    description: "Fashion event producer Indie through Premium with run-of-show and vendor coordination — June 30 cadence in The Gold Collective.",
+    description: "Fashion event producer Indie through Premium with run-of-show and vendor coordination — fashion modules launch June 30, 2026 in The Gold Collective.",
     eyebrow: "For fashion events",
     headline: "Call times everyone actually sees.",
     subheadline: "Run-of-show, vendor load-in, model holds, and backstage comms — one command layer instead of fifty group chats.",
-    heroBadge: "Launching June 30, 2026",
     openGraphTitle: "Call times everyone actually sees.",
     pricingTierIds: ["fashion-event-producer-indie","fashion-event-producer-pro","fashion-event-producer-premium"],
     features: [

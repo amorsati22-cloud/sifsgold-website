@@ -353,6 +353,12 @@ export function ProfileEditor({ initial, userId }: ProfileEditorProps) {
               <Link href="/dashboard/services" className="font-body text-sm text-gold-body hover:text-gold">
                 Manage services menu →
               </Link>
+              <Link href="/dashboard/calendar" className="font-body text-sm text-gold-body hover:text-gold">
+                Calendar →
+              </Link>
+              <Link href="/dashboard/availability" className="font-body text-sm text-gold-body hover:text-gold">
+                Availability →
+              </Link>
             </div>
           </div>
         </div>
