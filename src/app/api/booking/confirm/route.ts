@@ -5,6 +5,7 @@ import {
   logStatusChange,
 } from "@/lib/booking/appointments";
 import { sendAppointmentConfirmedEmails } from "@/lib/booking/notifications";
+import { notifyAppointmentConfirmed } from "@/lib/notifications/integrations";
 import { createSessionForAppointment, videoCallLobbyUrl } from "@/lib/video-calls/booking-hook";
 import { getStripe } from "@/lib/stripe/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -123,6 +124,14 @@ export async function POST(request: Request) {
     (appointment.video_call_session_id
       ? videoCallLobbyUrl(appointment.video_call_session_id as string)
       : undefined);
+
+  await notifyAppointmentConfirmed(admin, {
+    clientUserId: user?.id ?? (appointment.client_id as string | null),
+    proUserId: appointment.pro_id as string,
+    serviceName: service?.name ?? "Appointment",
+    appointmentId: appointment.id as string,
+    clientName: body.client_details.name,
+  });
 
   await sendAppointmentConfirmedEmails({
     appointmentId: appointment.id as string,

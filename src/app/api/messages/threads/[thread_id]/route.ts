@@ -5,6 +5,7 @@ import {
   requireMessagingUser,
   userInThread,
 } from "@/lib/messaging/server";
+import { notifyNewMessage } from "@/lib/notifications/integrations";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
@@ -122,6 +123,20 @@ export async function POST(request: Request, { params }: RouteCtx) {
         preview_iv: body.preview_iv ?? body.iv,
       })
       .eq("id", threadId);
+
+    const recipients = participantIds.filter((id) => id !== session.user.id);
+    if (recipients.length && admin) {
+      const { data: sender } = await admin
+        .from("profiles")
+        .select("full_name")
+        .eq("id", session.user.id)
+        .maybeSingle();
+      await notifyNewMessage(admin, {
+        recipientIds: recipients,
+        threadId,
+        senderName: (sender?.full_name as string) ?? "Someone",
+      });
+    }
   }
 
   return NextResponse.json({ message, participant_ids: participantIds });

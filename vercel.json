@@ -23,6 +23,10 @@
     {
       "path": "/api/loyalty/birthday-bonus",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/notifications/digest/run",
+      "schedule": "0 9 * * *"
     }
   ]
 }

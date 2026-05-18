@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { DashboardNotifications } from "@/components/notifications/DashboardNotifications";
 import { getDashboardNavForUserType } from "@/lib/dashboard/nav";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
@@ -56,11 +57,14 @@ export default async function DashboardLayout({
     <div className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-navy text-cream">
       <div className="border-b border-gold/15 bg-navy-deep/90">
         <div className="mx-auto flex max-w-content flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <div>
-            <p className="font-body text-xs uppercase tracking-widest text-goldBody">
-              {isClientHome ? "Client home" : "Member dashboard"}
-            </p>
-            <p className="font-body text-sm text-cream/70">{user.email}</p>
+          <div className="flex items-center gap-3">
+            <div>
+              <p className="font-body text-xs uppercase tracking-widest text-goldBody">
+                {isClientHome ? "Client home" : "Member dashboard"}
+              </p>
+              <p className="font-body text-sm text-cream/70">{user.email}</p>
+            </div>
+            <DashboardNotifications userId={user.id} />
           </div>
           <nav aria-label="Dashboard" className="flex flex-wrap gap-2">
             {nav.map((item) => (

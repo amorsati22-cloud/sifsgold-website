@@ -30,6 +30,7 @@
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.0",
     "@types/d3-hierarchy": "^3.1.7",
+    "@types/web-push": "^3.6.4",
     "@vercel/analytics": "^2.0.1",
     "@vercel/kv": "^3.0.0",
     "@vercel/speed-insights": "^2.0.0",
@@ -68,6 +69,7 @@
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
     "wavesurfer.js": "^7.12.7",
+    "web-push": "^3.6.7",
     "yet-another-react-lightbox": "^3.32.0",
     "zod": "^4.4.3"
   },

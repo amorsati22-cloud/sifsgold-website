@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { notifyTipReceived } from "@/lib/notifications/integrations";
 import { completeTipPayout } from "@/lib/streaming/tips-payout";
 import { getStripe } from "@/lib/stripe/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -47,6 +48,11 @@ export async function POST(request: Request, { params }: Params) {
   }
 
   if (result.tipId) {
+    await notifyTipReceived(admin, {
+      streamerId: intent.metadata.streamer_id,
+      amount,
+      streamId,
+    });
     await admin.from("stream_comments").insert({
       stream_id: streamId,
       author_id: user?.id ?? null,

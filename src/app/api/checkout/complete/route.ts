@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { awardLoyaltyForOrder } from "@/lib/loyalty/integrations";
+import { notifyOrderPlaced } from "@/lib/notifications/integrations";
 import { guestCartCookieOptions } from "@/lib/shop/cart";
 import { decrementInventoryOnOrder } from "@/lib/shop/inventory";
 import { PLATFORM_FEE_PERCENT } from "@/lib/shop/constants";
@@ -138,6 +139,15 @@ export async function POST(request: Request) {
   const storefrontTotals = new Map<string, number>();
   for (const oi of orderItems) {
     storefrontTotals.set(oi.storefront_id, (storefrontTotals.get(oi.storefront_id) ?? 0) + oi.line_total);
+  }
+
+  for (const [storefrontId] of storefrontTotals.keys()) {
+    await notifyOrderPlaced(admin, {
+      buyerUserId: user?.id ?? null,
+      sellerUserId: storefrontId,
+      orderNumber: order.order_number as string,
+      orderId: order.id as string,
+    });
   }
 
   for (const [storefrontId, amount] of storefrontTotals) {
