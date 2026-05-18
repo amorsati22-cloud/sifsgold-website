@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
+import { isAdmin } from "@/lib/admin/allowlist";
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/env";
 
 const PROTECTED_PREFIXES = ["/dashboard", "/admin", "/checkout"];
@@ -57,6 +58,21 @@ export async function updateSession(request: NextRequest) {
     url.pathname = "/dashboard";
     url.search = "";
     return NextResponse.redirect(url);
+  }
+
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/sign-in";
+      url.searchParams.set("next", pathname);
+      return NextResponse.redirect(url);
+    }
+    if (!isAdmin(user.email)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      url.searchParams.set("error", "admin_forbidden");
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

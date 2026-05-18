@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { isAdmin } from "@/lib/admin/allowlist";
 import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
 import { BRAND_USER_TYPES } from "@/lib/auth-brand";
 import { PRO_USER_TYPES } from "@/lib/auth-pro";
@@ -33,6 +34,45 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   let response = await updateSession(request);
+
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    if (!isSupabaseConfigured()) {
+      return NextResponse.redirect(new URL("/sign-in?next=/admin", request.url));
+    }
+
+    const supabase = createServerClient(getSupabaseUrl(), getSupabaseAnonKey(), {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    });
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      const signIn = new URL("/sign-in", request.url);
+      signIn.searchParams.set("next", pathname);
+      return NextResponse.redirect(signIn);
+    }
+
+    if (!isAdmin(user.email)) {
+      const denied = new URL("/dashboard", request.url);
+      denied.searchParams.set("error", "admin_forbidden");
+      return NextResponse.redirect(denied);
+    }
+  }
 
   const isDashboardProRoute = DASHBOARD_PRO_PATHS.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`),

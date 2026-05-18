@@ -37,7 +37,7 @@ export function PollCreator({ threadId, threadKey, onSent, onCancel }: Props) {
     const bodyEnc = encryptJson(poll, threadKey);
     const preview = encryptMessage(`Poll: ${poll.question}`, threadKey);
 
-    await fetch(`/api/messages/${threadId}`, {
+    await fetch(`/api/messages/threads/${threadId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import type { BubbleStyle } from "@/types/messaging";
+import { PollDisplay } from "@/components/messaging/PollDisplay";
+import type { PollData } from "@/types/messaging";
+import { decryptJson } from "@/lib/messaging/encryption";
 import type { DecryptedMessage } from "@/lib/messaging/realtime";
 
 const BUBBLE_STYLES: Record<
@@ -28,7 +31,9 @@ const REACTIONS = ["❤️", "👍", "😂", "🙏", "✨"];
 type Props = {
   message: DecryptedMessage;
   isOwn: boolean;
+  userId: string;
   bubbleStyle: BubbleStyle;
+  threadKey: Uint8Array;
   onReply: (message: DecryptedMessage) => void;
   onReact: (messageId: string, emoji: string) => void;
   onDelete: (messageId: string) => void;
@@ -37,7 +42,9 @@ type Props = {
 export function MessageBubble({
   message,
   isOwn,
+  userId,
   bubbleStyle,
+  threadKey,
   onReply,
   onReact,
   onDelete,
@@ -45,6 +52,48 @@ export function MessageBubble({
   const [menuOpen, setMenuOpen] = useState(false);
   const styles = BUBBLE_STYLES[bubbleStyle] ?? BUBBLE_STYLES.gold;
   const body = message.deleted ? "[Message deleted]" : message.plaintext;
+
+  if (message.message_type === "poll" && !message.deleted) {
+    const poll =
+      message.poll_data ??
+      decryptJson<PollData>(message.encrypted_body, message.iv, threadKey);
+    if (poll) {
+      return (
+        <PollDisplay message={message} poll={poll} userId={userId} isOwn={isOwn} />
+      );
+    }
+  }
+
+  if (message.message_type === "voice_note" && !message.deleted) {
+    return (
+      <div className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
+        <div className={`max-w-[85%] rounded-brand-lg px-4 py-3 ${isOwn ? styles.sent : styles.received}`}>
+          <p className="font-body text-sm">🎙 Voice message ({message.voice_note_duration_seconds ?? 0}s)</p>
+          {message.voice_note_waveform && (
+            <div className="mt-2 flex h-8 items-end gap-0.5">
+              {(message.voice_note_waveform as number[]).map((h, i) => (
+                <span key={i} className="w-1 rounded-full bg-gold/60" style={{ height: `${Math.max(4, h)}%` }} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (message.message_type === "file" && message.file_metadata && !message.deleted) {
+    const meta = message.file_metadata;
+    return (
+      <div className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
+        <a
+          href="#"
+          className={`max-w-[85%] rounded-brand-lg border border-gold/20 px-4 py-3 font-body text-sm ${isOwn ? styles.sent : styles.received}`}
+        >
+          📎 {meta.name} ({(meta.size / 1024).toFixed(0)} KB)
+        </a>
+      </div>
+    );
+  }
 
   const reactionGroups = (message.reactions ?? []).reduce<Record<string, number>>((acc, r) => {
     acc[r.emoji] = (acc[r.emoji] ?? 0) + 1;

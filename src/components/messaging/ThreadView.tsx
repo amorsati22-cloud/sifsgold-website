@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Composer } from "@/components/messaging/Composer";
+import { GroupThreadPanel } from "@/components/messaging/GroupThreadPanel";
 import { MessageBubble } from "@/components/messaging/MessageBubble";
 import {
   decryptJson,
@@ -83,7 +84,7 @@ export function ThreadView({
     if (!nextCursor || loadingOlder) return;
     setLoadingOlder(true);
     const res = await fetch(
-      `/api/messages/${threadId}?cursor=${encodeURIComponent(nextCursor)}&limit=30`,
+      `/api/messages/threads/${threadId}?cursor=${encodeURIComponent(nextCursor)}&limit=30`,
     );
     const data = await res.json();
     const older = (data.messages ?? []).map((row: Message) => decryptRow(row));
@@ -158,7 +159,7 @@ export function ThreadView({
     }
     const preview = encryptMessage(previewPlaintext(plaintext || "Attachment"), threadKey);
 
-    const res = await fetch(`/api/messages/${threadId}`, {
+    const res = await fetch(`/api/messages/threads/${threadId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -231,7 +232,18 @@ export function ThreadView({
             </Link>
           ) : null}
         </div>
-        <div className="relative">
+        <div className="relative flex items-center gap-2">
+          {initialThread.thread_type === "group" && (
+            <GroupThreadPanel
+              thread={initialThread}
+              participants={[]}
+              userId={userId}
+              pinnedMessageIds={[]}
+              announcement={null}
+              onLeave={() => router.push("/dashboard/messages")}
+              onMute={() => {}}
+            />
+          )}
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
@@ -286,6 +298,8 @@ export function ThreadView({
             <MessageBubble
               message={m}
               isOwn={m.sender_id === userId}
+              userId={userId}
+              threadKey={threadKey}
               bubbleStyle={bubbleStyle}
               onReply={setReplyTo}
               onReact={handleReact}
@@ -302,9 +316,11 @@ export function ThreadView({
       <Composer
         threadId={threadId}
         userId={userId}
+        threadKey={threadKey}
         replyPreview={replyTo ? previewPlaintext(replyTo.plaintext, 40) : null}
         onClearReply={() => setReplyTo(null)}
         onSend={handleSend}
+        onRefresh={() => router.refresh()}
       />
     </div>
   );

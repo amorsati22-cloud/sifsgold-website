@@ -14,6 +14,7 @@ type ThreadRow = {
   encrypted_last_preview: string | null;
   preview_iv: string | null;
   participant_ids: string[];
+  group_key_version?: number;
   unread_count: number;
   other_participants: { id: string; label: string; username?: string }[];
 };
@@ -70,6 +71,7 @@ export function ThreadList() {
           className="min-w-[200px] flex-1 rounded-brand-lg border border-gold/20 bg-navy px-3 py-2 font-body text-sm text-cream focus:ring-2 focus:ring-gold"
         />
         <GoldButton label="New message" href="/dashboard/messages/new" variant="solid" size="md" />
+        <GoldButton label="New group" href="/dashboard/messages/new-group" variant="outlined" size="md" />
       </div>
 
       {loading ? (

@@ -150,21 +150,19 @@ export function buildStateQuestionBank(facts: StateExamFacts): SeedQuestion[] {
       3,
       5,
     ),
-    tf(
+    fc(
       "state_law",
       `In ${f.stateName}, cosmetology rules are found in ${f.statuteCitation}.`,
-      "true",
+      true,
       `State law for ${f.stateName} cosmetology is anchored in ${f.statuteCitation}.`,
       f.statuteCitation,
-      2,
     ),
-    tf(
+    fc(
       "state_law",
       `A ${f.stateName} cosmetology candidate may ignore ${f.boardName} sanitation rules if their salon has private insurance.`,
-      "false",
+      false,
       `Licensure and inspection standards from ${f.boardName} apply regardless of private insurance.`,
       f.statuteCitation,
-      3,
     ),
     mc(
       "sanitation",
@@ -192,13 +190,12 @@ export function buildStateQuestionBank(facts: StateExamFacts): SeedQuestion[] {
       4,
       5,
     ),
-    tf(
+    fc(
       "sanitation",
       `Single-use porous items in ${f.stateName} salons may be reused if they look clean.`,
-      "false",
+      false,
       "Porous single-use supplies must be discarded after one client.",
       f.statuteCitation,
-      3,
     ),
     mc(
       "anatomy",
@@ -347,11 +344,14 @@ export function buildStateQuestionBank(facts: StateExamFacts): SeedQuestion[] {
   };
 
   for (const cat of CATEGORIES) {
-    const have = generated.filter(
+    let have = generated.filter(
       (q) => q.category === cat && q.question_type === "multiple_choice",
     ).length;
-    for (let i = have; i < 20; i += 1) {
-      generated.push(mcTemplates[cat](i + 1));
+    let i = 0;
+    while (have < 20) {
+      i += 1;
+      generated.push(mcTemplates[cat](i));
+      have += 1;
     }
   }
 
@@ -405,8 +405,14 @@ export function buildStateQuestionBank(facts: StateExamFacts): SeedQuestion[] {
   };
 
   for (const cat of CATEGORIES) {
-    for (let i = 0; i < 10; i += 1) {
-      generated.push(tfTemplates[cat](i + 1));
+    let have = generated.filter(
+      (q) => q.category === cat && q.question_type === "true_false",
+    ).length;
+    let i = 0;
+    while (have < 10) {
+      i += 1;
+      generated.push(tfTemplates[cat](i));
+      have += 1;
     }
   }
 
@@ -455,8 +461,14 @@ export function buildStateQuestionBank(facts: StateExamFacts): SeedQuestion[] {
   };
 
   for (const cat of CATEGORIES) {
-    for (let i = 0; i < 30; i += 1) {
-      generated.push(fcTemplates[cat](i + 1));
+    let have = generated.filter(
+      (q) => q.category === cat && q.question_type === "flashcard",
+    ).length;
+    let i = 0;
+    while (have < 30) {
+      i += 1;
+      generated.push(fcTemplates[cat](i));
+      have += 1;
     }
   }
 
