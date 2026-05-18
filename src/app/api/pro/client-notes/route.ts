@@ -31,26 +31,32 @@ export async function PUT(request: Request) {
     favorite: body.favorite ?? false,
   };
 
-  const { error } = await supabase.from("pro_client_notes").upsert(row, {
-    onConflict: body.client_id ? "pro_id,client_id" : undefined,
-  });
-
-  if (error && body.guest_key) {
-    const { data: existing } = await supabase
+  let existingId: string | null = null;
+  if (body.client_id) {
+    const { data } = await supabase
+      .from("pro_client_notes")
+      .select("id")
+      .eq("pro_id", user.id)
+      .eq("client_id", body.client_id)
+      .maybeSingle();
+    existingId = data?.id ?? null;
+  } else if (body.guest_key) {
+    const { data } = await supabase
       .from("pro_client_notes")
       .select("id")
       .eq("pro_id", user.id)
       .eq("guest_key", body.guest_key)
       .maybeSingle();
-
-    if (existing) {
-      await supabase.from("pro_client_notes").update(row).eq("id", existing.id);
-    } else {
-      await supabase.from("pro_client_notes").insert(row);
-    }
-    return NextResponse.json({ ok: true });
+    existingId = data?.id ?? null;
   }
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (existingId) {
+    const { error } = await supabase.from("pro_client_notes").update(row).eq("id", existingId);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  } else {
+    const { error } = await supabase.from("pro_client_notes").insert(row);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
   return NextResponse.json({ ok: true });
 }

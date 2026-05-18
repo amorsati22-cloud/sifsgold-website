@@ -1,3 +1,5 @@
+"use client";
+
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { ProInsights } from "@/types/pro-ops";
 
