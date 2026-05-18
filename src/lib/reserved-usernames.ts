@@ -16,6 +16,7 @@ const STATIC_RESERVED = [
   "brand",
   "career-paths",
   "careers",
+  "challenges",
   "community-guidelines",
   "compliance",
   "contact",

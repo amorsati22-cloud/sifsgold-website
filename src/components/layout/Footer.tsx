@@ -26,6 +26,8 @@ const resourcesLinks = [
   { label: "Career Paths", href: "/career-paths" },
   { label: "Daily Affirmation", href: "/daily" },
   { label: "Body Map", href: "/explore/body-map" },
+  { label: "Challenges", href: "/challenges" },
+  { label: "Advocate Feed", href: "/explore/advocates" },
   { label: "Tools", href: "/tools" },
   { label: "Glossary", href: "/glossary" },
   { label: "Blog", href: "/blog" },

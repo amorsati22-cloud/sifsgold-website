@@ -63,6 +63,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   push(routes, "/daily", "daily", 0.72);
   push(routes, "/daily/saved", "monthly", 0.5);
   push(routes, "/explore/body-map", "weekly", 0.75);
+  push(routes, "/challenges", "weekly", 0.72);
+  push(routes, "/explore/advocates", "daily", 0.7);
   push(routes, "/glossary", "monthly", 0.65);
   push(routes, "/tools", "weekly", 0.75);
   push(routes, "/tools/tip-calculator", "monthly", 0.6);
