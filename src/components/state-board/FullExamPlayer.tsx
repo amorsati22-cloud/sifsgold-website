@@ -40,21 +40,6 @@ export function FullExamPlayer({
 
   const q = questions[index];
 
-  useEffect(() => {
-    if (submitted) return;
-    const t = setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          clearInterval(t);
-          void handleSubmit();
-          return 0;
-        }
-        return s - 1;
-      });
-    }, 1000);
-    return () => clearInterval(t);
-  }, [submitted]);
-
   const handleSubmit = useCallback(async () => {
     if (submitted) return;
     setSubmitted(true);
@@ -83,6 +68,24 @@ export function FullExamPlayer({
     submitted,
     timeLimitMinutes,
   ]);
+
+  const submitRef = useRef(handleSubmit);
+  submitRef.current = handleSubmit;
+
+  useEffect(() => {
+    if (submitted) return;
+    const t = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(t);
+          void submitRef.current();
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [submitted]);
 
   const timerLabel = useMemo(() => {
     const m = Math.floor(secondsLeft / 60);

@@ -37,15 +37,17 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const { error } = await supabase.from("state_board_subscriptions").upsert(
-      {
-        user_id: user?.id ?? null,
-        state: stateCode,
-        program_type: parsed.data.program,
-        notification_email: parsed.data.email,
-      },
-      { onConflict: "user_id,state,program_type" },
-    );
+    const row = {
+      user_id: user?.id ?? null,
+      state: stateCode,
+      program_type: parsed.data.program,
+      notification_email: parsed.data.email,
+    };
+    const { error } = user
+      ? await supabase.from("state_board_subscriptions").upsert(row, {
+          onConflict: "user_id,state,program_type",
+        })
+      : await supabase.from("state_board_subscriptions").insert(row);
 
     if (error) {
       return NextResponse.json({ error: "Could not save subscription" }, { status: 500 });

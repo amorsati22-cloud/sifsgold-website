@@ -15,6 +15,7 @@ import { DMCATakedownReceived, dmcaTakedownReceivedSubject } from "@/lib/email/t
 import { FoundingMemberWelcome, foundingMemberWelcomeSubject } from "@/lib/email/templates/FoundingMemberWelcome";
 import { LaunchDayAnnouncement, launchDayAnnouncementSubject } from "@/lib/email/templates/LaunchDayAnnouncement";
 import { SifsAdvocateAcceptance, sifsAdvocateAcceptanceSubject } from "@/lib/email/templates/SifsAdvocateAcceptance";
+import { SifsAdvocateRejection, sifsAdvocateRejectionSubject } from "@/lib/email/templates/SifsAdvocateRejection";
 import {
   SifsAdvocateApplicationReceived,
   sifsAdvocateApplicationReceivedSubject,
@@ -147,6 +148,18 @@ export function buildEmailTemplate(
           <LaunchDayAnnouncement
             {...links}
             firstName={data.firstName ?? data.name}
+          />
+        ),
+      };
+    case "sifs_advocate_rejection":
+      return {
+        subject: sifsAdvocateRejectionSubject,
+        marketing: false,
+        from: EMAIL_FROM.notifications,
+        react: (
+          <SifsAdvocateRejection
+            {...links}
+            applicantName={data.name}
           />
         ),
       };

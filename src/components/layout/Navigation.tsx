@@ -12,6 +12,7 @@ import { NavigationAuthActions } from "@/components/layout/NavigationAuthActions
 
 const RESOURCE_LINKS = [
   { label: "Study Guides", href: "/study-guides" },
+  { label: "State Board Prep", href: "/state-board-prep" },
   { label: "Career Paths", href: "/career-paths" },
   { label: "Glossary", href: "/glossary" },
   { label: "Tools", href: "/tools" },

@@ -43,6 +43,7 @@ const STATIC_RESERVED = [
   "signup",
   "sitemap",
   "study-guides",
+  "state-board-prep",
   "terms",
   "tools",
   "transparency",

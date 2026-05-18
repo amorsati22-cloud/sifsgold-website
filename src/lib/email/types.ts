@@ -7,6 +7,7 @@ export const EMAIL_TEMPLATE_TYPES = [
   "data_deletion_request_received",
   "dmca_takedown_received",
   "launch_day_announcement",
+  "sifs_advocate_rejection",
 ] as const;
 
 export type EmailTemplateType = (typeof EMAIL_TEMPLATE_TYPES)[number];
