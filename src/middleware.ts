@@ -17,6 +17,7 @@ const DASHBOARD_PRO_PATHS = [
   "/dashboard/calendar",
   "/dashboard/availability",
   "/dashboard/photo-studio",
+  "/dashboard/vault",
 ];
 
 const DASHBOARD_BUYER_PATHS = ["/dashboard/orders", "/dashboard/wishlist", "/dashboard/returns"];
@@ -180,6 +181,8 @@ export const config = {
     "/dashboard/advocate/:path*",
     "/brand-deals/marketplace",
     "/brand-deals/marketplace/:path*",
+    "/dashboard/vault",
+    "/dashboard/vault/:path*",
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

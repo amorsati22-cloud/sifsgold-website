@@ -9,6 +9,7 @@ export const PRO_OPS_NAV = [
   { href: "/dashboard/pro/business", label: "Business" },
   { href: "/dashboard/pro/marketing", label: "Marketing" },
   { href: "/dashboard/pro/reviews", label: "Reviews" },
+  { href: "/dashboard/vault", label: "The Vault" },
   { href: "/dashboard/profile", label: "Public profile" },
   { href: "/dashboard/services", label: "Services" },
 ] as const;

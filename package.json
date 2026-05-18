@@ -52,6 +52,8 @@
     "resend": "^6.12.3",
     "server-only": "^0.0.1",
     "stripe": "^22.1.1",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "yet-another-react-lightbox": "^3.32.0",
     "zod": "^4.4.3"
   },

@@ -194,6 +194,39 @@ REVOKE ALL ON FUNCTION public.vault_decrypt_metadata(text, text) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.vault_encrypt_metadata(text, text) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.vault_decrypt_metadata(text, text) TO authenticated;
 
+-- Public share lookup by token only (no broad anon table access)
+CREATE OR REPLACE FUNCTION public.get_vault_share_public(share_token text)
+RETURNS TABLE (
+  share_id uuid,
+  document_id uuid,
+  document_name text,
+  expires_at timestamptz,
+  view_count integer,
+  max_views integer,
+  password_protected boolean
+)
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+SET search_path = public
+AS $$
+  SELECT
+    s.id,
+    s.document_id,
+    d.name,
+    s.expires_at,
+    s.view_count,
+    s.max_views,
+    s.password_protected
+  FROM public.vault_shared_documents s
+  JOIN public.vault_documents d ON d.id = s.document_id
+  WHERE s.share_link_token = share_token
+    AND (s.expires_at IS NULL OR s.expires_at > now());
+$$;
+
+REVOKE ALL ON FUNCTION public.get_vault_share_public(text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_vault_share_public(text) TO anon, authenticated;
+
 -- ---------------------------------------------------------------------------
 -- Storage bucket: vault-documents (private)
 -- Dashboard: Storage → New bucket → vault-documents (private)

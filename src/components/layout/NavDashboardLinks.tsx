@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ADVOCATE_USER_TYPES } from "@/lib/auth-advocate";
 import { BRAND_USER_TYPES } from "@/lib/auth-brand";
+import { PRO_USER_TYPES } from "@/lib/auth-pro";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 
@@ -81,6 +82,14 @@ export function NavDashboardLinks({ mobile = false }: { mobile?: boolean }) {
           Private
         </span>
       </Link>
+      {userType && PRO_USER_TYPES.includes(userType as (typeof PRO_USER_TYPES)[number]) && (
+        <Link href="/dashboard/vault" className={linkClass(pathname, "/dashboard/vault", mobile)}>
+          The Vault
+          <span className="rounded-full bg-teal/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-teal">
+            Private
+          </span>
+        </Link>
+      )}
       <Link
         href="/dashboard/photo-studio"
         className={linkClass(pathname, "/dashboard/photo-studio", mobile)}

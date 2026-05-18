@@ -101,6 +101,16 @@ export async function submitWaitlist(
 
   await afterSuccessfulSubmit(options, { source, email });
 
+  try {
+    await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, source, userType }),
+    });
+  } catch {
+    // Web3Forms succeeded; Supabase persistence is best-effort from the client.
+  }
+
   return {
     ok: true,
     message: "You're in Sif's Circle. Watch your inbox — and welcome.",

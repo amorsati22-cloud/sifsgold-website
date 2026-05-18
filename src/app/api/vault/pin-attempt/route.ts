@@ -43,14 +43,11 @@ export async function POST(request: Request) {
     ? new Date(Date.now() + VAULT_LOCKOUT_MINUTES * 60 * 1000).toISOString()
     : null;
 
-  await supabase
-    .from("vault_settings")
-    .upsert({
-      id: user.id,
-      failed_attempts: attempts,
-      locked_until: lockedUntil,
-    })
-    .eq("id", user.id);
+  await supabase.from("vault_settings").upsert({
+    id: user.id,
+    failed_attempts: attempts,
+    locked_until: lockedUntil,
+  });
 
   await supabase.from("vault_access_log").insert({
     user_id: user.id,
